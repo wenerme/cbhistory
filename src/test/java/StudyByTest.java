@@ -1,4 +1,5 @@
 import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
@@ -30,6 +31,9 @@ import me.wener.cbhistory.core.event.AbstractEvent;
 import me.wener.cbhistory.util.CodecUtils;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 @Slf4j
 @Ignore
@@ -262,6 +266,27 @@ public class StudyByTest
     {
         @SerializedName("cmntdict")
         private Map<String, List<CommentInfo>> commentDict;
+    }
+
+    @Test
+    public void testPropertySourcesPlaceholderConfigurer()
+    {
+        PropertySourcesPlaceholderConfigurer p = new PropertySourcesPlaceholderConfigurer();
+        String[] resources = {"default.properties", "db.properties","app.properties"};
+        List<Resource> resourceLocations = Lists.newArrayList();
+
+        for (String resource : resources)
+        {
+            ClassPathResource classPathResource = new ClassPathResource(resource);
+            if (classPathResource.exists())
+            {
+                log.info("加载属性文件: "+resource);
+                resourceLocations.add(classPathResource);
+            }
+        }
+
+        p.setLocations(resourceLocations.toArray(new Resource[0]));
+
     }
 
 }

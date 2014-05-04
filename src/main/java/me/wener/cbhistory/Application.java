@@ -2,6 +2,8 @@ package me.wener.cbhistory;
 
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -47,7 +52,6 @@ public class Application extends SpringBootServletInitializer
     {
         log.debug("初始化程序...");
         Events.register(ProcessCenter.getInstance());
-//        Events.register(EventScheduler.getInstance());
     }
 
     public static void main(String[] args) throws Exception
@@ -66,16 +70,35 @@ public class Application extends SpringBootServletInitializer
     {
         return ProcessCenter.getInstance();
     }
-//    @Bean
-//    public EventScheduler eventScheduler()
-//    {
-//        return EventScheduler.getInstance();
-//    }
 
     @Bean
     public TaskScheduler taskScheduler()
     {
         return new ThreadPoolTaskScheduler();
+    }
+
+    /**
+     * 配置需要加载的属性文件,如果属性文件不存在,则不添加
+     */
+    @Bean
+    public PropertySourcesPlaceholderConfigurer myPropertySourcesPlaceholderConfigurer()
+    {
+        PropertySourcesPlaceholderConfigurer p = new PropertySourcesPlaceholderConfigurer();
+        String[] resources = {"default.properties", "db.properties","app.properties"};
+        List<Resource> resourceLocations = Lists.newArrayList();
+
+        for (String resource : resources)
+        {
+            ClassPathResource classPathResource = new ClassPathResource(resource);
+            if (classPathResource.exists())
+            {
+                log.info("加载属性文件: "+resource);
+                resourceLocations.add(classPathResource);
+            }
+        }
+
+        p.setLocations(resourceLocations.toArray(new Resource[0]));
+        return p;
     }
 
 }

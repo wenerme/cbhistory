@@ -16,3 +16,5 @@ hs_err_pid*
 helper/
 target/
 out/
+
+src/main/resources/app.properties
