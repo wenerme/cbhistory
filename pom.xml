@@ -24,7 +24,7 @@
     </parent>
 
     <!--设置打包方式: jar/war -->
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <properties>
         <start-class>me.wener.cbhistory.Application</start-class>
@@ -46,22 +46,22 @@
             <artifactId>spring-boot-starter-web</artifactId>
 
             <!--是否使用内嵌的tomcat, 如果要打包为 war,则需要排除-->
-            <!--<exclusions>-->
-            <!--<exclusion>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
-            <!--</exclusion>-->
-            <!--</exclusions>-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
 
         </dependency>
 
         <!--如果不用内嵌的Tomcat,则需要添加这个依赖,即打包为 war 的时候需要解除这个注释.-->
-        <!--<dependency>-->
-        <!--<groupId>javax.servlet</groupId>-->
-        <!--<artifactId>javax.servlet-api</artifactId>-->
-        <!--<version>${servlet-api.version}</version>-->
-        <!--<scope>provided</scope>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!--H2 数据库支持-->
         <!--<dependency>-->
