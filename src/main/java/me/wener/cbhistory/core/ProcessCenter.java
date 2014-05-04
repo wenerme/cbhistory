@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -88,6 +89,11 @@ public class ProcessCenter
     public void needNonSharedEm(EntityManagerFactory emf)
     {
         em = emf.createEntityManager();
+    }
+    @PostConstruct
+    public void init()
+    {
+        log.info("完成处理中心的初始化.");
     }
 
     // region 服务性的事件处理

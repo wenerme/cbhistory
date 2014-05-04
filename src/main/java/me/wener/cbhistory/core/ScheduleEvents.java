@@ -1,10 +1,14 @@
 package me.wener.cbhistory.core;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.event.TryDiscoverArticleByUrlEvent;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -27,31 +31,28 @@ public class ScheduleEvents
     @Inject
     TaskScheduler scheduler;
 
-    @PostConstruct
-    public void init()
-    {
-
-    }
-
-    @Scheduled(initialDelay = 20 * SECOND_MS, fixedRate = 5 * HOUR_MS)
+    @Scheduled(initialDelay = 10 * SECOND_MS, fixedRate = 1 * HOUR_MS)
     public void discoverArticlesInHomePage()
     {
         log.info("从主页检索文章");
         Events.post(new TryDiscoverArticleByUrlEvent("http://www.cnbeta.com/"));
     }
+
     @Scheduled(initialDelay = 20 * MINUTE_MS, fixedRate = 1 * DAY_MS)
     public void discoverArticlesInTopTen()
     {
         log.info("从排行榜检索文章");
         Events.post(new TryDiscoverArticleByUrlEvent("http://www.cnbeta.com/top10.htm"));
     }
+
     @Scheduled(initialDelay = 40 * SECOND_MS, fixedRate = 40 * MINUTE_MS)
     public void discoverArticlesInHomeRank()
     {
         log.info("从推荐页检索文章");
         Events.post(new TryDiscoverArticleByUrlEvent("http://www.cnbeta.com/home/rank/show.htm"));
     }
-    @Scheduled(initialDelay = 10 * SECOND_MS, fixedRate = 1 * HOUR_MS)
+
+    @Scheduled(initialDelay = 5 * SECOND_MS, fixedRate = 1 * HOUR_MS)
     public void callGC()
     {
         log.info("请求垃圾收集.");

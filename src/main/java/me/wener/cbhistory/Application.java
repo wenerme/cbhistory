@@ -50,8 +50,7 @@ public class Application extends SpringBootServletInitializer
     @PostConstruct
     public void init()
     {
-        log.debug("初始化程序...");
-        Events.register(ProcessCenter.getInstance());
+        log.debug("初始化程序...");// 这里不会执行,不知道为什么
     }
 
     public static void main(String[] args) throws Exception
@@ -100,5 +99,4 @@ public class Application extends SpringBootServletInitializer
         p.setLocations(resourceLocations.toArray(new Resource[0]));
         return p;
     }
-
 }

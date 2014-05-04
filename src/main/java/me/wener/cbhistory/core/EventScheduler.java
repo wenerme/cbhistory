@@ -51,11 +51,11 @@ public class EventScheduler
         if (noSame && isScheduled(event))
         {
             if (log.isDebugEnabled())
-                log.debug("事件调度已经存在,添加失败: @%s -> %s",date, event);
+                log.debug("事件调度已经存在,添加失败: @{} -> {}",date, event);
             return false;
         }
         if (log.isDebugEnabled())
-            log.debug("添加事件调度: @%s -> %s",date, event);
+            log.debug("添加事件调度: @{} -> {}",date, event);
 
         events.put(event, date);
         schedule(new EventPostRunner(event), date);

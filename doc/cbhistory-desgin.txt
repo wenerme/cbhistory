@@ -66,9 +66,9 @@ select o.title as `最旧文章标题`, o.date as `最旧文章时间`
 	from (select * from article order by date asc limit 0,1) as o;
 
 -- 最早有评论的文章
-select date,title from article where sid = (select sid from comment order by date asc limit 0,1);
+select sid,date,title from article where sid = (select sid from comment order by date asc limit 0,1);
 -- 最新有评论的文章
-select date,title from article where sid = (select sid from comment order by date desc limit 0,1);
+select sid,date,title from article where sid = (select sid from comment order by date desc limit 0,1);
 
 -- 获取数据库的大小
 SELECT table_schema                                        "DB Name", 
