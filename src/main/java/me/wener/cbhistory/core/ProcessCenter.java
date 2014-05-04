@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.*;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Charsets;
-import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.AllowConcurrentEvents;
@@ -164,7 +163,12 @@ public class ProcessCenter
     {
         final String url = e.getUrl();
         HttpRequest request = HttpRequest.get(url);
-        HttpResponse response = request.send();
+        HttpResponse response = insureResponse(request);
+        if (response == null)
+        {
+            log.error("获取响应失败,请求的url为: "+e.getUrl());
+            return;
+        }
         DiscoverArticleEvent event = new DiscoverArticleEvent(response.bodyText());
         Events.post(event);
     }
@@ -228,9 +232,12 @@ public class ProcessCenter
         String url = "http://www.cnbeta.com/articles/%s.htm";
         url = String.format(url, e.getArticleId());
 
-        HttpResponse response = getResponse(HttpRequest.get(url), 3);
+        HttpResponse response = insureResponse(HttpRequest.get(url), 3);
         if (response == null)
-            response = HttpRequest.get(url).send();
+        {
+            log.error("获取响应失败,请求的url为: "+url);
+            return;
+        }
 
         // 确保返回的状态正确
         if (response.statusCode() != 200)
@@ -324,7 +331,12 @@ public class ProcessCenter
                 .header("X-Requested-With", "XMLHttpRequest")
                 .form("op", op);
 
-        HttpResponse response = request.send();
+        HttpResponse response = insureResponse(request);
+        if (response == null)
+        {
+            log.error("获取评论失败,无法获取相应,请求的url为: "+url+",参数op为:"+op);
+            return;
+        }
 
         RawData raw = article.getRawData();
         if (raw == null)
@@ -507,7 +519,14 @@ public class ProcessCenter
         return i.getDays();
     }
 
-    public HttpResponse getResponse(HttpRequest request, int retryTimes)
+    /**
+     * 确保能获取到响应,默认将会尝试三次
+     */
+    public HttpResponse insureResponse(HttpRequest request)
+    {
+        return insureResponse(request, 3);
+    }
+    public HttpResponse insureResponse(HttpRequest request, int retryTimes)
     {
         HttpResponse response = null;
 
