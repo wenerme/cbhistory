@@ -409,7 +409,6 @@ public class ProcessCenter
                 comment.setIcon(null);
         }
 
-//        article.setComments(comments);
         article.setLastUpdateDate(new Date());
 
         // 保存状态
