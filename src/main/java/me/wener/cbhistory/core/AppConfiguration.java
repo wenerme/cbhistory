@@ -3,10 +3,13 @@ package me.wener.cbhistory.core;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.extern.slf4j.Slf4j;
-import me.wener.cbhistory.core.Events;
-import me.wener.cbhistory.core.ProcessCenter;
+import me.wener.cbhistory.core.process.ArticleProcess;
+import me.wener.cbhistory.core.process.AuxiliaryProcess;
+import me.wener.cbhistory.core.process.CommentProcess;
+import me.wener.cbhistory.core.process.ProcessCenter;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -17,11 +20,16 @@ public class AppConfiguration
     @Value("${app.log.level:null}")
     private String logLevel = null;
 
+    @Inject
+    ArticleProcess articleProcess;
+    @Inject
+    AuxiliaryProcess auxiliaryProcess;
+    @Inject
+    CommentProcess commentProcess;
+
     @PostConstruct
     public void init()
     {
-        // 添加事件监听
-        Events.register(ProcessCenter.getInstance());
 
         // 配置日志等级
         if (logLevel != null)
@@ -33,5 +41,13 @@ public class AppConfiguration
         }
 
         log.info("完成程序配置的初始化.");
+    }
+
+    @PostConstruct
+    public void registerProcess()
+    {
+        Events.register(auxiliaryProcess);
+        Events.register(commentProcess);
+        Events.register(articleProcess);
     }
 }

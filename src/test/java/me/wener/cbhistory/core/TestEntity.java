@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import me.wener.cbhistory.Application;
 import me.wener.cbhistory.core.event.TryFoundArticleEvent;
 import me.wener.cbhistory.core.event.UpdateCommentEvent;
+import me.wener.cbhistory.core.process.ProcessCenter;
 import me.wener.cbhistory.domain.Article;
 import me.wener.cbhistory.domain.RawData;
 import me.wener.cbhistory.repositories.ArticleRepository;
