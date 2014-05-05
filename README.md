@@ -5,11 +5,13 @@ cbHistory-西贝历史评论插件
 
 这个为 cbhistory 的服务端,如果想要自己运行主要需要更改[db.properties]里的数据库连接配置,
 或者在同级目录下添加一个 `app.properties` 来覆盖 `db.properties` 的配置.
+关于可以设置的熟悉,在 [default.properties] 里有说明.
 
 在 `doc` 目录下有一些这个程序的相关设计信息.
 
-目前 `pom.xml` 配置为的打包为jar,即可以直接在本地运行,如果需要打包为 war 包,可以打开
-[pom.xml] 看看里面的一些注释,稍微修改一下注释掉的东西,就能打包为war包了.
+关于打包
+--------
+看看 [pom.xml] 里面的一些注释,可以轻松的设置为打包 jar/war.
 
 自动化发现文章过程
 ---------
@@ -33,6 +35,7 @@ cbHistory-西贝历史评论插件
 * [cbhistory chrome 插件](https://github.com/wenerme/cbhistory-extension)
 
  [db.properties]:https://github.com/wenerme/cbhistory/blob/master/src/main/resources/db.properties
+ [default.properties]:https://github.com/wenerme/cbhistory/blob/master/src/main/resources/default.properties
  [pom.xml]:https://github.com/wenerme/cbhistory/blob/master/pom.xml
  [ScheduleEvents.java]:https://github.com/wenerme/cbhistory/blob/master/src/main/java/me/wener/cbhistory/core/ScheduleEvents.java
  [ProcessCenter.java]:https://github.com/wenerme/cbhistory/blob/master/src/main/java/me/wener/cbhistory/core/ProcessCenter.java

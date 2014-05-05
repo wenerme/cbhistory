@@ -48,7 +48,7 @@ public abstract class CommonProcess
     @Getter
     private int articleUpdateInterval = 5 * 60;
     /**
-     * 文章过期因子,当距离过期时间低于这个值时,会以
+     * 文章更新因子,当距离过期时间低于这个值时,会以
      * <b>距离过期的分钟数/该因子 * 更新间隔</b> 来计算新的更新间隔时间
      * <pre>
      * 单位为: 分钟
