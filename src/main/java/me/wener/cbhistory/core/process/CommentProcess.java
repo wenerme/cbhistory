@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Named
 @Slf4j
+@Transactional(readOnly = true)
 public class CommentProcess extends CommonProcess
 {
 
@@ -86,6 +87,7 @@ public class CommentProcess extends CommonProcess
     public void parseComment(UpdateCommentEvent e)
     {
         Article article = e.getArticle();
+        article = articleRepo.save(article);
 
         log.debug("更新评论: {}", e);
 

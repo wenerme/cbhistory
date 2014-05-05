@@ -17,7 +17,6 @@ import jodd.jerry.Jerry;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.Events;
 import me.wener.cbhistory.core.event.DiscoverArticleEvent;
-import me.wener.cbhistory.core.event.ExceptionEvent;
 import me.wener.cbhistory.core.event.FoundArticleEvent;
 import me.wener.cbhistory.core.event.TryDiscoverArticleByUrlEvent;
 import me.wener.cbhistory.core.event.TryFoundArticleEvent;
@@ -70,8 +69,26 @@ public class ArticleProcess extends CommonProcess
         }
 
         // 将发现的所有 ID 发布出去
+        // 这里的并发太恐怖了,需要缩小范围
+        Article article = null;
         for (String id : ids)
-            Events.post(new TryFoundArticleEvent(id));
+        {
+            try
+            {
+                article = articleRepo.findOne(Long.parseLong(id));
+            } catch (NumberFormatException ignored){}
+
+            if (article != null)
+            {
+                if (isArticleNeedUpdate(article))
+                {
+                    log.debug("发现的文章已经存在,需要更新. {}", article);
+                    Events.post(new TryUpdateCommentEvent(article));
+                }else
+                    log.debug("发现的文章已经存在,尚且不需要更新. {}", article);
+            } else
+                Events.post(new TryFoundArticleEvent(id));
+        }
     }
 
     /**
@@ -121,7 +138,7 @@ public class ArticleProcess extends CommonProcess
         if (response.statusCode() != 200)
         {
             log.error("获取到的响应返回状态异常,将停止接下来的操作. 请求路径为: {} 响应对象: {}. "
-                    ,url, response);
+                    , url, response);
             return;
         }
 
@@ -190,6 +207,7 @@ public class ArticleProcess extends CommonProcess
         }
         return filterExpiredArticle(set);
     }
+
     private List<Article> filterExpiredArticle(Iterable<Article> articles)
     {
         List<Article> list = Lists.newArrayList();

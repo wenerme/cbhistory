@@ -19,11 +19,13 @@ import org.joda.time.Days;
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 抽象一些常用的东西
  */
 @Slf4j
+@Transactional(readOnly = true)
 public abstract class CommonProcess
 {
     /**
@@ -42,7 +44,7 @@ public abstract class CommonProcess
      * 默认 5 * 60
      * </pre>
      */
-    @Value("${app.article.update.interval:5 * 60}")
+    @Value("${app.article.update.interval:300}")
     @Getter
     private int articleUpdateInterval = 5 * 60;
     /**
@@ -53,13 +55,13 @@ public abstract class CommonProcess
      * 默认 2 * 60
      * </pre>
      */
-    @Value("${app.article.update.factor:2 * 60}")
+    @Value("${app.article.update.factor:120}")
     @Getter
     private int articleUpdateFactor = 2 * 60;
     /**
      * 文章过期小时数
      */
-    @Value("${app.article.expired.hours: 7 * 24}")
+    @Value("${app.article.expired.hours: 168}")
     @Getter
     private int articleExpiredHours = 7 * 24;
 
