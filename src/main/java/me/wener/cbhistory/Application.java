@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.CorePackage;
-import me.wener.cbhistory.core.process.ProcessCenter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -61,12 +60,6 @@ public class Application extends SpringBootServletInitializer
         SpringApplication.run(applicationClass, args);
 
         log.debug("程序启动完成");
-    }
-
-    @Bean
-    public ProcessCenter processCenter()
-    {
-        return ProcessCenter.getInstance();
     }
 
     @Bean

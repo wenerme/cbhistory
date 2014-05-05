@@ -13,7 +13,6 @@ import javax.transaction.Transactional;
 import me.wener.cbhistory.Application;
 import me.wener.cbhistory.core.event.TryFoundArticleEvent;
 import me.wener.cbhistory.core.event.UpdateCommentEvent;
-import me.wener.cbhistory.core.process.ProcessCenter;
 import me.wener.cbhistory.domain.Article;
 import me.wener.cbhistory.domain.RawData;
 import me.wener.cbhistory.repositories.ArticleRepository;
@@ -102,7 +101,7 @@ public class TestEntity
     @Test
     public void persistComment() throws Exception
     {
-        Events.register(ProcessCenter.getInstance());
+//        Events.register(ProcessCenter.getInstance());
 //        Events.register(EventScheduler.getInstance());
 
         Article article = new Article();

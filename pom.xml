@@ -6,7 +6,7 @@
 
     <groupId>cbhistory</groupId>
     <artifactId>cbhistory</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <description>cb评论记录服务器,提供评论查询的接口,可让cb直接使用这个服务器提供的评论</description>
 
     <developers>
