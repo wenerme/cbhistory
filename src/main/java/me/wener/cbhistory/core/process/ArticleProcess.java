@@ -8,10 +8,7 @@ import com.google.common.eventbus.Subscribe;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManagerFactory;
 import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
 import jodd.jerry.Jerry;
@@ -35,15 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleProcess extends CommonProcess
 {
     // 匹配出Gv信息,放在 data 分组
-    Pattern regGV = Pattern.compile("^GV\\.DETAIL[^\\{]+(?<data>\\{[^\\}]+})", Pattern.MULTILINE);
-
+    private static final Pattern regGV = Pattern.compile("^GV\\.DETAIL[^\\{]+(?<data>\\{[^\\}]+})", Pattern.MULTILINE);
     private static final Pattern regMatchId = Pattern.compile("articles/(?<id>\\d+)");
-
-    @PostConstruct
-    public void init()
-    {
-        log.info("完成处理中心的初始化.");
-    }
 
     @Subscribe
     @AllowConcurrentEvents
@@ -54,7 +44,7 @@ public class ArticleProcess extends CommonProcess
         HttpResponse response = insureResponse(request);
         if (response == null)
         {
-            log.error("获取响应失败,请求的url为: "+e.getUrl());
+            log.error("获取响应失败,请求的url为: " + e.getUrl());
             return;
         }
         DiscoverArticleEvent event = new DiscoverArticleEvent(response.bodyText());
@@ -123,7 +113,7 @@ public class ArticleProcess extends CommonProcess
         HttpResponse response = insureResponse(HttpRequest.get(url), 3);
         if (response == null)
         {
-            log.error("获取响应失败,请求的url为: "+url);
+            log.error("获取响应失败,请求的url为: " + url);
             return;
         }
 
@@ -161,8 +151,8 @@ public class ArticleProcess extends CommonProcess
             {
                 article = gson.fromJson(data, Article.class);
                 if (log.isInfoEnabled())
-                    log.info("发现新文章: "+ article);
-            }else
+                    log.info("发现新文章: " + article);
+            } else
                 CodecUtils.jsonMergeTo(data, article);
         } else
             throw new Exception("无法匹配出 GvDetail 的内容.");
@@ -177,13 +167,7 @@ public class ArticleProcess extends CommonProcess
             String tmp = bar.$(".where").text().trim();
             tmp = tmp.substring(tmp.indexOf("：") + 1);// 替换前缀
             article.setSource(tmp);
-            // 目前的时间格式 2014-04-30 11:57:01
-//            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             article.setDate(CodecUtils.jsonToDate(bar.$(".date").text()));
-
-            // 这两个值是动态生成的,要在获取到评论后才能赋值
-//            article.setReadCount(Integer.parseInt(bar.$("#view_num").text()));
-//            article.setDiscussCount(Integer.parseInt(bar.$(".comment_num").text()));
         }
 
         // 先将当前状态保存
@@ -193,4 +177,19 @@ public class ArticleProcess extends CommonProcess
         Events.post(new TryUpdateCommentEvent(article));
     }
 
+    /**
+     * 并发控制,请求尝试处理该文章,如果能处理,则返回 true,如果不能处理,则代表有其他进程在处理
+     */
+    private boolean tryProcess(Long articleId)
+    {
+        return false;
+    }
+
+    /**
+     * 完成处理文章
+     */
+    private boolean doneProcess(Long articleId)
+    {
+        return false;
+    }
 }
