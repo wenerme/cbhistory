@@ -5,7 +5,7 @@ cbHistory-西贝历史评论插件
 
 这个为 cbhistory 的服务端,如果想要自己运行主要需要更改[db.properties]里的数据库连接配置,
 或者在同级目录下添加一个 `app.properties` 来覆盖 `db.properties` 的配置.
-关于可以设置的熟悉,在 [default.properties] 里有说明.
+关于可以设置的属性,在 [default.properties] 里有说明.
 
 在 `doc` 目录下有一些这个程序的相关设计信息.
 
