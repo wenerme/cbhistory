@@ -36,14 +36,11 @@ public class CommentProcess extends CommonProcess
     {
         Article article = e.getArticle();
 
-        if (log.isDebugEnabled())
-            log.debug("处理尝试更新评论事件, " + article);
+        log.debug("处理尝试更新文章事件, {}", article);
 
-        // 确保更新该评论达到更新间隔
-        if (article.getLastUpdateDate() != null && minutesAgoFromNow(article.getLastUpdateDate()) < COMMENT_UPDATE_PERIOD_MIN)
+        if (!isArticleNeedUpdate(article))
         {
-            if (log.isDebugEnabled())
-                log.debug("文章评论未达到更新间隔. " + article);
+            log.debug("文章尚不需要更新. {}", article);
             return;
         }
 
@@ -58,7 +55,8 @@ public class CommentProcess extends CommonProcess
         HttpResponse response = insureResponse(request);
         if (response == null)
         {
-            log.error("获取评论失败,无法获取相应,请求的url为: " + url + ",参数op为:" + op);
+            log.error("获取评论失败,无法获取相应,请求的url为: {},参数op: {} 文章: {}"
+                    , url, op, article);
             return;
         }
 
@@ -69,16 +67,15 @@ public class CommentProcess extends CommonProcess
             CodecUtils.jsonMergeTo(response.bodyText(), raw);
 
         if (!raw.getStatus().equals("success"))
-            throw new RuntimeException("获取到的评论内容状态异常 :" + raw + " 在文章:" + article);
+        {
+            log.error("获取到的评论内容状态异常 :{}, 文章为: {}", raw, article);
+            return;
+        }
 
-//        raw.setSid(e.getArticle().getSid());
+        // 设置好关系
         article.setRawData(raw);
         raw.setArticle(article);
         raw.setSid(article.getSid());
-
-//        persist(article);// 保存状态
-        article = articleRepo.save(article);
-//        persist(raw);// 将源数据保存到数据库中
 
         Events.post(new UpdateCommentEvent(article, raw));
     }
@@ -90,8 +87,7 @@ public class CommentProcess extends CommonProcess
     {
         Article article = e.getArticle();
 
-        if (log.isDebugEnabled())
-            log.debug("更新评论 " + e);
+        log.debug("更新评论: {}", e);
 
         String result = CodecUtils.decodeBase64(e.getRawContent().getResult());
         result = result.replaceFirst("^cnbeta", "");// 去除前缀
@@ -141,15 +137,13 @@ public class CommentProcess extends CommonProcess
         article.setComments(Sets.newHashSet(saved));
         article = articleRepo.save(article);
 
-        if (log.isInfoEnabled())
-            log.info("完成文章的更新. " + article);
+        log.info("完成文章的更新. {}", article);
         // 添加下次更新的事件调度
-        if (!isArticleExpired(article))
         {
-            // TODO 修改为快要过期的是时候再更新
-            Date nextUpdate = DateTime.now().plusMinutes(COMMENT_UPDATE_PERIOD_MIN - 10).toDate();
+            // 距离失效前60分钟
+            DateTime expiredDate = getCommentExpiredDate(article).minusMinutes(60);
             TryFoundArticleEvent event = new TryFoundArticleEvent(article.getSid());
-            scheduler.schedule(event, nextUpdate);
+            scheduler.schedule(event, expiredDate.toDate());
         }
 
         Events.finish(e);

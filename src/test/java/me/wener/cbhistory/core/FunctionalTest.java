@@ -1,6 +1,14 @@
 package me.wener.cbhistory.core;
 
+import me.wener.cbhistory.core.process.ArticleProcess;
+import me.wener.cbhistory.core.process.CommentProcess;
+import me.wener.cbhistory.core.process.CommonProcess;
+import me.wener.cbhistory.domain.Article;
 import me.wener.cbhistory.domain.OpInfo;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Hours;
+import org.joda.time.Minutes;
 import org.junit.Test;
 
 public class FunctionalTest
@@ -41,5 +49,50 @@ public class FunctionalTest
         assert info.getPage() == 1;
         assert info.getSid() == 287171;
         assert info.getSn().equals("fb52e");
+    }
+
+    @Test
+    public void testUpdateStrategy()
+    {
+        CommonProcess process=new CommonProcess() {};
+
+        DateTime now = DateTime.now();
+        DateTime expiredDate = now.minus(Hours.hours(process.getArticleExpiredHours()));
+
+        Article article = new Article();
+        // 距离过期还有 60 分钟
+        article.setDate(expiredDate.plus(Minutes.minutes(60)).toDate());
+
+        // 因为没有 lastUpdate, 所以肯定是需要更新的
+        assert process.isArticleNeedUpdate(article);
+
+        // 这个也是会更新的,因为 距离过期还有60 分钟,会缩短这个更新间隔
+        article.setLastUpdateDate(now.minus(Minutes.minutes(1+process.getArticleUpdateInterval()/2)).toDate());
+
+        assert process.isArticleNeedUpdate(article);
+
+        // 而这个是不会更新的,因为已经过期了不会考虑那个因子
+        article.setDate(expiredDate.minusMinutes(1).toDate());
+
+        assert !process.isArticleNeedUpdate(article);
+
+        {
+            // 距离过期还有 60 分钟
+            article.setDate(expiredDate.plus(Minutes.minutes(60+1)).toDate());
+
+            double interval = (double)process.getArticleUpdateInterval() / ((double)process.getArticleUpdateFactor()/60);
+            interval -= 1;
+
+            // 即便考虑这个因子,更新时间很接近 也不会更新的
+            article.setLastUpdateDate(now.minus(Minutes.minutes((int)interval)).toDate());
+            assert !process.isArticleNeedUpdate(article);
+
+            // 刚好超过该时间 则会更新
+            interval +=2;
+            article.setLastUpdateDate(now.minus(Minutes.minutes((int)interval)).toDate());
+            assert process.isArticleNeedUpdate(article);
+
+        }
+
     }
 }

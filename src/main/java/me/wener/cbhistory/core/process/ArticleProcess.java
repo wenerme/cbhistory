@@ -2,9 +2,11 @@ package me.wener.cbhistory.core.process;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,6 +74,9 @@ public class ArticleProcess extends CommonProcess
             Events.post(new TryFoundArticleEvent(id));
     }
 
+    /**
+     * 下载文章基本信息,主要是处理发现的新文章
+     */
     @Subscribe
     @AllowConcurrentEvents
     public void getArticleFromInternet(TryFoundArticleEvent e)
@@ -91,38 +96,33 @@ public class ArticleProcess extends CommonProcess
         }
         // endregion
 
-        // 判断文章是否过期
         Article article = articleRepo.findOne(sid);
-        if (article != null && article.getDate() != null && daysAgoFromNow(article.getDate()) > ARTICLE_EXPIRED_DAYS)
+
+        // 如果文章已经存在,将不再尝试下载,而是直接尝试更新评论
+        if (article != null && article.getSn() != null)
         {
-            if (article.getLastUpdateDate() == null)
-            {
-                if (log.isInfoEnabled())
-                    log.info("虽然文章已过期,但是由于尚未获取过一次,将尝试获取文章. " + article);
-            } else
-            {
-                if (log.isDebugEnabled())
-                    log.debug("发现的文章已经过期. " + article);
-                return;
-            }
+            log.info("文章已经存在,不需要继续下载,将尝试更新评论. sid: {}", sid);
+            Events.post(new TryUpdateCommentEvent(article));
+            return;
         }
 
+        // 下载文章页
         String url = "http://www.cnbeta.com/articles/%s.htm";
         url = String.format(url, e.getArticleId());
 
         HttpResponse response = insureResponse(HttpRequest.get(url), 3);
         if (response == null)
         {
-            log.error("获取响应失败,请求的url为: " + url);
+            log.error("获取响应失败,请求的url为: {}", url);
             return;
         }
 
-        // 确保返回的状态正确
+        // 如果返回状态不正确,则不再处理
         if (response.statusCode() != 200)
         {
-            final String format = "获取到的响应返回状态异常: %s. 请求路径为: %s 将停止接下来的操作.";
-            String msg = String.format(format, response.statusCode(), url);
-            Events.post(new ExceptionEvent(new Exception(msg)));
+            log.error("获取到的响应返回状态异常,将停止接下来的操作. 请求路径为: {} 响应对象: {}. "
+                    ,url, response);
+            return;
         }
 
         // 这里必须转换下编码,目前使用的 UTF-8
@@ -175,6 +175,34 @@ public class ArticleProcess extends CommonProcess
 
         // 更新评论
         Events.post(new TryUpdateCommentEvent(article));
+    }
+
+
+    private List<Article> filterExpiredArticleById(Iterable<Long> articles)
+    {
+        Set<Article> set = Sets.newHashSet();
+        for (Long id : articles)
+        {
+            Article article = articleRepo.findOne(id);
+            if (article == null)
+                continue;
+            set.add(article);
+        }
+        return filterExpiredArticle(set);
+    }
+    private List<Article> filterExpiredArticle(Iterable<Article> articles)
+    {
+        List<Article> list = Lists.newArrayList();
+
+        for (Article article : articles)
+        {
+            if (isArticleNeedUpdate(article))
+            {
+                list.add(article);
+            }
+        }
+
+        return list;
     }
 
     /**
