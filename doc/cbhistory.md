@@ -1,95 +1,95 @@
-
-×¢Òâ
+ï»¿
+æ³¨æ„
 ----
 
-* cbµÄÆÀÂÛ±£´æÊ±¼äÎª 2 Ìì
+* cbçš„è¯„è®ºä¿å­˜æ—¶é—´ä¸º 2 å¤©
 
-ÊµÏÖ²½Öè
+å®žçŽ°æ­¥éª¤
 -------
 
-* ÊµÏÖÊý¾ÝÊÕ¼¯
-* ÊµÏÖÊý¾ÝÈë¿â
-* ÊµÏÖ ÊÊÅä,¿ª·¢chrome²å¼þ
-* ÊµÏÖÊý¾ÝÍ³¼Æ
+* å®žçŽ°æ•°æ®æ”¶é›†
+* å®žçŽ°æ•°æ®å…¥åº“
+* å®žçŽ° é€‚é…,å¼€å‘chromeæ’ä»¶
+* å®žçŽ°æ•°æ®ç»Ÿè®¡
 
-Server ¿ò¼Ü
+Server æ¡†æž¶
 -----------
 
-* Í¨¹ýmore,»ñÈ¡µ½ page >= 2 µÄËùÓÐÎÄÕÂ
-* ¼ì²é¸ÃÎÄÕÂµÄÊ±¼ä, ÒÔÅÐ¶ÏÆÀÂÛÊÇ·ñ¿ÉÓÃ,Èç¹û¿ÉÓÃ
-,ÔòÌí¼ÓÒ»¸ö ÊÕ¼¯¸ÃÎÄÕÂÆÀÂÛµÄ task,Óë´ËÍ¬Ê±,»º´æ¸ÃÎÄÕÂÐÅÏ¢
-* Server Ã¿¸ô 1m ¼ì²éÊÇ·ñÓÐÂú×ãÌõ¼þµÄ task,
-Èç¹ûÓÐÔòÖ´ÐÐ,ÕâÀïµÄtaskÖ÷ÒªÊÇÊÕ¼¯ÎÄÕÂÆÀÂÛ.
-µ±Ö´ÐÐºó ÔÙ´ÎÌí¼ÓÒ»´Î task,Õâ¸ö¸ù¾Ý¾ßÌåµÄÊ±¼äÅÐ¶Ï,Ó¦¸ÃÊÇºÜ¶ÌµÄ,
-ÒÔÈ·±£ÎÄÕÂÆÀÂÛÊÇ·ñ»¹»áÓÐ±ä»¯.
-Èç¹ûÔÚÊÕ¼¯ÎÄÕÂµÄÊ±ºò,·¢ÏÖÒÑ¾­Ã»ÓÐÆÀÂÛÁË,Ôò½«ÆÀÂÛ±£´æµ½ unchange,
-ÇÒ²»ÔÚÌí¼Ótask
+* é€šè¿‡more,èŽ·å–åˆ° page >= 2 çš„æ‰€æœ‰æ–‡ç« 
+* æ£€æŸ¥è¯¥æ–‡ç« çš„æ—¶é—´, ä»¥åˆ¤æ–­è¯„è®ºæ˜¯å¦å¯ç”¨,å¦‚æžœå¯ç”¨
+,åˆ™æ·»åŠ ä¸€ä¸ª æ”¶é›†è¯¥æ–‡ç« è¯„è®ºçš„ task,ä¸Žæ­¤åŒæ—¶,ç¼“å­˜è¯¥æ–‡ç« ä¿¡æ¯
+* Server æ¯éš” 1m æ£€æŸ¥æ˜¯å¦æœ‰æ»¡è¶³æ¡ä»¶çš„ task,
+å¦‚æžœæœ‰åˆ™æ‰§è¡Œ,è¿™é‡Œçš„taskä¸»è¦æ˜¯æ”¶é›†æ–‡ç« è¯„è®º.
+å½“æ‰§è¡ŒåŽ å†æ¬¡æ·»åŠ ä¸€æ¬¡ task,è¿™ä¸ªæ ¹æ®å…·ä½“çš„æ—¶é—´åˆ¤æ–­,åº”è¯¥æ˜¯å¾ˆçŸ­çš„,
+ä»¥ç¡®ä¿æ–‡ç« è¯„è®ºæ˜¯å¦è¿˜ä¼šæœ‰å˜åŒ–.
+å¦‚æžœåœ¨æ”¶é›†æ–‡ç« çš„æ—¶å€™,å‘çŽ°å·²ç»æ²¡æœ‰è¯„è®ºäº†,åˆ™å°†è¯„è®ºä¿å­˜åˆ° unchange,
+ä¸”ä¸åœ¨æ·»åŠ task
 
-* Ê¹ÓÃ node-cron À´ÊµÏÖ schedule,Ìí¼Ó¶¨Ê± task
-* Ê×ÏÈ´ÓÒ»¸ö½âÎö more ¿ªÊ¼,¸ÃÈÎÎñÒ²ÐèÒª¶¨Ê±ÔËÐÐ,ÒÔ¼ì²âÐÂµÄÎÄÕÂ.
-* ÐèÒª×¢ÒâµÄÊÇ, node-cron ×îºÃÐèÒªÄÜµ¼³ö,ÒÔ±ãÏÂ´Î¿ªÊ¼µÄÊ±ºò ¼ÌÐøÔËÐÐ.
+* ä½¿ç”¨ node-cron æ¥å®žçŽ° schedule,æ·»åŠ å®šæ—¶ task
+* é¦–å…ˆä»Žä¸€ä¸ªè§£æž more å¼€å§‹,è¯¥ä»»åŠ¡ä¹Ÿéœ€è¦å®šæ—¶è¿è¡Œ,ä»¥æ£€æµ‹æ–°çš„æ–‡ç« .
+* éœ€è¦æ³¨æ„çš„æ˜¯, node-cron æœ€å¥½éœ€è¦èƒ½å¯¼å‡º,ä»¥ä¾¿ä¸‹æ¬¡å¼€å§‹çš„æ—¶å€™ ç»§ç»­è¿è¡Œ.
 
-* ¼¯³É dbµÄÊ±ºò,¿¼ÂÇÊ¹ÓÃ Ç¶ÈëµÄnodejs db [nedb](https://github.com/louischatriot/nedb)
-* »òÕß mongodb Ò²ÐÐ, nedbµÄapiÊÇmongodbµÄ×Ó¼¯
+* é›†æˆ dbçš„æ—¶å€™,è€ƒè™‘ä½¿ç”¨ åµŒå…¥çš„nodejs db [nedb](https://github.com/louischatriot/nedb)
+* æˆ–è€… mongodb ä¹Ÿè¡Œ, nedbçš„apiæ˜¯mongodbçš„å­é›†
 
-ÎÄ¼þ¼Ð
+æ–‡ä»¶å¤¹
 ------
 
-* data/ ´æ´¢Êý¾ÝµÄÎÄ¼þ¼Ð
-	* unchange/ ´æ´¢²»»áÔÙ¸Ä±äµÄÊý¾Ý,Ò²¾ÍÊÇÎÄÕÂÒÑ¾­²»ÄÜÔÙÆÀÂÛµÄ
-	* change/ ´æ´¢»¹»á¸Ä±äµÄÊý¾Ý
+* data/ å­˜å‚¨æ•°æ®çš„æ–‡ä»¶å¤¹
+	* unchange/ å­˜å‚¨ä¸ä¼šå†æ”¹å˜çš„æ•°æ®,ä¹Ÿå°±æ˜¯æ–‡ç« å·²ç»ä¸èƒ½å†è¯„è®ºçš„
+	* change/ å­˜å‚¨è¿˜ä¼šæ”¹å˜çš„æ•°æ®
 
-Ãû´Ê
+åè¯
 -----
 
-* sid// ÎÄÕÂid
-* tid// ÓÎ¿Íid
+* sid// æ–‡ç« id
+* tid// æ¸¸å®¢id
 * pid// parent id
 	
-ÎÄ¼þÃüÃû
+æ–‡ä»¶å‘½å
 --------
 
-ÔÚÊý¾ÝÊÕ¼¯½×¶Î,Êý¾ÝÔÝÇÒ²»ÐèÒª±£´æÔÚÊý¾Ý¿â,
-ËùÒÔÐèÒªÒÔÎÄ¼þµÄÐÎÊ½±£´æÔÚ±¾µØ
+åœ¨æ•°æ®æ”¶é›†é˜¶æ®µ,æ•°æ®æš‚ä¸”ä¸éœ€è¦ä¿å­˜åœ¨æ•°æ®åº“,
+æ‰€ä»¥éœ€è¦ä»¥æ–‡ä»¶çš„å½¢å¼ä¿å­˜åœ¨æœ¬åœ°
 
-* [sid].article.json ÎÄÕÂµÄÊý¾Ý
-* [sid].comments.json ÎÄÕÂÆÀÂÛµÄÊý¾Ý
+* [sid].article.json æ–‡ç« çš„æ•°æ®
+* [sid].comments.json æ–‡ç« è¯„è®ºçš„æ•°æ®
 
-»á·¢³öµÄ¼¸ÖÖÇëÇó
+ä¼šå‘å‡ºçš„å‡ ç§è¯·æ±‚
 --------------
 
 * CommentsRequest(sid)
 * ArticleList(page)
 
-ÆÀÂÛurl
+è¯„è®ºurl
 : http://www.cnbeta.com/cmt
 
-·¢ËÍÇëÇó±ØÒªµÄÁ½Ïî
-: op ºÍ
+å‘é€è¯·æ±‚å¿…è¦çš„ä¸¤é¡¹
+: op å’Œ
 X-Requested-With: XMLHttpRequest
 
-ÕâÊÇÒ»¸ö¿ÉÐÐµÄ cURL ÇëÇó,ID Îª 287053
+è¿™æ˜¯ä¸€ä¸ªå¯è¡Œçš„ cURL è¯·æ±‚,ID ä¸º 287053
 curl "http://www.cnbeta.com/cmt" -H "X-Requested-With: XMLHttpRequest" --data "op=MSwyODcwNTMsMzBhZjI"%"253DjO"%"252BfWcX"%"252F" --compressed
 
-ÁíÒ»¸ö
+å¦ä¸€ä¸ª
 -----
 287931
 op:MSwyODc5MzEsOTUyNGM%3DkreE8FRh
 
-½âÎö¹ý³Ì
+è§£æžè¿‡ç¨‹
 -------
 
-ÅÐ¶Ï ÊÇ·ñ³É¹¦
-¶Ô result ½âÎö base64 ½âÂë
-½âÎö³öÀ´µÄ json ÓÐ¸ö cnbeta Ç°×º
-È¥³ýÇ°×ººó×ª»»Îª¶ÔÏó
+åˆ¤æ–­ æ˜¯å¦æˆåŠŸ
+å¯¹ result è§£æž base64 è§£ç 
+è§£æžå‡ºæ¥çš„ json æœ‰ä¸ª cnbeta å‰ç¼€
+åŽ»é™¤å‰ç¼€åŽè½¬æ¢ä¸ºå¯¹è±¡
 
-½ÓÏÂÀ´µÄ½âÎöÔÝ²»¿¼ÂÇ,ÏÈ»ñÈ¡µ½×î»ù±¾µÄÔÙËµ
+æŽ¥ä¸‹æ¥çš„è§£æžæš‚ä¸è€ƒè™‘,å…ˆèŽ·å–åˆ°æœ€åŸºæœ¬çš„å†è¯´
 
-opËã·¨
+opç®—æ³•
 ------
 
-Ì½¾¿µÄÎÄÕÂ id 287931
+æŽ¢ç©¶çš„æ–‡ç«  id 287931
 
 op: encodeURIComponent(eval(
 a(
@@ -103,66 +103,66 @@ for(var d=1;d<b.length;d++){c+=String.fromCharCode(b.charCodeAt(d)-c.charCodeAt(
 
 $.cbcode.en64(page+','+GV.DETAIL.SID+','+GV.DETAIL.SN,true,8)
 
-true ÎªÊ¹ÓÃiunicode ,8 Îª sublen,ËæÒâÉú³É bash64 ×Ö·ûµÄ³¤¶È
+true ä¸ºä½¿ç”¨iunicode ,8 ä¸º sublen,éšæ„ç”Ÿæˆ bash64 å­—ç¬¦çš„é•¿åº¦
 
 var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 Math.floor(Math.random() * b64.length)
 
 MSwyODc5MzEsOTUyNGM=7AwOqFik
-=ºÅºóÃæµÄÊÇ±ä»¯µÄ
+=å·åŽé¢çš„æ˜¯å˜åŒ–çš„
 
 atob('MSwyODc5MzEsOTUyNGM=')
 "1,287931,9524c"
-Ò²¾ÍÊÇ 
+ä¹Ÿå°±æ˜¯ 
 page+','+GV.DETAIL.SID+','+GV.DETAIL.SN
 
-page Ò»°ãÊÇ 1,ÔÝÊ±»¹Ã»ÔÚcbÉÏ¿´µ½¹ý·­Ò³µÄ
+page ä¸€èˆ¬æ˜¯ 1,æš‚æ—¶è¿˜æ²¡åœ¨cbä¸Šçœ‹åˆ°è¿‡ç¿»é¡µçš„
 GV.DETAIL.SID
 GV.DETAIL.SN
-ÕâÐ©Öµ¶¼ÔÚ html Àï,Ã¿¸öÎÄÕÂµÄ sn ¶¼²»Ò»Ñù
+è¿™äº›å€¼éƒ½åœ¨ html é‡Œ,æ¯ä¸ªæ–‡ç« çš„ sn éƒ½ä¸ä¸€æ ·
 GV.DETAIL = {SID:"287931",POST_URL:"/comment",POST_VIEW_URL:"/cmt",SN:"9524c"};
-Æ¥Åä³ö¸ÃÐÐ
+åŒ¹é…å‡ºè¯¥è¡Œ
 ^GV\.DETAIL[^\{]+(?<data>\{[^\}]+})
 
-È»ºó encodeURIComponent
+ç„¶åŽ encodeURIComponent
 
-Ò³Ãæ½âÎö
+é¡µé¢è§£æž
 ------------
 
-### ÎÄÕÂÒ³Ãæ
-$('#news_title') ÎÄÕÂ±êÌâ
-$('.introduction p').text() ¼ò½é
-$('.where a').text() ¸åÔ´
+### æ–‡ç« é¡µé¢
+$('#news_title') æ–‡ç« æ ‡é¢˜
+$('.introduction p').text() ç®€ä»‹
+$('.where a').text() ç¨¿æº
 
 article
 -------
 
-cmntdict ÊÇÒ»ÌõÆÀÂÛÀïËùÓÐµÄÄÚÈÝ
-	°´Ë³Ðò,Ò»¸öÒ»¸öµÄÇ¶ÈëÏÔÊ¾µÄ
-	pid ¼´¸¸ id
+cmntdict æ˜¯ä¸€æ¡è¯„è®ºé‡Œæ‰€æœ‰çš„å†…å®¹
+	æŒ‰é¡ºåº,ä¸€ä¸ªä¸€ä¸ªçš„åµŒå…¥æ˜¾ç¤ºçš„
+	pid å³çˆ¶ id
 
-	tid ÎªÆÀÂÛµÄid
-	sid ÎªÎÄÕÂµÄid
+	tid ä¸ºè¯„è®ºçš„id
+	sid ä¸ºæ–‡ç« çš„id
 	
-cmntstore ÊÇÖ÷ÒªÐèÒª´æ´¢µÄÄÚÈÝ
+cmntstore æ˜¯ä¸»è¦éœ€è¦å­˜å‚¨çš„å†…å®¹
 cmtlist
-	parent ºÍ pid ÊÇµÈ¼ÛµÄ
-hotlist ÊÇÈÈÃÅÆÀÂÛÁÐ±í
+	parent å’Œ pid æ˜¯ç­‰ä»·çš„
+hotlist æ˜¯çƒ­é—¨è¯„è®ºåˆ—è¡¨
 
-  "comment_num": "58", ÆÀÂÛÊý
-  "join_num": "58", ÏÔÊ¾µÄÆÀÂÛÊý
+  "comment_num": "58", è¯„è®ºæ•°
+  "join_num": "58", æ˜¾ç¤ºçš„è¯„è®ºæ•°
   "token": "c122f8ceee68bada98d1c1499e55848b9dbe83b3",
-  "view_num": 17458, ÔÄ¶ÁÁ¿
+  "view_num": 17458, é˜…è¯»é‡
   "page": "1",
   "sid": "287961",
   "u": [],
-  "dig_num": "12", ¶¥
+  "dig_num": "12", é¡¶
   "fav_num": "0"
 	
 ```
 "sid": "266441",
-"title_show": "ÄÐÍ¯ÎóÍÌÅ¦¿Ûµç³ØÊ³µÀ±»ÉÕ´©",
-"hometext_show_short": "³É¶¼ÊÐ¸¾Å®¶ùÍ¯ÖÐÐÄÒ½ÔºÇÀ¾ÈÁËÒ»ÃûÒâÍâÍÌÏÂÒ»Ã¶Å¦¿Ûµç³ØµÄÄÐÍ¯£¬ËäÈ»³É¹¦È¡³öµç³Ø£¬µ«ÄÐÍ¯µÄÊ³µÀÒÑ±»µç³Ø¼îÒº¸¯Ê´¡£Ò½ÉúÌáÐÑ£¬¼Ò³¤ÒªÈÃº¢×ÓÔ¶ÀëÅ¦¿Ûµç³ØÕâÀà²»ÆðÑÛµÄ¡°É±ÊÖ¡±¡£º¢×ÓÎóÍÌÒìÎïºóÒª½ûÊ³£¬²¢¾¡¿ì¾ÍÒ½¡£",
+"title_show": "ç”·ç«¥è¯¯åžçº½æ‰£ç”µæ± é£Ÿé“è¢«çƒ§ç©¿",
+"hometext_show_short": "æˆéƒ½å¸‚å¦‡å¥³å„¿ç«¥ä¸­å¿ƒåŒ»é™¢æŠ¢æ•‘äº†ä¸€åæ„å¤–åžä¸‹ä¸€æžšçº½æ‰£ç”µæ± çš„ç”·ç«¥ï¼Œè™½ç„¶æˆåŠŸå–å‡ºç”µæ± ï¼Œä½†ç”·ç«¥çš„é£Ÿé“å·²è¢«ç”µæ± ç¢±æ¶²è…èš€ã€‚åŒ»ç”Ÿæé†’ï¼Œå®¶é•¿è¦è®©å­©å­è¿œç¦»çº½æ‰£ç”µæ± è¿™ç±»ä¸èµ·çœ¼çš„â€œæ€æ‰‹â€ã€‚å­©å­è¯¯åžå¼‚ç‰©åŽè¦ç¦é£Ÿï¼Œå¹¶å°½å¿«å°±åŒ»ã€‚",
 "logo": "http://static.cnbetacdn.com/topics/alert.png",
 "url_show": "/articles/266441.htm",
 "counter": "6434",
@@ -176,7 +176,7 @@ hotlist ÊÇÈÈÃÅÆÀÂÛÁÐ±í
 * intro
 * logo
 * time
-<!-- ÉÏÃæµÄÊÇÒ»¿ªÊ¼¾Í¿ÉÒÔ±£´æµÄ, ÏÂÃæµÄÊÇ»¹»á¸Ä±äµÄ,¿¼ÂÇ·Ö¿ª±£´æ -->
+<!-- ä¸Šé¢çš„æ˜¯ä¸€å¼€å§‹å°±å¯ä»¥ä¿å­˜çš„, ä¸‹é¢çš„æ˜¯è¿˜ä¼šæ”¹å˜çš„,è€ƒè™‘åˆ†å¼€ä¿å­˜ -->
 * counter
 * comments
 * score
@@ -188,25 +188,25 @@ comment
 "pid": "0",
 "sid": "266603",
 "date": "2014-01-01 02:47:06",
-"name": "ÄäÃûÈËÊ¿",
-"host_name": "ÃÀ¹ú",
-"comment": "ÈÕ±¾Í¬Ñ§ÏëÏóÁ¦Õæ·á¸»¡£",
+"name": "åŒ¿åäººå£«",
+"host_name": "ç¾Žå›½",
+"comment": "æ—¥æœ¬åŒå­¦æƒ³è±¡åŠ›çœŸä¸°å¯Œã€‚",
 "score": "0",
 "reason": "0",
 "userid": "0",
 "icon": ""
 ```
 
-* tid	¸ÃÆÀÂÛid
-* pic	¸ÃÆÀÂÛ»Ø¸´µÄÆÀÂÛ
-* sid	ÎÄÕÂid
+* tid	è¯¥è¯„è®ºid
+* pic	è¯¥è¯„è®ºå›žå¤çš„è¯„è®º
+* sid	æ–‡ç« id
 * date
 * name
 * host_name
 * comment
 * userid
 * icon
-<!-- ÒÔÉÏµÄÊÇ²»»á¸Ä±äµÄ -->
+<!-- ä»¥ä¸Šçš„æ˜¯ä¸ä¼šæ”¹å˜çš„ -->
 * score
 * reason
 
