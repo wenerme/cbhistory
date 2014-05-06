@@ -11,6 +11,7 @@ import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,8 +21,10 @@ import org.springframework.data.domain.Persistable;
 @Entity
 @ToString(exclude = {"article","parent"})
 @EqualsAndHashCode(exclude = {"article"})
-public class Comment implements Persistable<Long>
+@Table(name = Comment.TABLE_NAME)
+public class Comment implements Persistable<Long>, CBHistoryTable
 {
+    public static final String TABLE_NAME = TABLE_PREFIX+"comment";
     /*
      "tid": "9041995",
       "pid": "0",
@@ -35,10 +38,6 @@ public class Comment implements Persistable<Long>
       "userid": "0",
       "icon": ""
      */
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Expose(deserialize = false,serialize = false)
-//    private Long id;
 
     @Override
     public Long getId()

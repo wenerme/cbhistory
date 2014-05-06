@@ -7,20 +7,22 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import me.wener.cbhistory.core.CBHistory;
 import org.springframework.data.domain.Persistable;
 
 @Data
 @ToString(exclude = {"result","article"})
 @EqualsAndHashCode(exclude = {"article"})
 @Entity
-public class RawData implements Persistable<Long>
+@Table(name = RawData.TABLE_NAME)
+public class RawData implements Persistable<Long>, CBHistoryTable
 {
-//    @Id
-//    @Expose(deserialize = false,serialize = false)
-//    private Long id;
+    public static final String TABLE_NAME = TABLE_PREFIX+"rawdata";
+
     @Override
     public Long getId()
     {

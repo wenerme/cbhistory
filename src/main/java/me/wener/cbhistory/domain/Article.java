@@ -5,15 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -24,12 +16,10 @@ import org.springframework.data.domain.Persistable;
 @Entity
 @Accessors(chain = true)
 @ToString(exclude = {"comments","rawData","introduction"})
-//@EqualsAndHashCode(exclude = {"comments"})
-public class Article implements Persistable<Long>
+@Table(name = Article.TABLE_NAME)
+public class Article implements Persistable<Long>, CBHistoryTable
 {
-//    @Id
-//    @Expose(deserialize = false,serialize = false)
-//    private Long id;
+    public static final String TABLE_NAME = TABLE_PREFIX+"article";
 
     @Override
     public Long getId()
