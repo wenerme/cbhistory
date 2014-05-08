@@ -45,7 +45,7 @@ public class ArticleProcess extends CommonProcess
         HttpResponse response = insureResponse(request);
         if (response == null)
         {
-            log.error("获取响应失败,请求的url为: " + e.getUrl());
+            log.error("获取响应失败,请求的url为: {}", e.getUrl());
             return;
         }
         DiscoverArticleEvent event = new DiscoverArticleEvent(response.bodyText());
@@ -57,7 +57,7 @@ public class ArticleProcess extends CommonProcess
     public void discoverArticleIdInContent(DiscoverArticleEvent e)
     {
         if (log.isDebugEnabled())
-            log.debug("解析出内容中的文章 ID " + e);
+            log.debug("解析出内容中的文章 ID {}", e);
         final String content = e.getContent();
 
         Set<String> ids = Sets.newHashSet();
@@ -76,7 +76,7 @@ public class ArticleProcess extends CommonProcess
             try
             {
                 article = articleRepo.findOne(Long.parseLong(id));
-            } catch (NumberFormatException ignored){}
+            } catch (NumberFormatException ignored){continue;}
 
             if (article != null)
             {
@@ -108,7 +108,7 @@ public class ArticleProcess extends CommonProcess
             sid = Long.parseLong(e.getArticleId());
         } catch (NumberFormatException ex)
         {
-            log.error("解析文章 ID 的时候出现异常,不再尝试获取该文章. ID:" + e.getArticleId());
+            log.error("解析文章 ID 的时候出现异常,不再尝试获取该文章. sid: {}", e.getArticleId());
             return;
         }
         // endregion
@@ -168,7 +168,7 @@ public class ArticleProcess extends CommonProcess
             {
                 article = gson.fromJson(data, Article.class);
                 if (log.isInfoEnabled())
-                    log.info("发现新文章: " + article);
+                    log.info("发现新文章: {}", article);
             } else
                 CodecUtils.jsonMergeTo(data, article);
         } else

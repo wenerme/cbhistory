@@ -23,23 +23,28 @@ public class AuxiliaryProcess
 {
 
     // region 服务性的事件处理
+
+    @Subscribe
+    @AllowConcurrentEvents
+    public void logEvents(Event e)
+    {
+        if (log.isDebugEnabled())
+        {
+            if (e instanceof StartEvent)
+                log.debug("开始事件 {}" , e);
+            else if (e instanceof FinishEvent)
+                log.debug("结束事件 {}", e);
+
+        }
+    }
+
     @Subscribe
     @AllowConcurrentEvents
     public void unwrapStartEvent(StartEvent e)
     {
         Event event = e.getEvent();
         checkNotNull(event);
-        log.debug("开始事件 " + e);
         Events.post(event);
-    }
-
-    @Subscribe
-    @AllowConcurrentEvents
-    public void logFinishedEvent(FinishEvent e)
-    {
-        Event event = e.getEvent();
-        checkNotNull(event);
-        log.debug("结束事件 " + e);
     }
 
     @Subscribe
