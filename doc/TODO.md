@@ -16,8 +16,11 @@ v 0.0.4
 
 v 0.0.3
 -------
-* 优化 rawdata 的处理,在发现 rawdata 中没有评论时,不能保存该 rawdata,
+* [放弃] 优化 rawdata 的处理,在发现 rawdata 中没有评论时,不能保存该 rawdata,
 	这里也会涉及到一个更新 rawdata 的过程,即会更新 rawdata 中文章相关数据
+	* 需要修改 rawdata 的实现模式
+		1. 缓存文件
+		2. 手动生成 rawdata,生成步骤稍微有点复杂~
 
 v 0.0.2
 -------

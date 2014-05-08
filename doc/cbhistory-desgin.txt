@@ -56,25 +56,33 @@
 显示统计的 SQL
 -- 总数查询
 select "总数" as `统计`, 
-	(select count(*) from article) as `文章`, (select count(*) from comment) as `评论`,
-	(select count(a.c) from (select count(sid) as c from comment group by sid) as a) as `有评论的文章`;
+	(select count(*) from cbhistory_article) as `文章`, 
+	(select count(*) from cbhistory_comment) as `评论`,
+	(select count(a.c) from 
+		(select count(sid) as c from cbhistory_comment group by sid) as a) as `有评论的文章`,
+	(select now()) as `查询日期`;
+
 -- 最新文章
 select n.title as `最新文章标题`, n.date as `最新文章时间` 
-	from (select * from article order by date desc limit 0,1) as n;
+	from (select * from cbhistory_article order by date desc limit 0,1) as n;
 -- 最旧文章
 select o.title as `最旧文章标题`, o.date as `最旧文章时间` 
-	from (select * from article order by date asc limit 0,1) as o;
+	from (select * from cbhistory_article order by date asc limit 0,1) as o;
 
 -- 最早有评论的文章
-select sid,date,title from article where sid = (select sid from comment order by date asc limit 0,1);
+select sid,date,title from cbhistory_article where sid = (select sid from cbhistory_comment order by date asc limit 0,1);
 -- 最新有评论的文章
-select sid,date,title from article where sid = (select sid from comment order by date desc limit 0,1);
+select sid,date,title from cbhistory_article where sid = (select sid from cbhistory_comment order by date desc limit 0,1);
 
 -- 获取数据库的大小
 SELECT table_schema                                        "DB Name", 
    Round(Sum(data_length + index_length) / 1024 / 1024, 1) "DB Size in MB" 
 FROM   information_schema.tables 
 GROUP  BY table_schema; 
+
+H2 中这样导出 SQL
+
+script to 'filenam'
 
 统计记录
 =========
@@ -94,6 +102,12 @@ GROUP  BY table_schema;
 +------+------+------+--------------+
 | 总数 |  549 | 8157 |          441 |
 +------+------+------+--------------+
+
++------+------+-------+--------------+---------------------+
+| 统计 | 文章 | 评论  | 有评论的文章 | 查询日期            |
++------+------+-------+--------------+---------------------+
+| 总数 |  834 | 12346 |          679 | 2014-05-08 18:58:34 |
++------+------+-------+--------------+---------------------+
 
 并发控制
 --------
