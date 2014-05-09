@@ -9,6 +9,7 @@
 	
 	<logger name="org.springframework.data" level="debug" />
 	<logger name="me.wener.cbhistory" level="info" />
+	<logger name="com.j256.ormlite" level="debug" />
 
 	<root level="info">
 		<appender-ref ref="console" />

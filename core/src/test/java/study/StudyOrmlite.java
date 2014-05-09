@@ -2,17 +2,20 @@ package study;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.j256.ormlite.table.DatabaseTableConfig;
 import com.j256.ormlite.table.TableUtils;
 import java.io.IOException;
 import me.wener.cbhistory.core.modules.PersistModule;
 import me.wener.cbhistory.core.modules.PropertiesModule;
 import me.wener.cbhistory.domain.Article;
 import me.wener.cbhistory.service.ArticleService;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class StudyOrmlite
 {
     @Test
+    @Ignore
     public void testTable() throws IOException
     {
         Injector injector = Guice.createInjector(
@@ -24,6 +27,8 @@ public class StudyOrmlite
         assert articleSvc != null;
         assert articleSvc == articleSvcDup;
 
+        DatabaseTableConfig.extractTableName(Article.class);
 
+        System.out.println(articleSvc.count());
     }
 }
