@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cbhistory</groupId>
-    <artifactId>cbhistory</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <groupId>me.wener.cbhistory</groupId>
+    <artifactId>parent</artifactId>
+    <version>${cbhistory.version}</version>
     <description>cb评论记录服务器,提供评论查询的接口,可让cb直接使用这个服务器提供的评论</description>
 
     <developers>
@@ -24,11 +24,18 @@
     </parent>
 
     <!--设置打包方式: jar/war -->
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
 
+	<modules>
+		<module>core</module>
+	</modules>
+	
     <properties>
+        <!--程序的主要配置-->
         <start-class>me.wener.cbhistory.Application</start-class>
+        <cbhistory.version>0.0.2-SNAPSHOT</cbhistory.version>
 
+        <!--外围配置-->
         <java.version>1.7</java.version>
         <jodd.version>3.5.1</jodd.version>
         <hibernate.version>4.3.5.Final</hibernate.version>
