@@ -12,10 +12,42 @@
 	<name>CBHistory Core</name>
 
     <dependencies>
+        <!--DB-->
         <dependency>
             <groupId>com.j256.ormlite</groupId>
             <artifactId>ormlite-core</artifactId>
             <version>4.48</version>
+        </dependency>
+        <dependency>
+            <groupId>com.j256.ormlite</groupId>
+            <artifactId>ormlite-jdbc</artifactId>
+            <version>4.48</version>
+        </dependency>
+
+        <!--Guice-->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.0-beta4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mycila.guice.extensions</groupId>
+            <artifactId>mycila-guice-jsr250</artifactId>
+            <version>3.2.ga</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.sonatype.sisu</groupId>
+                    <artifactId>sisu-guice</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 	
