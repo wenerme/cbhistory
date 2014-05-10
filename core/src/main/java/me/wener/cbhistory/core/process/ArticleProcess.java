@@ -75,7 +75,7 @@ public class ArticleProcess extends CommonProcess
         {
             try
             {
-                article = articleRepo.findOne(Long.parseLong(id));
+                article = articleSvc.findOne(Long.parseLong(id));
             } catch (NumberFormatException ignored){continue;}
 
             if (article != null)
@@ -113,7 +113,7 @@ public class ArticleProcess extends CommonProcess
         }
         // endregion
 
-        Article article = articleRepo.findOne(sid);
+        Article article = articleSvc.findOne(sid);
 
         // 如果文章已经存在,将不再尝试下载,而是直接尝试更新评论
         if (article != null && article.getSn() != null)
@@ -156,7 +156,7 @@ public class ArticleProcess extends CommonProcess
         final String content = e.getContent();
         final Jerry doc = Jerry.jerry(content);
 
-        Article article = articleRepo.findOne(e.getArticleId());
+        Article article = articleSvc.findOne(e.getArticleId());
 
         // 解析出文章的详细信息
         Matcher matcher = regGV.matcher(content);
@@ -188,7 +188,7 @@ public class ArticleProcess extends CommonProcess
         }
 
         // 先将当前状态保存
-        article = articleRepo.save(article);
+        article = articleSvc.save(article);
 
         // 更新评论
         Events.post(new TryUpdateCommentEvent(article));
@@ -200,7 +200,7 @@ public class ArticleProcess extends CommonProcess
         Set<Article> set = Sets.newHashSet();
         for (Long id : articles)
         {
-            Article article = articleRepo.findOne(id);
+            Article article = articleSvc.findOne(id);
             if (article == null)
                 continue;
             set.add(article);

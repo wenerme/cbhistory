@@ -14,6 +14,8 @@ import me.wener.cbhistory.domain.Article;
 import me.wener.cbhistory.repositories.ArticleRepository;
 import me.wener.cbhistory.repositories.CommentRepository;
 import me.wener.cbhistory.repositories.RawDataRepository;
+import me.wener.cbhistory.service.ArticleService;
+import me.wener.cbhistory.service.CommentService;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
@@ -25,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
  * 抽象一些常用的东西
  */
 @Slf4j
-@Transactional(readOnly = true)
 public abstract class CommonProcess
 {
     /**
@@ -69,11 +70,11 @@ public abstract class CommonProcess
     protected EventScheduler scheduler;
 
     @Inject
-    protected ArticleRepository articleRepo;
+    protected ArticleService articleSvc;
     @Inject
     protected RawDataRepository rawCommentRepo;
     @Inject
-    protected CommentRepository commentRepo;
+    protected CommentService commentSvc;
 
     /**
      * Gson 是比较常用,不需要太多的实例,gson 是线程安全的.

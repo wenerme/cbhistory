@@ -1,6 +1,7 @@
 package me.wener.cbhistory.domain;
 
 import com.google.gson.annotations.Expose;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -45,7 +46,9 @@ public class RawData implements Persistable<Long>, CBHistoryTable
     @Expose(deserialize = false)
     private Long sid;
 
+    @Column
     private String status;
+    @Column
     @Lob
     private String result;
 

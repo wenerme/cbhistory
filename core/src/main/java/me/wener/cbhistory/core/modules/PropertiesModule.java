@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -15,9 +18,24 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PropertiesModule extends AbstractModule
 {
+    @Setter(AccessLevel.PROTECTED)
+    @Getter
+    private Properties properties;
 
-    Properties properties = new Properties();
+    protected PropertiesModule()
+    {
+    }
 
+    public static PropertiesModule from(Properties properties)
+    {
+        PropertiesModule module = new PropertiesModule();
+        module.setProperties(properties);
+        return module;
+    }
+    public static PropertiesModule none()
+    {
+        return from(new Properties());
+    }
     @Override
     protected void configure()
     {

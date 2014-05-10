@@ -2,6 +2,7 @@ package me.wener.cbhistory.domain;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.table.DatabaseTable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
@@ -15,6 +16,8 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import me.wener.cbhistory.service.impl.ArticleServiceImpl;
+import me.wener.cbhistory.service.impl.CommentServiceImpl;
 import org.springframework.data.domain.Persistable;
 
 @Data
@@ -22,6 +25,7 @@ import org.springframework.data.domain.Persistable;
 @ToString(exclude = {"article","parent"})
 @EqualsAndHashCode(exclude = {"article"})
 @Table(name = Comment.TABLE_NAME)
+@DatabaseTable(daoClass = CommentServiceImpl.class)
 public class Comment implements Persistable<Long>, CBHistoryTable
 {
     public static final String TABLE_NAME = TABLE_PREFIX+"comment";
@@ -59,14 +63,19 @@ public class Comment implements Persistable<Long>, CBHistoryTable
 
     @Id
     private Long tid;
+    @Column
     private Long pid;
+    @Column
     private Long sid;
 
+    @Column
     private Date date;
+    @Column
     private String name;
     /**
      * 所在地址
      */
+    @Column
     @SerializedName("host_name")
     private String hostName;
     @Column(length = 400)// 默认长度为320, 给 400足够了
@@ -74,15 +83,19 @@ public class Comment implements Persistable<Long>, CBHistoryTable
     /**
      * 支持
      */
+    @Column
     @SerializedName("score")
     private Integer pros;
     /**
      * 反对
      */
+    @Column
     @SerializedName("reason")
     private Integer cons;
+    @Column
     @SerializedName("userid")
     private Integer userId;
+    @Column
     private String icon;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

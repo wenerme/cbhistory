@@ -22,17 +22,14 @@ import me.wener.cbhistory.domain.RawComment;
 import me.wener.cbhistory.domain.RawData;
 import me.wener.cbhistory.util.CodecUtils;
 import org.joda.time.DateTime;
-import org.springframework.transaction.annotation.Transactional;
 
 @Named
 @Slf4j
-@Transactional(readOnly = true)
 public class CommentProcess extends CommonProcess
 {
 
     @Subscribe
     @AllowConcurrentEvents
-    @Transactional
     public void getCommentFromInternet(TryUpdateCommentEvent e)
     {
         Article article = e.getArticle();
@@ -83,11 +80,10 @@ public class CommentProcess extends CommonProcess
 
     @Subscribe
     @AllowConcurrentEvents
-    @Transactional
     public void parseComment(UpdateCommentEvent e)
     {
         Article article = e.getArticle();
-        article = articleRepo.save(article);
+        article = articleSvc.save(article);
 
         log.debug("更新评论: {}", e);
 
@@ -95,7 +91,7 @@ public class CommentProcess extends CommonProcess
         result = result.replaceFirst("^cnbeta", "");// 去除前缀
         RawComment rawComment = new RawComment();
         // 设置好已有的评论
-        Set<Comment> comments = article.getComments();
+        Set<Comment> comments = Sets.newHashSet(article.getComments());
         {
             if (comments == null)
             {
@@ -135,9 +131,9 @@ public class CommentProcess extends CommonProcess
 
         // 保存状态
         // 这里的更新稍微有点麻烦,但是为了确保正确性,也就这样了
-        Iterable<Comment> saved = commentRepo.save(article.getComments());
+        Iterable<Comment> saved = commentSvc.save(article.getComments());
         article.setComments(Sets.newHashSet(saved));
-        article = articleRepo.save(article);
+        article = articleSvc.save(article);
 
         log.info("完成文章的更新. {}", article);
         // 添加下次更新的事件调度

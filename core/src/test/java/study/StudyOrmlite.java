@@ -2,9 +2,11 @@ package study;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.j256.ormlite.table.DatabaseTableConfig;
-import com.j256.ormlite.table.TableUtils;
+import com.mycila.guice.ext.closeable.CloseableModule;
+import com.mycila.guice.ext.jsr250.Jsr250Module;
 import java.io.IOException;
+import me.wener.cbhistory.core.modules.ChainInjector;
+import me.wener.cbhistory.core.modules.OrmlitePersistModule;
 import me.wener.cbhistory.core.modules.PersistModule;
 import me.wener.cbhistory.core.modules.PropertiesModule;
 import me.wener.cbhistory.domain.Article;
@@ -19,16 +21,40 @@ public class StudyOrmlite
     public void testTable() throws IOException
     {
         Injector injector = Guice.createInjector(
-                new PropertiesModule().withOptionalResource("default.properties","db.properties"),
-                new PersistModule());
+                PropertiesModule.none().withOptionalResource("default.properties", "db.properties"),
+                new OrmlitePersistModule());
         ArticleService articleSvc = injector.getInstance(ArticleService.class);
         ArticleService articleSvcDup = injector.getInstance(ArticleService.class);
 
         assert articleSvc != null;
         assert articleSvc == articleSvcDup;
 
-        DatabaseTableConfig.extractTableName(Article.class);
-
         System.out.println(articleSvc.count());
+    }
+
+    @Test
+    @Ignore
+    public void testQuery() throws IOException
+    {
+        long id = 286991;
+
+        Injector injector = ChainInjector
+                .start(PropertiesModule.none().withOptionalResource("default.properties", "db.properties")
+                    , new Jsr250Module(), new CloseableModule())
+                .then(PersistModule.class)
+                .then(OrmlitePersistModule.class)
+                .getInjector();
+
+        ArticleService articleSvc = injector.getInstance(ArticleService.class);
+
+        Article article = articleSvc.findOne(id);
+
+        System.out.println(article.getComments().size());
+        System.out.println(article);
+    }
+
+    public void testSource()
+    {
+
     }
 }

@@ -6,7 +6,7 @@ import java.sql.SQLException;
  /**
  * 和 Spring data 的 CrudRepository 相同
   *
-  * 将 delete(T) 修改为了 deleteBy 因为和 ormlite 的 dao 方法不匹配
+  * 将 delete(T) 移除了,因为和 Dao 冲突
  * @param <T>
  * @param <ID>
  */
@@ -73,13 +73,6 @@ public interface CrudService<T, ID extends Serializable>
      * @throws IllegalArgumentException in case the given {@code id} is {@literal null}
      */
     void delete(ID id);
-
-    /**
-     * Deletes a given entity.
-     *
-     * @throws IllegalArgumentException in case the given entity is (@literal null}.
-     */
-    void deleteBy(T entity);
 
     /**
      * Deletes the given entities.
