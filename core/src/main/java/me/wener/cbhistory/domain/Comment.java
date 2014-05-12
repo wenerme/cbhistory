@@ -91,7 +91,7 @@ public class Comment implements Persistable<Long>, CBHistoryTable
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "sid", nullable = false, insertable = false, updatable = false)
-    @Expose(deserialize = false)
+    @Expose(deserialize = false, serialize = false)
     private Article article;
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
@@ -99,7 +99,7 @@ public class Comment implements Persistable<Long>, CBHistoryTable
             // 因为有可能评论被删除了,所以不需要添加外键约束
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT),
             nullable = true, insertable = false, updatable = false)
-    @Expose(deserialize = false)
+    @Expose(deserialize = false, serialize = false)
     private Comment parent;
 
 }

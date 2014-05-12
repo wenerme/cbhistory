@@ -5,11 +5,14 @@ import com.google.inject.Injector;
 import com.mycila.guice.ext.closeable.CloseableModule;
 import com.mycila.guice.ext.jsr250.Jsr250Module;
 import java.io.IOException;
+import me.wener.cbhistory.core.CBHistory;
 import me.wener.cbhistory.core.modules.ChainInjector;
 import me.wener.cbhistory.core.modules.OrmlitePersistModule;
 import me.wener.cbhistory.core.modules.PersistModule;
 import me.wener.cbhistory.core.modules.PropertiesModule;
 import me.wener.cbhistory.domain.Article;
+import me.wener.cbhistory.domain.RawComment;
+import me.wener.cbhistory.domain.RawData;
 import me.wener.cbhistory.service.ArticleService;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -36,7 +39,7 @@ public class StudyOrmlite
     @Ignore
     public void testQuery() throws IOException
     {
-        long id = 286991;
+        long id = 287625;
 
         Injector injector = ChainInjector
                 .start(PropertiesModule.none().withOptionalResource("default.properties", "db.properties")
@@ -51,6 +54,11 @@ public class StudyOrmlite
 
         System.out.println(article.getComments().size());
         System.out.println(article);
+        RawComment rawComment = CBHistory.getRawCommentFrom(article);
+        System.out.println(rawComment);
+
+        RawData rawData = CBHistory.getRawDataFrom(article);
+        System.out.println(rawData);
     }
 
     public void testSource()

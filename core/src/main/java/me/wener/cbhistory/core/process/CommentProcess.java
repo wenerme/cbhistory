@@ -72,7 +72,7 @@ public class CommentProcess extends CommonProcess
 
         // 设置好关系
         article.setRawData(raw);
-        raw.setArticle(article);
+        // TODO 保存 raw 数据
         raw.setSid(article.getSid());
 
         Events.post(new UpdateCommentEvent(article, raw));

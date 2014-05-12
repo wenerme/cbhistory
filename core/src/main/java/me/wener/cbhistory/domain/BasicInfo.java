@@ -8,7 +8,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @Data
 public class BasicInfo
 {
-    private String tid;
-    private String pid;
-    private String sid;
+    private Long tid;
+    private Long pid;
+    private Long sid;
 }
