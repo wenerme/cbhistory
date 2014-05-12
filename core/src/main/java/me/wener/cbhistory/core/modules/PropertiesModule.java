@@ -32,10 +32,12 @@ public class PropertiesModule extends AbstractModule
         module.setProperties(properties);
         return module;
     }
+
     public static PropertiesModule none()
     {
         return from(new Properties());
     }
+
     @Override
     protected void configure()
     {
@@ -64,12 +66,13 @@ public class PropertiesModule extends AbstractModule
 
     /**
      * 读取 ClassPath 中的资源文件
+     *
      * @throws IOException
      */
     public PropertiesModule withResource(String path) throws IOException
     {
         InputStream is = getClass().getClassLoader().getResourceAsStream(path);
-        log.info("尝试加载属性文件 {} {}", path, is==null?"文件未找到!":"");
+        log.info("尝试加载属性文件 {} {}", path, is == null ? "文件未找到!" : "");
         if (is == null)
             throw new FileNotFoundException("未找到资源 " + path);
 
@@ -84,28 +87,35 @@ public class PropertiesModule extends AbstractModule
     /**
      * 和 {@link me.wener.cbhistory.core.modules.PropertiesModule#withResource(String)}
      * 类似,但允许资源不存在
-     * @throws IOException
      */
-    public PropertiesModule withOptionalResource(String path) throws IOException
+    public PropertiesModule withOptionalResource(String path)
     {
         InputStream is = getClass().getClassLoader().getResourceAsStream(path);
-        log.info("尝试加载属性文件 {} {}", path, is==null?"文件未找到!":"");
-        if (is != null)
-        {
-            Properties prop = new Properties();
-            prop.load(is);
-            withProperties(prop);
-            is.close();
+        log.info("尝试加载属性文件 {} {}", path, is == null ? "文件未找到!" : "");
+        if (is != null) {
+            try {
+                Properties prop = new Properties();
+                prop.load(is);
+                withProperties(prop);
+                is.close();
+            } catch (IOException e) {
+                log.error("加载属性文件 " + path + " 出现异常", e);
+            } finally {
+                try {
+                    is.close();
+                } catch (IOException ignored) {
+                }
+            }
+
         }
 
         return this;
     }
 
     /**
-     * @throws IOException
      * @see me.wener.cbhistory.core.modules.PropertiesModule#withOptionalResource(String)
      */
-    public PropertiesModule withOptionalResource(String ... resources) throws IOException
+    public PropertiesModule withOptionalResource(String... resources)
     {
         for (String resource : resources)
             withOptionalResource(resource);
