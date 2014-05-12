@@ -17,8 +17,8 @@ public class App
         Injector injector = ChainInjector
                 .start(PropertiesModule
                         .none()
-                        .withOptionalResource("default.properties", "db.properties")
-                        , new Jsr250Module(), new CloseableModule())
+                        .withOptionalResource("default.properties", "db.properties"))
+                .and(Jsr250Module.class, CloseableModule.class)
                 .then(PersistModule.class)
                 .then(OrmlitePersistModule.class)
                 .getInjector();
