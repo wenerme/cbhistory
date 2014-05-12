@@ -70,7 +70,7 @@ public class BasicServiceImpl<T, ID extends Serializable>
             entity = queryForId(id);
         } catch (SQLException e)
         {
-            log.error("查询 id 时发生异常. id: {}", id);
+            log.error("查询 id 时发生异常. id: "+id, e);
         }
         return entity;
     }

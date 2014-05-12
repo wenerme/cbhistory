@@ -29,8 +29,12 @@ public class JpaEnabledDao<T, ID extends Serializable> extends BaseDaoImpl<T, ID
     @Override
     public void initialize() throws SQLException
     {
-        DatabaseTableConfig<T> config = DatabaseTableConfig.fromClass(getConnectionSource(), dataClass);
+        DatabaseTableConfig<T> config = new DatabaseTableConfig<>();
+        config.setDataClass(dataClass);
         config.setTableName(getTableName());
+        config.setFieldConfigs(OrmliteJPAUtils.getFieldConfig(getConnectionSource(), getTableName(), dataClass));
+        config.initialize();
+
         setTableConfig(config);
 
         super.initialize();

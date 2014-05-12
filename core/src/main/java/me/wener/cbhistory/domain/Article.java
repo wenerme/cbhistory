@@ -54,48 +54,37 @@ public class Article implements Persistable<Long>, CBHistoryTable
     @SerializedName("SID")
     private Long sid;
 
-    @Column
     @SerializedName("SN")
     private String sn;
 
-    @Column
     private String title;
     @Column(length = 512)// 为了避免长度过长
     private String introduction;
     /**
      * 稿源
      */
-    @Column
     private String source;
-    @Column
     private Date date;
 
     /**
      * 阅读数量
      */
-    @Column
     @SerializedName("view_num")
     private Integer readCount;
     /**
      * 评论数量
      */
-    @Column
     @SerializedName("comment_num")
     private Integer discussCount;
-    @Column
     @SerializedName("join_num")
     private Integer joinNum;
-    @Column
     private String token;
 
-    @Column
     @SerializedName("dig_num")
     private Integer digNum;
-    @Column
     @SerializedName("fav_num")
     private Integer favNum;
 
-    @Column
     @Expose(deserialize = false, serialize = false)
     private Date lastUpdateDate;
 

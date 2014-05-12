@@ -63,19 +63,14 @@ public class Comment implements Persistable<Long>, CBHistoryTable
 
     @Id
     private Long tid;
-    @Column
     private Long pid;
-    @Column
     private Long sid;
 
-    @Column
     private Date date;
-    @Column
     private String name;
     /**
      * 所在地址
      */
-    @Column
     @SerializedName("host_name")
     private String hostName;
     @Column(length = 400)// 默认长度为320, 给 400足够了
@@ -83,19 +78,15 @@ public class Comment implements Persistable<Long>, CBHistoryTable
     /**
      * 支持
      */
-    @Column
     @SerializedName("score")
     private Integer pros;
     /**
      * 反对
      */
-    @Column
     @SerializedName("reason")
     private Integer cons;
-    @Column
     @SerializedName("userid")
     private Integer userId;
-    @Column
     private String icon;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
