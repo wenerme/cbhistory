@@ -10,7 +10,7 @@ import me.wener.cbhistory.core.event.FoundArticleEvent;
 import me.wener.cbhistory.core.event.TryFoundArticleEvent;
 import me.wener.cbhistory.core.event.TryUpdateCommentEvent;
 import me.wener.cbhistory.core.event.UpdateCommentEvent;
-import me.wener.cbhistory.domain.Article;
+import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.domain.RawData;
 import org.junit.Ignore;
 import org.junit.Test;

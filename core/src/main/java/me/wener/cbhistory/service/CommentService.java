@@ -1,7 +1,6 @@
 package me.wener.cbhistory.service;
 
-import me.wener.cbhistory.domain.Article;
-import me.wener.cbhistory.domain.Comment;
+import me.wener.cbhistory.domain.entity.Comment;
 
 public interface CommentService extends BasicService<Comment, Long>
 {

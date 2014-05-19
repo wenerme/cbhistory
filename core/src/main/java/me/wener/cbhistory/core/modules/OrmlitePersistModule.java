@@ -11,42 +11,17 @@ import com.j256.ormlite.support.ConnectionSource;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 import lombok.SneakyThrows;
-import me.wener.cbhistory.domain.Article;
+import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
 import me.wener.cbhistory.service.impl.CommentServiceImpl;
 
 public class OrmlitePersistModule extends AbstractModule
 {
-//    @Inject
-//    DataSource dataSource;
-//    @Inject @Named("jdbc.url")
-//    String jdbcUrl;
 
     @Override
     protected void configure()
     {
-//        ArticleServiceImpl articleSvc;
-//        CommentServiceImpl commentSvc;
-//        ConnectionSource source;
-//        try
-//        {
-//            articleSvc = new ArticleServiceImpl();
-//            commentSvc = new CommentServiceImpl();
-//            source = new DataSourceConnectionSource(dataSource, jdbcUrl);
-//            DaoManager.registerDao(source, articleSvc);
-//            DaoManager.registerDao(source, commentSvc);
-//
-//        } catch (SQLException e)
-//        {
-//            throw new RuntimeException(e);
-//        }
-//        bind(ConnectionSource.class)
-//                .toInstance(source);
-//        bind(ArticleService.class)
-//            .toInstance(articleSvc);
-//        bind(CommentService.class)
-//                .toInstance(commentSvc);
 
         bind(ConnectionSource.class)
                 .toProvider(new Provider<ConnectionSource>()

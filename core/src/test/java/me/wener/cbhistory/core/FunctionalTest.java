@@ -1,16 +1,15 @@
 package me.wener.cbhistory.core;
 
-import me.wener.cbhistory.core.process.ArticleProcess;
-import me.wener.cbhistory.core.process.CommentProcess;
 import me.wener.cbhistory.core.process.CommonProcess;
-import me.wener.cbhistory.domain.Article;
+import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.domain.OpInfo;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class FunctionalTest
 {
     @Test

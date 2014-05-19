@@ -184,8 +184,11 @@ map: id -> date/event
 		解析出 Comment 对象
 		发送 更新文章评论完成事件
 		
-		
-		
+允许跨域的设置
+response.setHeader("Access-Control-Allow-Origin", "*");
+response.setHeader("Access-Control-Allow-Methods", "POST, GET");
+response.setHeader("Access-Control-Max-Age", "3600");
+response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
 		
 		
 		

@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -68,6 +69,12 @@ public class App
     public static final long MINUTE_MS = SECOND_MS * 60;
     public static final long HOUR_MS = MINUTE_MS * 60;
     public static final long DAY_MS = HOUR_MS * 24;
+
+    @Inject
+    private void setupLogging(@Named("app.log.level") String  logLevel)
+    {
+        log.info("设置日志等级为: {}", logLevel);
+    }
 
     @PostConstruct
     private void setupSchedules()

@@ -2,11 +2,9 @@ package me.wener.cbhistory.core.process;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,9 +19,8 @@ import me.wener.cbhistory.core.event.FoundArticleEvent;
 import me.wener.cbhistory.core.event.TryDiscoverArticleByUrlEvent;
 import me.wener.cbhistory.core.event.TryFoundArticleEvent;
 import me.wener.cbhistory.core.event.TryUpdateCommentEvent;
-import me.wener.cbhistory.domain.Article;
+import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.util.CodecUtils;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 对文章的相关处理
@@ -38,7 +35,7 @@ public class ArticleProcess extends CommonProcess
 
     @Subscribe
     @AllowConcurrentEvents
-    public void getHtmlFromInternet(TryDiscoverArticleByUrlEvent e)
+    public void downloadDiscoverContent(TryDiscoverArticleByUrlEvent e)
     {
         final String url = e.getUrl();
         HttpRequest request = HttpRequest.get(url);
@@ -56,8 +53,8 @@ public class ArticleProcess extends CommonProcess
     @AllowConcurrentEvents
     public void discoverArticleIdInContent(DiscoverArticleEvent e)
     {
-        if (log.isDebugEnabled())
-            log.debug("解析出内容中的文章 ID {}", e);
+        log.debug("解析出内容中的文章 ID {}", e);
+
         final String content = e.getContent();
 
         Set<String> ids = Sets.newHashSet();
@@ -67,6 +64,8 @@ public class ArticleProcess extends CommonProcess
             String id = matcher.group("id");
             ids.add(id);
         }
+
+        log.info("在内容中共发现 {} 个id", ids.size());
 
         // 将发现的所有 ID 发布出去
         // 这里的并发太恐怖了,需要缩小范围
@@ -96,10 +95,9 @@ public class ArticleProcess extends CommonProcess
      */
     @Subscribe
     @AllowConcurrentEvents
-    public void getArticleFromInternet(TryFoundArticleEvent e)
+    public void downloadArticle(TryFoundArticleEvent e)
     {
-        if (log.isDebugEnabled())
-            log.debug("发现文章, 尝试获取 " + e);
+        log.debug("发现文章, 尝试获取 {}", e);
 
         Long sid = null;
         // region 获取ID,并确保 ID 的正确性
@@ -150,8 +148,7 @@ public class ArticleProcess extends CommonProcess
 
     @Subscribe
     @AllowConcurrentEvents
-    @Transactional
-    public void parseArticle(FoundArticleEvent e) throws Exception
+    public void parseArticle(FoundArticleEvent e)
     {
         final String content = e.getContent();
         final Jerry doc = Jerry.jerry(content);
@@ -172,7 +169,10 @@ public class ArticleProcess extends CommonProcess
             } else
                 CodecUtils.jsonMergeTo(data, article);
         } else
-            throw new Exception("无法匹配出 GvDetail 的内容.");
+        {
+            log.error("无法匹配出 GvDetail 的内容. sid: {}", e.getArticleId());
+            return;
+        }
 
         // 解析 HTML
         article.setTitle(doc.$("#news_title").text().trim());
@@ -192,35 +192,6 @@ public class ArticleProcess extends CommonProcess
 
         // 更新评论
         Events.post(new TryUpdateCommentEvent(article));
-    }
-
-
-    private List<Article> filterExpiredArticleById(Iterable<Long> articles)
-    {
-        Set<Article> set = Sets.newHashSet();
-        for (Long id : articles)
-        {
-            Article article = articleSvc.findOne(id);
-            if (article == null)
-                continue;
-            set.add(article);
-        }
-        return filterExpiredArticle(set);
-    }
-
-    private List<Article> filterExpiredArticle(Iterable<Article> articles)
-    {
-        List<Article> list = Lists.newArrayList();
-
-        for (Article article : articles)
-        {
-            if (isArticleNeedUpdate(article))
-            {
-                list.add(article);
-            }
-        }
-
-        return list;
     }
 
     /**

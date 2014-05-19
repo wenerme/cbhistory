@@ -1,9 +1,6 @@
 package me.wener.cbhistory.domain;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
@@ -11,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import me.wener.cbhistory.domain.entity.Comment;
 
 /**
  * 整个的评论对象,是json数据的root

@@ -1,4 +1,4 @@
-package me.wener.cbhistory.domain;
+package me.wener.cbhistory.domain.entity;
 
 import java.io.Serializable;
 

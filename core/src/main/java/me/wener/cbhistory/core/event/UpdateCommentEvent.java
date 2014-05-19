@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import me.wener.cbhistory.domain.Article;
+import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.domain.RawData;
 
 @ToString

@@ -1,19 +1,16 @@
 package me.wener.cbhistory.core.process;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import com.google.gson.Gson;
 import java.util.Date;
 import javax.inject.Inject;
+import javax.inject.Named;
 import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import me.wener.cbhistory.core.EventScheduler;
-import me.wener.cbhistory.domain.Article;
-import me.wener.cbhistory.repositories.ArticleRepository;
-import me.wener.cbhistory.repositories.CommentRepository;
-import me.wener.cbhistory.repositories.RawDataRepository;
+import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
 import me.wener.cbhistory.service.RawDataService;
@@ -21,8 +18,6 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 抽象一些常用的东西
@@ -46,7 +41,8 @@ public abstract class CommonProcess
      * 默认 5 * 60
      * </pre>
      */
-    @Value("${app.article.update.interval:300}")
+    @Inject
+    @Named("app.article.update.interval")
     @Getter
     private int articleUpdateInterval = 5 * 60;
     /**
@@ -57,24 +53,21 @@ public abstract class CommonProcess
      * 默认 2 * 60
      * </pre>
      */
-    @Value("${app.article.update.factor:120}")
+    @Inject
+    @Named("app.article.update.factor")
     @Getter
     private int articleUpdateFactor = 2 * 60;
     /**
      * 文章过期小时数
      */
-    @Value("${app.article.expired.hours: 168}")
+    @Inject
+    @Named("app.article.expired.hours")
     @Getter
     private int articleExpiredHours = 7 * 24;
 
-//    @Inject
-    @Deprecated
-    protected EventScheduler scheduler;
-
     @Inject
     protected ArticleService articleSvc;
-//    @Inject
-    @Deprecated
+    @Inject
     protected RawDataService rawDataSvc;
     @Inject
     protected CommentService commentSvc;
@@ -86,7 +79,7 @@ public abstract class CommonProcess
 
     /**
      * 判断该文章是否需要更新
-     *
+     * <p/>
      * 文章更新策略,文章的更新需要更新
      */
     public boolean isArticleNeedUpdate(Article article)
@@ -100,7 +93,7 @@ public abstract class CommonProcess
         DateTime lastUpdate = new DateTime(article.getLastUpdateDate());
 
         // 如果已经达到了更新间隔,则直接返回 true
-        int minBetweenLastUpdate = Minutes.minutesBetween(lastUpdate,now).getMinutes();
+        int minBetweenLastUpdate = Minutes.minutesBetween(lastUpdate, now).getMinutes();
         if (minBetweenLastUpdate > getArticleUpdateInterval())// 5 个小时的更新间隔
             return true;
 
@@ -116,14 +109,15 @@ public abstract class CommonProcess
             int minutes = Minutes.minutesBetween(now, expiredDate).getMinutes();
             if (minutes < getArticleUpdateFactor())// 如果还差 30 分钟,则认为该时间非常近
             {
-                factor = (double)minutes/getArticleUpdateFactor();
+                factor = (double) minutes / getArticleUpdateFactor();
             }
         }
 
         // 考虑上当前的因子
-        return minBetweenLastUpdate > getArticleUpdateInterval()*factor;
+        return minBetweenLastUpdate > getArticleUpdateInterval() * factor;
 
     }
+
     public static DateTime getCommentExpiredDate(Article article)
     {
         return new DateTime(article.getDate()).plusDays(ARTICLE_EXPIRED_DAYS);
@@ -171,6 +165,7 @@ public abstract class CommonProcess
     {
         return insureResponse(request, 3);
     }
+
     public static HttpResponse insureResponse(HttpRequest request, int retryTimes)
     {
         HttpResponse response = null;

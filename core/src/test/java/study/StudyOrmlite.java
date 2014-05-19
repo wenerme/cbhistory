@@ -1,17 +1,10 @@
 package study;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.mycila.guice.ext.closeable.CloseableModule;
-import com.mycila.guice.ext.jsr250.Jsr250Module;
 import java.io.IOException;
 import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.core.CBHistory;
-import me.wener.cbhistory.core.modules.ChainInjector;
-import me.wener.cbhistory.core.modules.OrmlitePersistModule;
-import me.wener.cbhistory.core.modules.PersistModule;
-import me.wener.cbhistory.core.modules.PropertiesModule;
-import me.wener.cbhistory.domain.Article;
+import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.domain.RawComment;
 import me.wener.cbhistory.domain.RawData;
 import me.wener.cbhistory.service.ArticleService;
