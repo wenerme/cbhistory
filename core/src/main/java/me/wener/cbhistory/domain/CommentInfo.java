@@ -1,8 +1,5 @@
 package me.wener.cbhistory.domain;
 
-import javax.persistence.Entity;
-import lombok.Data;
-
 public class CommentInfo extends BasicInfo
 {
     /*

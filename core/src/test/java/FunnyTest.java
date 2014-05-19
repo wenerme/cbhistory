@@ -1,4 +1,5 @@
-import java.io.Serializable;
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,12 +10,16 @@ import java.util.concurrent.ConcurrentMap;
 import org.junit.Ignore;
 import org.junit.Test;
 
-
-import static org.junit.Assert.assertEquals;
-
 @Ignore
+@SuppressWarnings("unchecked")
 public class FunnyTest
 {
+
+    // 正确的做法
+    public static <E> Set<E> addIn(Set<? extends E> s1, Set<? extends E> s2)
+    {
+        return null;
+    }
 
     @Test
     public void testGetBoolean()
@@ -59,12 +64,6 @@ public class FunnyTest
     {
         // 必须显示的指定类型参数
         Set<Number> set = FunnyTest.<Number>addIn((Set<Integer>) null, (Set<Double>) null);
-    }
-
-    // 正确的做法
-    public static <E> Set<E> addIn(Set<? extends E> s1, Set<? extends E> s2)
-    {
-        return null;
     }
 
     @Test

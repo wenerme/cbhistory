@@ -1,6 +1,5 @@
 package me.wener.cbhistory.domain;
 
-import javax.persistence.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -12,12 +12,6 @@ public class FoundArticleEvent extends AbstractEvent
     @Getter
     private String content;
 
-    @Deprecated
-    public FoundArticleEvent(String content)
-    {
-        this.content = content;
-    }
-
     public FoundArticleEvent(Long articleId, String content)
     {
         this.content = content;

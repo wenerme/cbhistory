@@ -1,13 +1,10 @@
 package me.wener.cbhistory.service.impl;
 
-import com.google.common.base.Strings;
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTableConfig;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import java.io.Serializable;
 import java.sql.SQLException;
-import javax.persistence.Table;
 
 public class JpaEnabledDao<T, ID extends Serializable> extends BaseDaoImpl<T, ID>
 {
@@ -29,24 +26,24 @@ public class JpaEnabledDao<T, ID extends Serializable> extends BaseDaoImpl<T, ID
     @Override
     public void initialize() throws SQLException
     {
-        DatabaseTableConfig<T> config = new DatabaseTableConfig<>();
-        config.setDataClass(dataClass);
-        config.setTableName(getTableName());
-        config.setFieldConfigs(OrmliteJPAUtils.getFieldConfig(getConnectionSource(), getTableName(), dataClass));
-        config.initialize();
-
-        setTableConfig(config);
+//        DatabaseTableConfig<T> config = new DatabaseTableConfig<>();
+//        config.setDataClass(dataClass);
+//        config.setTableName(getTableName());
+//        config.setFieldConfigs(OrmliteJPAUtils.getFieldConfig(getConnectionSource(), getTableName(), dataClass));
+//        config.initialize();
+//
+//        setTableConfig(config);
 
         super.initialize();
     }
-
-    private String getTableName()
-    {
-        Table table = dataClass.getAnnotation(Table.class);
-        if (table == null || Strings.isNullOrEmpty(table.name()))
-            return DatabaseTableConfig.extractTableName(dataClass);
-
-        return table.name();
-    }
+//
+//    private String getTableName()
+//    {
+//        Table table = dataClass.getAnnotation(Table.class);
+//        if (table == null || Strings.isNullOrEmpty(table.name()))
+//            return DatabaseTableConfig.extractTableName(dataClass);
+//
+//        return table.name();
+//    }
 
 }

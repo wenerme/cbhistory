@@ -4,19 +4,16 @@ import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.SubscriberExceptionContext;
 import com.google.common.eventbus.SubscriberExceptionHandler;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import javax.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.event.Event;
 import me.wener.cbhistory.core.event.ExceptionEvent;
 import me.wener.cbhistory.core.event.FinishEvent;
 import me.wener.cbhistory.core.event.StartEvent;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
  * 全局的事件总线,所有全局级的时间都由该对象处理.

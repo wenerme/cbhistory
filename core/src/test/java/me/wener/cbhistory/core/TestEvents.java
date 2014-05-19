@@ -26,15 +26,6 @@ public class TestEvents
     }
 
     @Test
-    public void testParseArticle() throws IOException, InterruptedException
-    {
-        FoundArticleEvent event = new FoundArticleEvent(Files.toString(new File("C:\\articles.html"), Charsets.UTF_8));
-
-        Events.post(event);
-        Thread.sleep(2000);
-    }
-
-    @Test
     public void testParseOpAndGetComment() throws InterruptedException
     {
         Article detail = new Article();
