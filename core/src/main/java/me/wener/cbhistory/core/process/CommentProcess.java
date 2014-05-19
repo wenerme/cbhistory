@@ -53,7 +53,7 @@ public class CommentProcess extends CommonProcess
         HttpResponse response = insureResponse(request);
         if (response == null)
         {
-            log.error("获取评论失败,无法获取相应,请求的url为: {},参数op: {} 文章: {}"
+            log.error("获取评论失败,无法获取响应,请求的url为: {},参数op: {} 文章: {}"
                     , url, op, article);
             return;
         }
@@ -141,7 +141,8 @@ public class CommentProcess extends CommonProcess
             // 距离失效前60分钟
             DateTime expiredDate = getCommentExpiredDate(article).minusMinutes(60);
             TryFoundArticleEvent event = new TryFoundArticleEvent(article.getSid());
-            scheduler.schedule(event, expiredDate.toDate());
+            // TODO 发布调度事件
+//            scheduler.schedule(event, expiredDate.toDate());
         }
 
         Events.finish(e);

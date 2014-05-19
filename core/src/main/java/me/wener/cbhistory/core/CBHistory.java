@@ -41,7 +41,7 @@ public class CBHistory
 
     public static String calcOp(Article detail)
     {
-        return calcOp(1, detail.getSid(), detail.getSn(), 8);
+        return calcOp(1, detail.getSid(), detail.getSn(), 0);
     }
 
     public static String calcOp(String page, String sid, String sn, int n)

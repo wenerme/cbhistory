@@ -36,11 +36,10 @@ public class OrmliteJPAUtils
                 DatabaseFieldConfig fieldConfig = DatabaseFieldConfig.fromField(databaseType, tableName, field);
 
                 // 如果为实体类,即便是没有 Column 也将该值作为数据库列
-
                 if (fieldConfig == null && isEntity
-                        && !(Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers())))
+                        && !(Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers()))
+                        && !field.isAnnotationPresent(OneToMany.class))// 排除 OneToMany
                 {
-
                     DatabaseFieldConfig config = new DatabaseFieldConfig();
                     String fieldName = field.getName();
                     if (databaseType.isEntityNamesMustBeUpCase()) {

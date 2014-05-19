@@ -90,12 +90,14 @@ public class Article implements Persistable<Long>, CBHistoryTable
 
     @ForeignCollectionField(foreignFieldName = "article")
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.ALL})
-    @JoinColumn(name = "sid")
     @Expose(deserialize = false)
     private Collection<Comment> comments = Sets.newHashSet();
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.ALL})
-    @JoinColumn(name = "sid", referencedColumnName = "sid", nullable = false)
-    @Expose(deserialize = false)
-    private RawData rawData;
+//    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.ALL})
+//    @JoinColumn(name = "sid", referencedColumnName = "sid", nullable = false)
+//    @Expose(deserialize = false)
+    // TODO 移除该字段
+    @Deprecated
+    transient private RawData rawData;
+
 }

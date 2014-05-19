@@ -16,6 +16,7 @@ import me.wener.cbhistory.repositories.CommentRepository;
 import me.wener.cbhistory.repositories.RawDataRepository;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
+import me.wener.cbhistory.service.RawDataService;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
@@ -66,13 +67,15 @@ public abstract class CommonProcess
     @Getter
     private int articleExpiredHours = 7 * 24;
 
-    @Inject
+//    @Inject
+    @Deprecated
     protected EventScheduler scheduler;
 
     @Inject
     protected ArticleService articleSvc;
-    @Inject
-    protected RawDataRepository rawCommentRepo;
+//    @Inject
+    @Deprecated
+    protected RawDataService rawDataSvc;
     @Inject
     protected CommentService commentSvc;
 

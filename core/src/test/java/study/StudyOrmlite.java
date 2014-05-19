@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import com.mycila.guice.ext.closeable.CloseableModule;
 import com.mycila.guice.ext.jsr250.Jsr250Module;
 import java.io.IOException;
+import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.core.CBHistory;
 import me.wener.cbhistory.core.modules.ChainInjector;
 import me.wener.cbhistory.core.modules.OrmlitePersistModule;
@@ -23,9 +24,7 @@ public class StudyOrmlite
     @Ignore
     public void testTable() throws IOException
     {
-        Injector injector = Guice.createInjector(
-                PropertiesModule.none().withOptionalResource("default.properties", "db.properties"),
-                new OrmlitePersistModule());
+        Injector injector = App.getInjector();
         ArticleService articleSvc = injector.getInstance(ArticleService.class);
         ArticleService articleSvcDup = injector.getInstance(ArticleService.class);
 
@@ -41,12 +40,7 @@ public class StudyOrmlite
     {
         long id = 287625;
 
-        Injector injector = ChainInjector
-                .start(PropertiesModule.none().withOptionalResource("default.properties", "db.properties")
-                    , new Jsr250Module(), new CloseableModule())
-                .then(PersistModule.class)
-                .then(OrmlitePersistModule.class)
-                .getInjector();
+        Injector injector = App.getInjector();
 
         ArticleService articleSvc = injector.getInstance(ArticleService.class);
 

@@ -7,6 +7,7 @@ import me.wener.cbhistory.domain.OpInfo;
 import me.wener.cbhistory.domain.RawData;
 import me.wener.cbhistory.domain.StatusResponse;
 import me.wener.cbhistory.repositories.RawDataRepository;
+import me.wener.cbhistory.service.RawDataService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CBAdapterController
 {
     @Inject
-    private RawDataRepository rawDataRepository;
+    private RawDataService rawDataRepository;
 
     private Gson gson = new Gson();
 
