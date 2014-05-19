@@ -39,6 +39,11 @@ public class CBHistory
         return calcOp(info.getPage(), info.getSid(), info.getSn(), 8);
     }
 
+    public static String calcOp(Article detail, int page)
+    {
+        return calcOp(page, detail.getSid(), detail.getSn(), 0);
+    }
+    @Deprecated
     public static String calcOp(Article detail)
     {
         return calcOp(1, detail.getSid(), detail.getSn(), 0);

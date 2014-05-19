@@ -22,6 +22,6 @@ public class GuiceEventTest
         Injector injector = App.getInjector();
 //        TryDiscoverArticleByUrlEvent event = new TryDiscoverArticleByUrlEvent("http://www.cnbeta.com/");
         Events.post(event);
-        Thread.sleep(5000);
+        Thread.sleep(50000);
     }
 }

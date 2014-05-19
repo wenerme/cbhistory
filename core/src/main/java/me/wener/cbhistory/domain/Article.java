@@ -3,6 +3,7 @@ package me.wener.cbhistory.domain;
 import com.google.common.collect.Sets;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 import java.util.Collection;
@@ -88,10 +89,12 @@ public class Article implements Persistable<Long>, CBHistoryTable
     @Expose(deserialize = false, serialize = false)
     private Date lastUpdateDate;
 
-    @ForeignCollectionField(foreignFieldName = "article")
-    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.ALL})
-    @Expose(deserialize = false)
-    private Collection<Comment> comments = Sets.newHashSet();
+//    @ForeignCollectionField(foreignFieldName = "article")
+//    // 评论单独保存,不再需要 cascade
+////    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY)
+//    @Expose(deserialize = false)
+//    private Collection<Comment> comments = Sets.newHashSet();
+    public Collection<Comment> getComments(){return null;}
 
 //    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.ALL})
 //    @JoinColumn(name = "sid", referencedColumnName = "sid", nullable = false)

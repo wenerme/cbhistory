@@ -1,8 +1,12 @@
 package me.wener.cbhistory.domain;
 
+import com.google.common.collect.Sets;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
@@ -21,11 +25,9 @@ import me.wener.cbhistory.service.impl.CommentServiceImpl;
 import org.springframework.data.domain.Persistable;
 
 @Data
-@Entity
 @ToString(exclude = {"article","parent"})
 @EqualsAndHashCode(exclude = {"article"})
-@Table(name = Comment.TABLE_NAME)
-@DatabaseTable(daoClass = CommentServiceImpl.class)
+@DatabaseTable(daoClass = CommentServiceImpl.class, tableName = Comment.TABLE_NAME)
 public class Comment implements Persistable<Long>, CBHistoryTable
 {
     public static final String TABLE_NAME = TABLE_PREFIX+"comment";
@@ -61,9 +63,10 @@ public class Comment implements Persistable<Long>, CBHistoryTable
         return this;
     }
 
-    @Id
+    @DatabaseField(id = true)
     private Long tid;
     private Long pid;
+    @DatabaseField
     private Long sid;
 
     private Date date;
@@ -89,17 +92,29 @@ public class Comment implements Persistable<Long>, CBHistoryTable
     private Integer userId;
     private String icon;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "sid", nullable = false, insertable = false, updatable = false)
-    @Expose(deserialize = false, serialize = false)
-    private Article article;
+//    @DatabaseField(foreign = true, persisted = false)
+//    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "sid", nullable = false, insertable = false, updatable = false)
+//    @DatabaseField(foreign = true, foreignColumnName = "sid", columnName = "sid")
+//    @Expose(deserialize = false, serialize = false)
+    public Article getArticle(){return null;}
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "pid", referencedColumnName = "sid",
-            // 因为有可能评论被删除了,所以不需要添加外键约束
-            foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT),
-            nullable = true, insertable = false, updatable = false)
-    @Expose(deserialize = false, serialize = false)
-    private Comment parent;
+
+//
+//    // FIXME 暂时移除,用ormlite的时候导致和pid字段冲突
+//    @DatabaseField(foreign = true, foreignColumnName = "pid", columnName = "sid")
+//    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "pid", referencedColumnName = "sid",
+//            // 因为有可能评论被删除了,所以不需要添加外键约束
+//            foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT),
+//            nullable = true, insertable = false, updatable = false)
+//    @Expose(deserialize = false, serialize = false)
+//    private Comment parent;
+
+//    @DatabaseField(canBeNull = true, foreign = true, foreignColumnName = "sid", columnName = "sid")
+//    private Article article;
+
+//    @DatabaseField(canBeNull = true, foreign = true, foreignColumnName = "pid", columnName = "tid")
+//    private Comment parent;
 
 }

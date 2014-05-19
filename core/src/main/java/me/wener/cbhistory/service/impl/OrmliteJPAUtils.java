@@ -54,6 +54,10 @@ public class OrmliteJPAUtils
                     fieldConfig = config;
                 }
 
+                // 如果为 transient 则不做持久
+                if (fieldConfig != null && Modifier.isTransient(field.getModifiers()))
+                    fieldConfig = null;
+
                 if (fieldConfig != null) {
                     fieldConfigs.add(fieldConfig);
                 }
