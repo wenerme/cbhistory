@@ -1,5 +1,6 @@
 package me.wener.cbhistory.core.modules;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -45,22 +46,33 @@ public class ChainInjector
     @SafeVarargs
     public final ChainInjector and(Class<? extends Module>... modules)
     {
-        for (Class<? extends Module> module : modules)
-            moduleList.add(injector.getInstance(module));
+        for (Class<? extends Module> module : modules) {
+            Module m;
+
+            try {
+                m = module.newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            moduleList.add(m);
+        }
         return this;
     }
 
     public ChainInjector and(Iterable<Module> modules)
     {
-        for (Module module : modules) {
-            injector.injectMembers(module);
-            moduleList.add(module);
-        }
+        Iterables.addAll(moduleList, modules);
         return this;
     }
 
     private ChainInjector installBefore()
     {
+        if (injector != null)
+            for (Module module : moduleList) {
+                injector.injectMembers(module);
+            }
+
         if (injector == null)
             injector = Guice.createInjector(moduleList);
         else
