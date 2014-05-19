@@ -1,14 +1,9 @@
 package me.wener.cbhistory.core;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.event.TryDiscoverArticleByUrlEvent;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
 

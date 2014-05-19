@@ -9,8 +9,8 @@
 	
 	<logger name="org.springframework.data" level="debug" />
 	<logger name="me.wener.cbhistory" level="debug" />
-	<logger name="com.j256.ormlite" level="debug" />
-	<logger name="com.j256.ormlite.stmt.mapped.BaseMappedStatement" level="trace" />
+	<logger name="com.j256.ormlite" level="info" />
+	<logger name="com.j256.ormlite.stmt.mapped.BaseMappedStatement" level="info" />
 	<logger name="com.j256.ormlite.stmt.mapped.MappedCreate" level="trace" />
 	<logger name="com.j256.ormlite.stmt.StatementExecutor" level="trace" />
 
