@@ -14,6 +14,7 @@ import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
 import me.wener.cbhistory.service.RawDataService;
+import me.wener.cbhistory.util.Same;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
@@ -75,7 +76,7 @@ public abstract class CommonProcess
     /**
      * Gson 是比较常用,不需要太多的实例,gson 是线程安全的.
      */
-    protected static Gson gson = new Gson();
+    protected static Gson gson = Same.getGson();
 
     /**
      * 判断该文章是否需要更新

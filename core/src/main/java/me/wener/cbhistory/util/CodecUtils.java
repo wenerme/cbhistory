@@ -17,7 +17,7 @@ import javax.xml.bind.DatatypeConverter;
 
 public class CodecUtils
 {
-    private final static Gson gson = new Gson();
+    private final static Gson gson = Same.getGson();
 
     public static Map<String, String> jsonToMap(String json)
     {
