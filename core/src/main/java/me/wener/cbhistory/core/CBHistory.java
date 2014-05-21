@@ -11,6 +11,7 @@ import com.google.common.collect.Sets;
 import com.google.common.primitives.Ints;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -117,9 +118,9 @@ public class CBHistory
         return rawData;
     }
 
-    public static RawData getRawDataFrom(Article article)
+    public static RawData getRawDataFrom(Article article, Collection<Comment> comments)
     {
-        return getRawDataFrom(getRawCommentFrom(article));
+        return getRawDataFrom(getRawCommentFrom(article, comments));
     }
 
     private static Function<Comment, String> funcGetCommentTid = new Function<Comment, String>()
@@ -138,10 +139,10 @@ public class CBHistory
         }
     };
 
-    public static RawComment getRawCommentFrom(Article article)
+    public static RawComment getRawCommentFrom(Article article, Collection<Comment> cmt)
     {
         RawComment rawComment = new RawComment();
-        List<Comment> comments = orderCommentByPros.reverse().sortedCopy(article.getComments());
+        List<Comment> comments = orderCommentByPros.reverse().sortedCopy(cmt);
         // 生成文章内容列表
         Map<String, Comment> commentMap = Maps
                 .uniqueIndex(comments, funcGetCommentTid);

@@ -77,8 +77,4 @@ public class Article implements Identifiable<Long>, CBHistoryTable
         this.sid = sid;
         return this;
     }
-
-    // FIXME 移除该字段
-    public Collection<Comment> getComments()
-    {return null;}
 }
