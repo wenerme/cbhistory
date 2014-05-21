@@ -66,15 +66,4 @@ public class Article implements Identifiable<Long>, CBHistoryTable
         return getSid();
     }
 
-    public Article setSid(int sid)
-    {
-        setSid((long) sid);
-        return this;
-    }
-
-    public Article setSid(Long sid)
-    {
-        this.sid = sid;
-        return this;
-    }
 }

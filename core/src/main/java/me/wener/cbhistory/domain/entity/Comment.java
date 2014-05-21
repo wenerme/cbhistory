@@ -29,6 +29,7 @@ public class Comment implements Identifiable<Long>, CBHistoryTable
      */
     @DatabaseField(id = true)
     private Long tid;
+    @DatabaseField
     private Long pid;
     @DatabaseField
     private Long sid;

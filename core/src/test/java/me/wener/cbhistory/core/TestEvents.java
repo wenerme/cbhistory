@@ -29,7 +29,7 @@ public class TestEvents
     public void testParseOpAndGetComment() throws InterruptedException
     {
         Article detail = new Article();
-        detail.setSid(287931);
+        detail.setSid(287931l);
         detail.setSn("9524c");
 
         Events.post(new TryUpdateCommentEvent(detail));
@@ -40,7 +40,7 @@ public class TestEvents
     public void testParseComment() throws Exception
     {
         Article detail = new Article();
-        detail.setSid(287931);
+        detail.setSid(287931l);
         detail.setSn("9524c");
         RawData raw = new Gson().fromJson(Files.toString(new File("C:\\cmt.json"), Charsets.UTF_8), RawData.class);
 
