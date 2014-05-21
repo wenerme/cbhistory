@@ -19,6 +19,7 @@ import me.wener.cbhistory.domain.entity.Comment;
 import me.wener.cbhistory.domain.RawComment;
 import me.wener.cbhistory.domain.RawData;
 import me.wener.cbhistory.util.CodecUtils;
+import org.joda.time.LocalDateTime;
 
 @Named
 @Slf4j
@@ -105,7 +106,7 @@ public class CommentProcess extends CommonProcess
         }
 
 
-        article.setLastUpdateDate(new Date());
+        article.setLastUpdateDate(LocalDateTime.now());
         articleSvc.save(article);
         commentSvc.save(comments);
 

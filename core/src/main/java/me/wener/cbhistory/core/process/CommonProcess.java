@@ -18,6 +18,7 @@ import me.wener.cbhistory.util.Same;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
+import org.joda.time.LocalDateTime;
 import org.joda.time.Minutes;
 
 /**
@@ -90,15 +91,15 @@ public abstract class CommonProcess
         if (article.getLastUpdateDate() == null)
             return true;
 
-        DateTime now = DateTime.now();
-        DateTime lastUpdate = new DateTime(article.getLastUpdateDate());
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime lastUpdate = article.getLastUpdateDate();
 
         // 如果已经达到了更新间隔,则直接返回 true
         int minBetweenLastUpdate = Minutes.minutesBetween(lastUpdate, now).getMinutes();
         if (minBetweenLastUpdate > getArticleUpdateInterval())// 5 个小时的更新间隔
             return true;
 
-        DateTime expiredDate = getCommentExpiredDate(article);
+        LocalDateTime expiredDate = getCommentExpiredDate(article);
 
         // 缩短更新间隔的因子
         double factor = 1;
@@ -119,14 +120,14 @@ public abstract class CommonProcess
 
     }
 
-    public static DateTime getCommentExpiredDate(Article article)
+    public static LocalDateTime getCommentExpiredDate(Article article)
     {
-        return new DateTime(article.getDate()).plusDays(ARTICLE_EXPIRED_DAYS);
+        return new LocalDateTime(article.getDate()).plusDays(ARTICLE_EXPIRED_DAYS);
     }
 
     public boolean isArticleCommentNeedUpdate(Article article)
     {
-        return minutesAgoFromNow(article.getLastUpdateDate()) >= COMMENT_UPDATE_PERIOD_MIN;
+        return minutesAgoFromNow(article.getLastUpdateDate().toDate()) >= COMMENT_UPDATE_PERIOD_MIN;
     }
 
     /**

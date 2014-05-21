@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -24,6 +25,8 @@ import me.wener.cbhistory.core.event.TryFoundArticleEvent;
 import me.wener.cbhistory.core.event.TryUpdateCommentEvent;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.util.CodecUtils;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 /**
  * 对文章的相关处理
@@ -203,7 +206,8 @@ public class ArticleProcess extends CommonProcess
             String tmp = bar.$(".where").text().trim();
             tmp = tmp.substring(tmp.indexOf("：") + 1);// 替换前缀
             article.setSource(tmp);
-            article.setDate(CodecUtils.jsonToDate(bar.$(".date").text()));
+            Date date = CodecUtils.jsonToDate(bar.$(".date").text());
+            article.setDate(new LocalDateTime(date));
         }
 
         // 先将当前状态保存

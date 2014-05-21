@@ -2,6 +2,7 @@ package me.wener.cbhistory.domain.entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import java.util.Collection;
@@ -9,6 +10,8 @@ import java.util.Date;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import me.wener.cbhistory.service.impl.ArticleServiceImpl;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 @Data
 @Accessors(chain = true)
@@ -32,7 +35,7 @@ public class Article implements Identifiable<Long>, CBHistoryTable
     @DatabaseField(width = 64)
     private String source;
     @DatabaseField
-    private Date date;
+    private LocalDateTime date;
     /**
      * 阅读数量
      */
@@ -58,7 +61,7 @@ public class Article implements Identifiable<Long>, CBHistoryTable
     private Integer favNum;
     @DatabaseField
     @Expose(deserialize = false, serialize = false)
-    private Date lastUpdateDate;
+    private LocalDateTime lastUpdateDate;
 
     @Override
     public Long getId()

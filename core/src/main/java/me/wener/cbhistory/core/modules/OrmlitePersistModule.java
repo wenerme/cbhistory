@@ -6,11 +6,14 @@ import com.google.inject.Provider;
 import com.google.inject.name.Named;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.field.DataPersisterManager;
+import com.j256.ormlite.field.types.BaseDateType;
 import com.j256.ormlite.jdbc.DataSourceConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 import lombok.SneakyThrows;
+import me.wener.cbhistory.db.ormlite.JodaDateType;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
@@ -22,6 +25,7 @@ public class OrmlitePersistModule extends AbstractModule
     @Override
     protected void configure()
     {
+        DataPersisterManager.registerDataPersisters(new JodaDateType());
 
         bind(ConnectionSource.class)
                 .toProvider(new Provider<ConnectionSource>()
