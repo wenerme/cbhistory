@@ -2,9 +2,11 @@ package me.wener.cbhistory.core.process;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,6 +19,7 @@ import me.wener.cbhistory.core.Events;
 import me.wener.cbhistory.core.event.DiscoverArticleEvent;
 import me.wener.cbhistory.core.event.FoundArticleEvent;
 import me.wener.cbhistory.core.event.TryDiscoverArticleByUrlEvent;
+import me.wener.cbhistory.core.event.TryFoundAllArticleEvent;
 import me.wener.cbhistory.core.event.TryFoundArticleEvent;
 import me.wener.cbhistory.core.event.TryUpdateCommentEvent;
 import me.wener.cbhistory.domain.entity.Article;
@@ -66,28 +69,44 @@ public class ArticleProcess extends CommonProcess
         }
 
         log.info("在内容中共发现 {} 个id", ids.size());
+        Events.post(new TryFoundAllArticleEvent().setDescription("在内容中发现").setIds(ids));
+    }
 
-        // 将发现的所有 ID 发布出去
-        // 这里的并发太恐怖了,需要缩小范围
+    @Subscribe
+    @AllowConcurrentEvents
+    public void dispatchDiscoverAllArticle(TryFoundAllArticleEvent e)
+    {
+        // 这里统一处理批量的 id
         Article article = null;
-        for (String id : ids)
+        int total = e.getIds().size();
+        int tryFound = 0;
+        int tryUpdate = 0;
+
+        for (String id : e.getIds())
         {
             try
             {
                 article = articleSvc.findOne(Long.parseLong(id));
-            } catch (NumberFormatException ignored){continue;}
+            } catch (NumberFormatException ignored) {continue;}
 
             if (article != null)
             {
                 if (isArticleNeedUpdate(article))
                 {
                     log.debug("发现的文章已经存在,需要更新. {}", article);
+                    tryUpdate ++;
                     Events.post(new TryUpdateCommentEvent(article));
-                }else
+                } else
                     log.debug("发现的文章已经存在,尚且不需要更新. {}", article);
             } else
+            {
+                tryFound++;
                 Events.post(new TryFoundArticleEvent(id));
+            }
         }
+
+        log.info("{} 共计 {} 个id, 发现 {} 个新的id, {} 个进行评论更新, {} 个无任何操作"
+                ,e.getDescription(), total, tryFound, tryUpdate, total-(tryFound+tryUpdate));
     }
 
     /**
