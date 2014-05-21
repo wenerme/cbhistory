@@ -39,7 +39,7 @@ public class App
             injector = ChainInjector
                     .start(PropertiesModule
                             .none()
-                            .withOptionalResource("default.properties", "db.properties"))
+                            .withOptionalResource("default.properties", "db.properties", "app.properties"))
                     .and(Jsr250Module.class, CloseableModule.class)
                     .then(PersistModule.class)
                     .then(OrmlitePersistModule.class)

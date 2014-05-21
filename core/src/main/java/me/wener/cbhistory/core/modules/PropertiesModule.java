@@ -1,5 +1,6 @@
 package me.wener.cbhistory.core.modules;
 
+import com.google.common.io.Closeables;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import java.io.FileNotFoundException;
@@ -92,6 +93,7 @@ public class PropertiesModule extends AbstractModule
     {
         InputStream is = getClass().getClassLoader().getResourceAsStream(path);
         log.info("尝试加载属性文件 {} {}", path, is == null ? "文件未找到!" : "");
+
         if (is != null) {
             try {
                 Properties prop = new Properties();
@@ -101,10 +103,7 @@ public class PropertiesModule extends AbstractModule
             } catch (IOException e) {
                 log.error("加载属性文件 " + path + " 出现异常", e);
             } finally {
-                try {
-                    is.close();
-                } catch (IOException ignored) {
-                }
+                Closeables.closeQuietly(is);
             }
 
         }

@@ -109,6 +109,35 @@ script to 'filenam'
 | 总数 |  834 | 12346 |          679 | 2014-05-08 18:58:34 |
 +------+------+-------+--------------+---------------------+
 
++------+------+-------+--------------+---------------------+
+| 统计 | 文章 | 评论  | 有评论的文章 | 查询日期            |
++------+------+-------+--------------+---------------------+
+| 总数 | 2212 | 35102 |         1922 | 2014-05-19 23:46:38 |
++------+------+-------+--------------+---------------------+
+
+查询 几天前的sql
+----
+http://stackoverflow.com/questions/14497662
+
+mysql日期函数
+-------------
+http://dev.mysql.com/doc/refman/5.1/en/date-and-time-functions.html
+
+选择过去 6 - 7 天的
+----
+select count(*) from cbhistory_article 
+where date between  
+	DATE_SUB(DATE(NOW()), INTERVAL 7 DAY)
+	AND DATE_SUB(DATE(NOW()), INTERVAL 6 DAY);
+
+非常接近过期了
+--------------
+select count(*) from cbhistory_article 
+	WHERE date between 
+	DATE_SUB(NOW(), INTERVAL 24*7 + 1 HOUR)
+	AND DATE_SUB(DATE(NOW()), INTERVAL 24*6 + 12 HOUR);
+
+	
 并发控制
 --------
 map: id -> date/event
