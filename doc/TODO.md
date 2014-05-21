@@ -16,6 +16,13 @@
 
 * 查询距离过期 1 天 的文章进行批量更新
 
+v 0.3.1
+------
+
+* 严重的设计失误, 需要将涉及到的 date 类型更正为 joda.date
+	* 因为 ormlite 和 hibernate 都是有对 joda date 的支持,所以这样实现是可以的
+	* 对于 Gson, 需要一个 serializer, 需要将所有 new Gson 的方法提取出来,在一个固定的地方统一创建 Gson 对象
+	* 这里使用到的是 LocalDateTime
 
 v 0.2.1
 ------

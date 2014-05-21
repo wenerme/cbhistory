@@ -11,8 +11,8 @@
 	<logger name="me.wener.cbhistory" level="debug" />
 	<logger name="com.j256.ormlite" level="info" />
 	<logger name="com.j256.ormlite.stmt.mapped.BaseMappedStatement" level="info" />
-	<logger name="com.j256.ormlite.stmt.mapped.MappedCreate" level="trace" />
-	<logger name="com.j256.ormlite.stmt.StatementExecutor" level="trace" />
+	<logger name="com.j256.ormlite.stmt.mapped.MappedCreate" level="info" />
+	<logger name="com.j256.ormlite.stmt.StatementExecutor" level="info" />
 
 	<root level="info">
 		<appender-ref ref="console" />
