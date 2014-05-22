@@ -1,27 +1,41 @@
 ![cbHistory-西贝历史评论插件](https://raw.githubusercontent.com/wenerme/cbhistory-extension/master/images/title.png)
 
-cbHistory-西贝历史评论插件
---------------------------
+cbHistory-西贝历史评论
+===
 
-这个为 cbhistory 的服务端,如果想要自己运行主要需要更改[db.properties]里的数据库连接配置,
-或者在同级目录下添加一个 `app.properties` 来覆盖 `db.properties` 的配置.
-关于可以设置的属性,在 [default.properties] 里有说明.
+---
+
+模块
+====
+
+core 数据收集模块
+----
+
+这个为 cbhistory 的服务端,如果想要自己运行主要需要参考[db.properties]里的数据库连接配置,
+和 [default.properties] 中的默认配置来修改参数.可以在运行目录下建立一个 `app.properties`
+来覆盖这些设置.
 
 在 `doc` 目录下有一些这个程序的相关设计信息.
 
-关于打包
---------
-看看 [pom.xml] 里面的一些注释,可以轻松的设置为打包 jar/war.
+### 主要功能
 
-自动化发现文章过程
----------
+* 自动化文章/评论发现入库
+* 定时触发发现时间
 
-* 这个程序使用的 `spring` 的调度管理,设置的自动化发现配置主要在 
-	[ScheduleEvents.java] 下面.现在的自动发现比较简单,但是还算实用.
-* 在更新完一个文章过后会添加一个调度事件, 
-	在 [ProcessCenter.java] 中的 `parseComment` 下.当更新一个文章评论成功后,
-	会在一定时间后再次触发更新.
-	
+杂谈
+===
+
+历程
+---
+
+* 从新改造后,主要实现一个 core 模块,仅仅实现数据收集入库的功能  
+	使用的架构为 Guice + Ormlite,暂未完成提供评论数据的服务端,收集数据为主要任务  
+	整个服务端的运行时消耗霎时减小.目前运行时内存差不多 500M 左右
+* 但是由于这一套框架太过于庞大了,我本地运行起来要使用 3G+ 的内存,所以准备了改造计划.
+* 最开始由 Spring Data, Spring Schedule, JPA(Hibernate), Spring Web 实现了完整的客户端  
+	配合 cbhistory 插件能完成取代 cb 评论服务器
+
+
 作案动机
 -------
 
@@ -34,9 +48,7 @@ cbHistory-西贝历史评论插件
 * [cbhistory 服务端](https://github.com/wenerme/cbhistory)
 * [cbhistory chrome 插件](https://github.com/wenerme/cbhistory-extension)
 
- [db.properties]:https://github.com/wenerme/cbhistory/blob/master/src/main/resources/db.properties
- [default.properties]:https://github.com/wenerme/cbhistory/blob/master/src/main/resources/default.properties
+ [db.properties]:https://github.com/wenerme/cbhistory/blob/master/core/src/main/resources/db.properties
+ [default.properties]:https://github.com/wenerme/cbhistory/blob/master/core/src/main/resources/default.properties
  [pom.xml]:https://github.com/wenerme/cbhistory/blob/master/pom.xml
- [ScheduleEvents.java]:https://github.com/wenerme/cbhistory/blob/master/src/main/java/me/wener/cbhistory/core/ScheduleEvents.java
- [ProcessCenter.java]:https://github.com/wenerme/cbhistory/blob/master/src/main/java/me/wener/cbhistory/core/ProcessCenter.java
-	
+ 
