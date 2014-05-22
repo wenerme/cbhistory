@@ -1,17 +1,23 @@
-![cbHistory-西贝历史评论插件](https://raw.githubusercontent.com/wenerme/cbhistory-extension/master/images/title.png)
-
-cbHistory-西贝历史评论
-===
+> ![cbHistory-西贝历史评论插件](https://raw.githubusercontent.com/wenerme/cbhistory-extension/master/images/title.png)
+>
+> cbHistory-西贝历史评论
+>
+> 给 cnbeta 上无法显示评论的文章,提供一个评论服务器.可使用 chrome 插件,无缝衔接.
 
 ---
 
-模块
-====
-
-core 数据收集模块
+目录
 ----
 
-这个为 cbhistory 的服务端,如果想要自己运行主要需要参考[db.properties]里的数据库连接配置,
+- [core-数据收集模块](#core-数据收集模块)
+- [项目历程](#项目历程)
+- [作案动机](#作案动机)
+- [相关项目](#相关项目)
+
+core-数据收集模块
+------------
+
+cbhistory 的数据收集模块,如果想要自己运行主要需要参考[db.properties]里的数据库连接配置,
 和 [default.properties] 中的默认配置来修改参数.可以在运行目录下建立一个 `app.properties`
 来覆盖这些设置.
 
@@ -20,13 +26,11 @@ core 数据收集模块
 ### 主要功能
 
 * 自动化文章/评论发现入库
-* 定时触发发现时间
+* 定时触发发现功能
+* 定时发现即将过期的文章
 
-杂谈
-===
-
-历程
----
+项目历程
+-----
 
 * 从新改造后,主要实现一个 core 模块,仅仅实现数据收集入库的功能  
 	使用的架构为 Guice + Ormlite,暂未完成提供评论数据的服务端,收集数据为主要任务  

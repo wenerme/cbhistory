@@ -22,6 +22,8 @@
 
 * 实现一个简单的 servlet 作为服务器
 
+* 将发现调度的时间配置到 default.properties
+
 * 考虑将 Comment 分离出一个 User 实体,这样 Comment 中的空字段会大大减少
 	但是序列化操作的时候会比较麻烦,可以考虑 BeanCopy 拷贝.
 	存储的时候也比较麻烦,需要每个对象分离出来存储
