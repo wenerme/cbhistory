@@ -49,9 +49,15 @@ public class App
             injector.getInstance(App.class);
 
             DateTime end = DateTime.now();
-            log.info("程序启动完成 耗时: {} ms", new Duration(start, end).getMillis());
+            log.info("程序配置完成 耗时: {} ms", new Duration(start, end).getMillis());
         }
         return injector;
+    }
+
+    public static void start()
+    {
+        // 开始调度
+        getInjector().getInstance(App.class).setupSchedules();
     }
 
     /**
@@ -76,7 +82,9 @@ public class App
         log.info("设置日志等级为: {}", logLevel);
     }
 
-    @PostConstruct
+    /**
+     * 这个需要手动调用,以便于测试时不用每次都启动
+     */
     private void setupSchedules()
     {
         Timer timer = new Timer();
@@ -115,7 +123,7 @@ public class App
 
     public static void main(String[] args)
     {
-        Injector injector = getInjector();
+        App.start();
     }
 
 }

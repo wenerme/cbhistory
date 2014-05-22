@@ -62,8 +62,6 @@ public abstract class CommonProcess
     @Inject
     protected ArticleService articleSvc;
     @Inject
-    protected RawDataService rawDataSvc;
-    @Inject
     protected CommentService commentSvc;
 
     /**
