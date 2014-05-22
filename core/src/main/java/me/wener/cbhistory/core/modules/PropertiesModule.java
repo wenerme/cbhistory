@@ -3,6 +3,8 @@ package me.wener.cbhistory.core.modules;
 import com.google.common.io.Closeables;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -85,6 +87,12 @@ public class PropertiesModule extends AbstractModule
         return this;
     }
 
+    public PropertiesModule withSystemProperties()
+    {
+        withProperties(System.getProperties());
+        return this;
+    }
+
     /**
      * 和 {@link me.wener.cbhistory.core.modules.PropertiesModule#withResource(String)}
      * 类似,但允许资源不存在
@@ -93,6 +101,23 @@ public class PropertiesModule extends AbstractModule
     {
         InputStream is = getClass().getClassLoader().getResourceAsStream(path);
         log.info("尝试加载属性文件 {} {}", path, is == null ? "文件未找到!" : "");
+
+        if (is == null)
+        {
+            File file = new File(path);
+            if (file.exists() || (file = file.getAbsoluteFile()).exists())
+            {
+                log.info("在目录中发现文件 {}, 尝试加载", file.getPath());
+                try
+                {
+                    is = new FileInputStream(file);
+                } catch (FileNotFoundException ignored)
+                {
+                    // 已经判断文件存在
+                    log.error("属性文件异常",ignored);
+                }
+            }
+        }
 
         if (is != null) {
             try {

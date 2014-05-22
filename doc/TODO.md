@@ -22,6 +22,20 @@
 
 * 实现一个简单的 servlet 作为服务器
 
+* 考虑将 Comment 分离出一个 User 实体,这样 Comment 中的空字段会大大减少
+	但是序列化操作的时候会比较麻烦,可以考虑 BeanCopy 拷贝.
+	存储的时候也比较麻烦,需要每个对象分离出来存储
+	目前和用户相关的有三个字段, icon name userid
+	但是 name 不一定需要用户存在
+
+
+v 0.3.2
+------
+
+* PropertiesModule 添加一个 withSystemProperties 功能
+
+* PropertiesModule 检测当前目录
+
 v 0.3.1
 ------
 

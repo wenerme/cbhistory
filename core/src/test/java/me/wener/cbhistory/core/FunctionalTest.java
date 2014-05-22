@@ -13,6 +13,11 @@ import org.junit.Test;
 public class FunctionalTest
 {
     @Test
+    public void launchTest()
+    {
+        App.getInjector();
+    }
+    @Test
     public void parseOp()
     {
         // atob('MSwyODc5MzEsOTUyNGM=')

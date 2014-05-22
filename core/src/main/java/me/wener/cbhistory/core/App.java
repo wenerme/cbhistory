@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.event.Event;
 import me.wener.cbhistory.core.event.TryDiscoverArticleByUrlEvent;
 import me.wener.cbhistory.core.modules.ChainInjector;
+import me.wener.cbhistory.core.modules.ConfigureModule;
 import me.wener.cbhistory.core.modules.OrmlitePersistModule;
 import me.wener.cbhistory.core.modules.PersistModule;
 import me.wener.cbhistory.core.modules.PropertiesModule;
@@ -39,8 +40,10 @@ public class App
             injector = ChainInjector
                     .start(PropertiesModule
                             .none()
+                            .withSystemProperties()
                             .withOptionalResource("default.properties", "db.properties", "app.properties"))
                     .and(Jsr250Module.class, CloseableModule.class)
+                    .then(ConfigureModule.class)
                     .then(PersistModule.class)
                     .then(OrmlitePersistModule.class)
                     .getInjector();
