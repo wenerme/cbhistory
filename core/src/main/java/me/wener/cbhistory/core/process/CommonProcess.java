@@ -27,14 +27,6 @@ import org.joda.time.Minutes;
 @Slf4j
 public abstract class CommonProcess
 {
-    /**
-     * 文章过期的时间,单位为 天
-     */
-    public static final int ARTICLE_EXPIRED_DAYS = 7;// 看到有 6 天后还有评论的,所以暂且设置为7天
-    /**
-     * 评论更新的间隔,单位为 分钟
-     */
-    public static final int COMMENT_UPDATE_PERIOD_MIN = 60 * 5;// 5 小时
 
     /**
      * 文章更新间隔
@@ -120,44 +112,9 @@ public abstract class CommonProcess
 
     }
 
-    public static LocalDateTime getCommentExpiredDate(Article article)
+    public LocalDateTime getCommentExpiredDate(Article article)
     {
-        return new LocalDateTime(article.getDate()).plusDays(ARTICLE_EXPIRED_DAYS);
-    }
-
-    public boolean isArticleCommentNeedUpdate(Article article)
-    {
-        return minutesAgoFromNow(article.getLastUpdateDate().toDate()) >= COMMENT_UPDATE_PERIOD_MIN;
-    }
-
-    /**
-     * 距离现在已经经过多少分钟
-     */
-    public static int minutesAgoFromNow(Date date)
-    {
-        checkNotNull(date);
-        Minutes minutes = Minutes.minutesBetween(new DateTime(date), DateTime.now());
-        return minutes.getMinutes();
-    }
-
-    /**
-     * 距离现在已经经过多少小时
-     */
-    public static int hoursAgoFromNow(Date date)
-    {
-        checkNotNull(date);
-        Hours minutes = Hours.hoursBetween(new DateTime(date), DateTime.now());
-        return minutes.getHours();
-    }
-
-    /**
-     * 距离现在已经经过多少天
-     */
-    public static int daysAgoFromNow(Date date)
-    {
-        checkNotNull(date);
-        Days i = Days.daysBetween(new DateTime(date), DateTime.now());
-        return i.getDays();
+        return new LocalDateTime(article.getDate()).plusDays(articleExpiredHours);
     }
 
     /**
@@ -171,7 +128,7 @@ public abstract class CommonProcess
     public static HttpResponse insureResponse(HttpRequest request, int retryTimes)
     {
         HttpResponse response = null;
-
+        int totalTimes = retryTimes;
         do
         {
             try
@@ -179,9 +136,15 @@ public abstract class CommonProcess
                 response = request.send();
             } catch (jodd.http.HttpException ex)
             {
-                log.warn("获取响应失败: " + ex.getMessage());
+                log.warn("第 {} 次 获取响应失败: {}", totalTimes-retryTimes+1, ex.getMessage());
             }
         } while (response == null && retryTimes-- > 0);
+
+        if(response != null && response.statusCode() != 200)
+        {
+            log.error("获取 URL 返回状态码异常 status: {} 请求的url为: {},参数: {}"
+                    , response.statusCode(), request.url(), request.query());
+        }
 
         return response;
     }

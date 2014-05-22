@@ -57,6 +57,11 @@ public class CommentProcess extends CommonProcess
             log.error("获取评论失败,无法获取响应,请求的url为: {},参数op: {} 文章: {}"
                     , url, op, article);
             return;
+        }else if(response.statusCode() != 200)
+        {
+            log.error("获取 URL 返回状态码异常 status: {} 请求的url为: {},参数op: {} 文章: {}"
+                    , response.statusCode(), url, op, article);
+            return;
         }
 
         RawData raw = gson.fromJson(response.bodyText(), RawData.class);
