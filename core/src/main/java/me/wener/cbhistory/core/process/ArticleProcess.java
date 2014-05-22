@@ -2,6 +2,7 @@ package me.wener.cbhistory.core.process;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Charsets;
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.AllowConcurrentEvents;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.Events;
 import me.wener.cbhistory.core.event.DiscoverArticleEvent;
 import me.wener.cbhistory.core.event.FoundArticleEvent;
+import me.wener.cbhistory.core.event.TryDiscoverArticleBetweenDateEvent;
 import me.wener.cbhistory.core.event.TryDiscoverArticleByUrlEvent;
 import me.wener.cbhistory.core.event.TryFoundAllArticleEvent;
 import me.wener.cbhistory.core.event.TryFoundArticleEvent;
@@ -63,12 +65,15 @@ public class ArticleProcess extends CommonProcess
 
         final String content = e.getContent();
 
-        Set<String> ids = Sets.newHashSet();
+        Set<Long> ids = Sets.newHashSet();
         Matcher matcher = regMatchId.matcher(content);
         while (matcher.find())
         {
             String id = matcher.group("id");
-            ids.add(id);
+            try
+            {
+                ids.add(Long.parseLong(id));
+            }catch (Exception ex){log.error("解析ID出现异常", ex);}
         }
 
         log.info("在内容中共发现 {} 个id", ids.size());
@@ -85,11 +90,11 @@ public class ArticleProcess extends CommonProcess
         int tryFound = 0;
         int tryUpdate = 0;
 
-        for (String id : e.getIds())
+        for (Long id : e.getIds())
         {
             try
             {
-                article = articleSvc.findOne(Long.parseLong(id));
+                article = articleSvc.findOne(id);
             } catch (NumberFormatException ignored) {continue;}
 
             if (article != null)
@@ -110,6 +115,28 @@ public class ArticleProcess extends CommonProcess
 
         log.info("{} 共计 {} 个id, 发现 {} 个新的id, {} 个进行评论更新, {} 个无任何操作"
                 ,e.getDescription(), total, tryFound, tryUpdate, total-(tryFound+tryUpdate));
+    }
+
+    @Subscribe
+    @AllowConcurrentEvents
+    public void updateArticleBetweenDate(TryDiscoverArticleBetweenDateEvent e)
+    {
+        List<Article> list = articleSvc.findAllByDateBetween(e.getStart(), e.getEnd());
+        List<Long> ids = Lists.transform(list, new Function<Article, Long>()
+        {
+            @Override
+            public Long apply(Article input)
+            {
+                return input.getSid();
+            }
+        });
+
+        String description = "尝试更新从 %s 到 %s 的文章, 共 %s 条";
+        description = String.format(description, e.getStart(), e.getEnd(), ids.size());
+        log.info(description);
+
+        if (ids.size() > 0)
+            Events.post(new TryFoundAllArticleEvent().setIds(ids).setDescription(description));
     }
 
     /**

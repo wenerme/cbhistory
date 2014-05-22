@@ -10,6 +10,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class TryFoundAllArticleEvent implements Event
 {
-    private Collection<String> ids;
+    private Collection<Long> ids;
     private String description = null;
 }

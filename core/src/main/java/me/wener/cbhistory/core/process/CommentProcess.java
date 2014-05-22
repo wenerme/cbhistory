@@ -67,7 +67,7 @@ public class CommentProcess extends CommonProcess
         RawData raw = gson.fromJson(response.bodyText(), RawData.class);
         if (!raw.getStatus().equals("success"))
         {
-            log.error("获取到的评论内容状态异常 :{}, 文章为: {}", raw, article);
+            log.error("获取到的评论内容状态异常 :{}, SID: {}. 可能请求太频繁", raw, article.getSid());
             return;
         }
 

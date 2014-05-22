@@ -17,4 +17,4 @@ helper/
 target/
 out/
 
-src/main/resources/app.properties
+app.properties
