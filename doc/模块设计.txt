@@ -1,0 +1,78 @@
+模块结构
+	core
+		目前为 guice + guava
+	db-ormlite
+		使用 ormlite 作为持久层的实现
+	db-spring-data
+		使用 spring-data-jpa 作为持久层实现
+		如果引入 spring,则必须要使用 guice 和 spring 的集成包
+	server-madvoc
+		使用 madvoc 实现的服务端
+	server-madvoc-jetty
+		作为本地使用时,使用jetty作为服务器来运行
+		? 这个模块或许不应该依赖于 madvoc,单独的一个 server
+	server
+		是否需要实现一个这样公共的server呢~?
+		这个似乎也很有用,因为后面可能会使用 springMvc 来实现服务器
+		但是由于使用的不同的服务实现,这个server应该怎么抽取呢~?
+		一个 rest 路径对应一个返回值,主要定义返回值~?
+		在这个模块里没有 rest 这些概念,定义返回值的类型,模式
+	server-spring: spring-data-jpa
+		使用 spring 来作为服务器实现,后端使用 spring-data-jpa
+		
+		
+如果实现插件式的模块?
+	me.wener.cbhistory.modules
+	使用该命名空间作为模块装入的扫描包 ?
+		OrmliteModule
+		SpringDataModule
+		MadvocModule
+		...
+	这些模块必须 extends PluginModule(自己实现,继承自 AbstractModule)
+	
+	如何通知这些模块?
+		1. 事件式的模块加载事件处理(PluginModule.EventBus)
+			用于告知模块
+				模块开始加载
+				模块加载完成
+				甚至取消模块的加载 ?
+				
+	模块何时被实例化?
+		在App start 前
+		在App 初始化后
+		PluginAwareModule 中
+		
+	模块何时被加载 ?
+		需要 PluginModule 实现一个 plugin 方法,这样插件就能自己控制加载时机
+			比如说,可以在 PostConstruts 时加载
+		
+进程
+	实现 PluginAwareModule, 使程序能够意识到插件
+	将 ormlite 从 core 中抽取出来
+		命名空间: me.wener.cbhistory.persistance.ormlite
+		更改 Article 和 Comment
+			需要将这两个改为接口
+			使用 Entities.of(IEntity) 来实例化
+				内部使用 App.getInjector().getInstance
+		将 ArticleService 和 CommentService 的实现提取出来
+		将 PersistsModule 拿出来
+		这里需要注意 也需要将 RawDataService 实现拿出来
+			但是core默认提供一个基于 缓存 实现的 RawDataService
+	抽取出 ormlite 后,再实现 server-madvoc
+	如果在实现madvoc的过程中发现可以抽取的东西,再抽为 server
+		
+	
+	
+如果使用缓存实现 RawDataService
+	何时缓存
+		findOne
+	何时清除缓存
+		当 article 更新的时候,需要清楚对应 id 的缓存
+		如何知道 article 更新?
+			1. 更新文章完成事件,判断该 id
+			
+是否对 article 也进行缓存 ?
+	
+	
+	
+	
