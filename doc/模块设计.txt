@@ -49,7 +49,7 @@
 进程
 	实现 PluginAwareModule, 使程序能够意识到插件
 	将 ormlite 从 core 中抽取出来
-		命名空间: me.wener.cbhistory.persistance.ormlite
+		命名空间: me.wener.cbhistory.persistence.ormlite
 		更改 Article 和 Comment
 			需要将这两个改为接口
 			使用 Entities.of(IEntity) 来实例化

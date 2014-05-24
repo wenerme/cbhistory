@@ -1,4 +1,4 @@
-package me.wener.cbhistory.db.ormlite;
+package me.wener.cbhistory.persistence.ormlite;
 
 import com.j256.ormlite.field.FieldType;
 import com.j256.ormlite.field.SqlType;

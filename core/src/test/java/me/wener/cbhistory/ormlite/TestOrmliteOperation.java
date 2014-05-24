@@ -1,13 +1,10 @@
 package me.wener.cbhistory.ormlite;
 
 import com.google.inject.Injector;
-import com.j256.ormlite.field.DataPersisterManager;
-import com.j256.ormlite.field.types.BaseDateType;
 import java.io.IOException;
 import java.util.Collection;
 import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.core.CBHistory;
-import me.wener.cbhistory.db.ormlite.JodaDateType;
 import me.wener.cbhistory.domain.RawComment;
 import me.wener.cbhistory.domain.RawData;
 import me.wener.cbhistory.domain.entity.Article;
