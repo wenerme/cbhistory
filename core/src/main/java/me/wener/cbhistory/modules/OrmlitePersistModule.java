@@ -1,4 +1,4 @@
-package me.wener.cbhistory.core.modules;
+package me.wener.cbhistory.modules;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -12,13 +12,15 @@ import com.j256.ormlite.support.ConnectionSource;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 import lombok.SneakyThrows;
+import me.wener.cbhistory.core.pluggable.PlugInfo;
 import me.wener.cbhistory.persistence.ormlite.JodaDateType;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
 import me.wener.cbhistory.service.impl.CommentServiceImpl;
 
-public class OrmlitePersistModule extends AbstractModule
+@PlugInfo(name = "Ormlite 持久层模块", author = "wener<wenermail@gmail.com>")
+public class OrmlitePersistModule extends PluggableModule
 {
 
     @Override

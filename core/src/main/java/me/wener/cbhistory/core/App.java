@@ -6,7 +6,6 @@ import com.mycila.guice.ext.jsr250.Jsr250Module;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +18,8 @@ import me.wener.cbhistory.core.event.TryDiscoverArticleBetweenDateEvent;
 import me.wener.cbhistory.core.event.TryDiscoverArticleByUrlEvent;
 import me.wener.cbhistory.core.modules.ChainInjector;
 import me.wener.cbhistory.core.modules.ConfigureModule;
-import me.wener.cbhistory.core.modules.OrmlitePersistModule;
+import me.wener.cbhistory.core.pluggable.PluginLoadModule;
+import me.wener.cbhistory.modules.OrmlitePersistModule;
 import me.wener.cbhistory.core.modules.PersistModule;
 import me.wener.cbhistory.core.modules.PropertiesModule;
 import me.wener.cbhistory.core.process.ArticleProcess;
@@ -56,7 +56,7 @@ public class App
                     .and(Jsr250Module.class, CloseableModule.class)
                     .then(ConfigureModule.class)
                     .then(PersistModule.class)
-                    .then(OrmlitePersistModule.class)
+                    .then(PluginLoadModule.class)
                     .getInjector();
 
             // 初始化

@@ -73,6 +73,16 @@
 			
 是否对 article 也进行缓存 ?
 	
+抽取 Article 和 Comment 时出现严重的问题
+	1. 这些实体类的属性上定义了如何序列化 json 的注解
+		gson 不支持setter和getter
+		所以必须得保留 Article 和 Comment,否则的话只能更换使用的 JSON 库
+	2. 因为 Service 的接口参数都是用的 Article 和 Comment
+		所以在写子类的时候略微比较蛋疼
+		在实现 Service 的时候都是 Article 和 Comment 的子类
+		返回结果集的时候处理起来非常伤脑筋
+	3. ormlite 的 databaseField 必须定义在 field 上,这里也很蛋疼了
 	
-	
-	
+新的思路:
+	不再抽出 ormlite, core默认绑定一套持久层的实现,
+	如果需要集成 spring data 的时候,说明是其他的东西需要使用,core依然使用ormlite
