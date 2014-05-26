@@ -30,11 +30,8 @@ public class JWSServerModule extends AbstractPlugin
         try
         {
             Injector injector = App.getInjector();
-            JWSCommentProvider provider = new JWSCommentProvider(
-                    injector.getInstance(ArticleService.class)
-                    ,injector.getInstance(CommentService.class)
-                    ,injector.getInstance(RawDataService.class)
-            );
+            JWSCommentProvider provider = new JWSCommentProvider()
+                    .setRawDataSvc(injector.getInstance(RawDataService.class));
 
             Endpoint.publish(address, provider);
             log.info("在 {} 启动 jws 服务完成.", address);

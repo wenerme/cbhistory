@@ -3,6 +3,7 @@ package me.wener.cbhistory.service.impl;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import me.wener.cbhistory.core.CBHistory;
@@ -22,6 +23,10 @@ public class RawDataServiceCacheImpl implements RawDataService
 
     private static Cache<String , RawData> dataCache = null;
 
+    static {
+        // 初始化缓存对象
+        getDataCache();
+    }
     public static Cache<String, RawData> getDataCache()
     {
         if (dataCache == null)

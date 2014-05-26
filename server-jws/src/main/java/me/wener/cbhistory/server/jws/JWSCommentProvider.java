@@ -15,11 +15,12 @@ import javax.xml.ws.http.HTTPBinding;
 import jodd.http.HttpUtil;
 import jodd.http.HttpValuesMap;
 import lombok.Setter;
+import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.CBHistory;
 import me.wener.cbhistory.domain.OpInfo;
 import me.wener.cbhistory.domain.RawData;
 import me.wener.cbhistory.domain.StatusResponse;
-import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
 import me.wener.cbhistory.service.RawDataService;
@@ -27,6 +28,8 @@ import me.wener.cbhistory.util.Same;
 
 @WebServiceProvider
 @BindingType(HTTPBinding.HTTP_BINDING)
+@Slf4j
+@Accessors(chain = true)
 public class JWSCommentProvider implements Provider<Source>
 {
     // 由于这个注入不是用 guice,所以该对象不能由 guice 来实例化
@@ -34,20 +37,14 @@ public class JWSCommentProvider implements Provider<Source>
     @Resource
     WebServiceContext wsContext;
     @Setter
-    private ArticleService articleSvc;
-    @Setter
-    private CommentService commentSvc;
-    @Setter
     private RawDataService rawDataSvc;
 
     public JWSCommentProvider()
     {
     }
 
-    public JWSCommentProvider(ArticleService articleSvc, CommentService commentSvc, RawDataService rawDataSvc)
+    public JWSCommentProvider(RawDataService rawDataSvc)
     {
-        this.articleSvc = articleSvc;
-        this.commentSvc = commentSvc;
         this.rawDataSvc = rawDataSvc;
     }
 
@@ -93,12 +90,17 @@ public class JWSCommentProvider implements Provider<Source>
             return StatusResponse.error("解析 OP 参数错误 " + op);
         }
 
-        Article article = articleSvc.findOne(info.getSid());
-        if (article == null)
-            return StatusResponse.error("所查找的文章不存在, 当前信息为" + info);
-
-        RawData rawData = CBHistory.getRawDataFrom(article, commentSvc.findAllBySid(article.getSid()));
-
-        return StatusResponse.success(rawData);
+        try
+        {
+            RawData rawData = rawDataSvc.findBySid(info.getSid(), info.getPage());
+            if (rawData != null)
+                return StatusResponse.success(rawData);
+            else
+                return StatusResponse.error("无结果数据.");
+        } catch (Exception e)
+        {
+            log.error("查询出现异常 "+info, e);
+            return StatusResponse.error("查询过程中发生异常: "+e.getMessage());
+        }
     }
 }
