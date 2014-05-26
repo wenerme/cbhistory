@@ -149,7 +149,7 @@ public class CBHistory
 
         // 生成热门列表
         Set<HotCommentInfo> hotList = Sets.newHashSet();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10 && i < comments.size(); i++) {
             Comment comment = comments.get(i);
             HotCommentInfo hotCommentInfo = new HotCommentInfo();
 
