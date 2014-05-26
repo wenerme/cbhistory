@@ -3,14 +3,7 @@ package me.wener.cbhistory.server.jws;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import java.io.ByteArrayInputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import javafx.animation.Animation;
 import javax.annotation.Resource;
-import javax.inject.Inject;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.ws.BindingType;
@@ -36,17 +29,16 @@ import me.wener.cbhistory.util.Same;
 @BindingType(HTTPBinding.HTTP_BINDING)
 public class JWSCommentProvider implements Provider<Source>
 {
+    // 由于这个注入不是用 guice,所以该对象不能由 guice 来实例化
+    // 也就是 所有的 service 需要自己手动注入
+    @Resource
+    WebServiceContext wsContext;
     @Setter
     private ArticleService articleSvc;
     @Setter
     private CommentService commentSvc;
     @Setter
     private RawDataService rawDataSvc;
-
-    // 由于这个注入不是用 guice,所以该对象不能由 guice 来实例化
-    // 也就是 所有的 service 需要自己手动注入
-    @Resource
-    WebServiceContext wsContext;
 
     public JWSCommentProvider()
     {
@@ -67,19 +59,21 @@ public class JWSCommentProvider implements Provider<Source>
         StatusResponse response = null;
         if (Strings.isNullOrEmpty(queryString))
             response = StatusResponse.error("无操作");
-        else{
+        else
+        {
             HttpValuesMap queries = HttpUtil.parseQuery(queryString, true);
             String param = (String) queries.getFirst("op");
-            if (! Strings.isNullOrEmpty(param))
+            if (!Strings.isNullOrEmpty(param))
                 response = getResponseByOP(param);
         }
 
         if (response == null)
-            response = StatusResponse.error("未知的操作: "+queryString);
+            response = StatusResponse.error("未知的操作: " + queryString);
 
 
         return returnJson(response);
     }
+
     public Source returnJson(Object obj)
     {
         String result = "<cbhistory>%s</cbhistory>";
@@ -94,14 +88,14 @@ public class JWSCommentProvider implements Provider<Source>
         try
         {
             info = CBHistory.parseOp(op);
-        }catch (Exception ex)
+        } catch (Exception ex)
         {
-            return StatusResponse.error("解析 OP 参数错误 "+op);
+            return StatusResponse.error("解析 OP 参数错误 " + op);
         }
 
         Article article = articleSvc.findOne(info.getSid());
         if (article == null)
-            return StatusResponse.error("所查找的文章不存在, 当前信息为"+info);
+            return StatusResponse.error("所查找的文章不存在, 当前信息为" + info);
 
         RawData rawData = CBHistory.getRawDataFrom(article, commentSvc.findAllBySid(article.getSid()));
 

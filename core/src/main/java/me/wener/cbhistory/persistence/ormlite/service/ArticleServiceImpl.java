@@ -1,4 +1,4 @@
-package me.wener.cbhistory.service.impl;
+package me.wener.cbhistory.persistence.ormlite.service;
 
 import com.google.inject.Inject;
 import com.j256.ormlite.stmt.QueryBuilder;

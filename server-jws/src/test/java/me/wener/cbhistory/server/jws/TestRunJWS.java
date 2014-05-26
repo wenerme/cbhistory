@@ -1,6 +1,5 @@
 package me.wener.cbhistory.server.jws;
 
-import javax.xml.ws.Endpoint;
 import jodd.http.HttpUtil;
 import jodd.http.HttpValuesMap;
 import me.wener.cbhistory.core.App;

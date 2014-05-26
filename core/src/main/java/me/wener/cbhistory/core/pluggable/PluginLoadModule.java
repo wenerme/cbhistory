@@ -81,7 +81,7 @@ public class PluginLoadModule extends AbstractPluginModule
                 continue;
             }
 
-            log.info("加载插件 {} {} BY {}", plugin.getClass().getSimpleName(), info.name(), info.name());
+            log.info("加载插件 {} {} BY {}", plugin.getClass().getSimpleName(), info.name(), info.author());
             //
             requestInjection(plugin);
             plugin.init();

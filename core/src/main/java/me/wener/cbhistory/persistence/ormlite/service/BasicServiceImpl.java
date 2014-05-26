@@ -1,4 +1,4 @@
-package me.wener.cbhistory.service.impl;
+package me.wener.cbhistory.persistence.ormlite.service;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;

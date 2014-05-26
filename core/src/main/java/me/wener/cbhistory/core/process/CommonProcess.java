@@ -112,7 +112,7 @@ public abstract class CommonProcess
 
     public LocalDateTime getCommentExpiredDate(Article article)
     {
-        return new LocalDateTime(article.getDate()).plusDays(articleExpiredHours);
+        return new LocalDateTime(article.getDate()).plusHours(articleExpiredHours);
     }
 
     /**

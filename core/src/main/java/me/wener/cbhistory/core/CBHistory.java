@@ -111,7 +111,7 @@ public class CBHistory
     {
         RawData rawData = new RawData();
         rawData.setSid(rawComment.getSid())
-               .setLastUpdate(new Date())
+               .setLastUpdateDate(new Date())
                .setStatus("success");
         String json = JSON_PREFIX + gson.toJson(rawComment);
         rawData.setResult(CodecUtils.encodeBase64(json));

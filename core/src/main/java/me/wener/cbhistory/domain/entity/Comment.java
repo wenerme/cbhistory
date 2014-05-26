@@ -6,7 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.Date;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import me.wener.cbhistory.service.impl.CommentServiceImpl;
+import me.wener.cbhistory.persistence.ormlite.service.CommentServiceImpl;
 
 @Data
 @Accessors(chain = true)

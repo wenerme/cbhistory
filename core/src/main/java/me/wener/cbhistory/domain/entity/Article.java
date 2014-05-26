@@ -2,15 +2,11 @@ package me.wener.cbhistory.domain.entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import java.util.Collection;
-import java.util.Date;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import me.wener.cbhistory.service.impl.ArticleServiceImpl;
-import org.joda.time.DateTime;
+import me.wener.cbhistory.persistence.ormlite.service.ArticleServiceImpl;
 import org.joda.time.LocalDateTime;
 
 @Data

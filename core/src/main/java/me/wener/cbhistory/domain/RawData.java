@@ -18,7 +18,7 @@ public class RawData implements Identifiable<Long>
 
     private String status;
     private String result;
-    private Date lastUpdate;
+    private Date lastUpdateDate;
 
     @Override
     public Long getId()

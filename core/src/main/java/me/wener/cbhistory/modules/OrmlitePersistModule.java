@@ -17,7 +17,7 @@ import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
 import me.wener.cbhistory.service.RawDataService;
-import me.wener.cbhistory.service.impl.CommentServiceImpl;
+import me.wener.cbhistory.persistence.ormlite.service.CommentServiceImpl;
 import me.wener.cbhistory.service.impl.RawDataServiceCacheImpl;
 
 @PlugInfo(name = "Ormlite 持久层模块", author = "wener<wenermail@gmail.com>")
