@@ -1,7 +1,7 @@
 模块结构
 	core
 		目前为 guice + guava
-	db-ormlite
+	db-ormlite: 不能实现, ormlite 和 core 绑定
 		使用 ormlite 作为持久层的实现
 	db-spring-data
 		使用 spring-data-jpa 作为持久层实现
@@ -19,7 +19,7 @@
 		在这个模块里没有 rest 这些概念,定义返回值的类型,模式
 	server-spring: spring-data-jpa
 		使用 spring 来作为服务器实现,后端使用 spring-data-jpa
-		
+	server-dropwizard: 依赖 spring-data 作为持久层
 		
 如果实现插件式的模块?
 	me.wener.cbhistory.modules
@@ -72,6 +72,20 @@
 		当 article 更新的时候,需要清楚对应 id 的缓存
 		如何知道 article 更新?
 			1. 更新文章完成事件,判断该 id
+			这一步不好处理, 只有依赖于完成事件
+		缓存什么?
+			rawData 或者是 json 数据~?
+				rawData 应该在 rawDataService 实现中做.
+				而 json 则应该在提供服务的地方实现
+				如果在 rawDataService 实现,则所有的使用该操作的都能得益于同一个缓存
+					但是每次都需要序列化 rawData,成本略高
+				如果在 提供服务的地方实现缓存,则每个服务提供都需要
+				或者是同时在两个地方实现
+			缓存 rawData 是否有必要再输出到本地作为文件缓存
+			如何处理分页问题
+				有分页问题,也有排序问题
+				
+			
 			
 是否对 article 也进行缓存 ?
 	

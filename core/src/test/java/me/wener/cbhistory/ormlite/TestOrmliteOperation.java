@@ -55,6 +55,7 @@ public class TestOrmliteOperation
     }
 
     @Test
+    @Ignore
     public void testOrmliteWorkWithJodaDate() throws NoSuchFieldException
     {
         long id = 287625;
@@ -86,4 +87,18 @@ public class TestOrmliteOperation
         DateTime.parse(str);
     }
 
+    @Test
+    @Ignore
+    public void testQueryComment()
+    {
+        // 该 id 有 400 多条评论
+        long id = 293839;
+
+        Injector injector = App.getInjector();
+
+        CommentService commentService = injector.getInstance(CommentService.class);
+
+        Collection<Comment> comments = commentService.findAllBySid(id, 1);
+        assert comments.size() == 100;
+    }
 }

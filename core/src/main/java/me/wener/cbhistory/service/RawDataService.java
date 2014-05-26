@@ -4,6 +4,6 @@ import me.wener.cbhistory.domain.RawData;
 
 public interface RawDataService
 {
-    RawData save(RawData rawData);
-    RawData findOne(Long id);
+    void delete(Long id);
+    RawData findBySid(Long id, int page);
 }

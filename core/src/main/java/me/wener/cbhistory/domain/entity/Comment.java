@@ -7,6 +7,7 @@ import java.util.Date;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import me.wener.cbhistory.persistence.ormlite.service.CommentServiceImpl;
+import org.joda.time.LocalDateTime;
 
 @Data
 @Accessors(chain = true)
@@ -34,7 +35,7 @@ public class Comment implements Identifiable<Long>, CBHistoryTable
     @DatabaseField
     private Long sid;
     @DatabaseField
-    private Date date;
+    private LocalDateTime date;
     @DatabaseField(width = 32)
     private String name;
     /**
