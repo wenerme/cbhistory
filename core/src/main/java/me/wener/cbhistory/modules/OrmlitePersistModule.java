@@ -17,7 +17,9 @@ import me.wener.cbhistory.persistence.ormlite.JodaDateType;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
+import me.wener.cbhistory.service.RawDataService;
 import me.wener.cbhistory.service.impl.CommentServiceImpl;
+import me.wener.cbhistory.service.impl.RawDataServiceCacheImpl;
 
 @PlugInfo(name = "Ormlite 持久层模块", author = "wener<wenermail@gmail.com>")
 public class OrmlitePersistModule extends PluggableModule
@@ -27,6 +29,9 @@ public class OrmlitePersistModule extends PluggableModule
     protected void configure()
     {
         DataPersisterManager.registerDataPersisters(new JodaDateType());
+
+        bind(RawDataService.class)
+                .to(RawDataServiceCacheImpl.class);
 
         bind(ConnectionSource.class)
                 .toProvider(new Provider<ConnectionSource>()
