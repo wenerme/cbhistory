@@ -18,8 +18,10 @@ import me.wener.cbhistory.core.event.TryDiscoverArticleBetweenDateEvent;
 import me.wener.cbhistory.core.event.TryDiscoverArticleByUrlEvent;
 import me.wener.cbhistory.core.modules.ChainInjector;
 import me.wener.cbhistory.core.modules.ConfigureModule;
+import me.wener.cbhistory.core.pluggable.AfterAppStartedEvent;
+import me.wener.cbhistory.core.pluggable.AfterConfigureCompleteEvent;
 import me.wener.cbhistory.core.pluggable.PluginLoadModule;
-import me.wener.cbhistory.modules.OrmlitePersistModule;
+import me.wener.cbhistory.modules.AbstractPlugin;
 import me.wener.cbhistory.core.modules.PersistModule;
 import me.wener.cbhistory.core.modules.PropertiesModule;
 import me.wener.cbhistory.core.process.ArticleProcess;
@@ -61,6 +63,8 @@ public class App
 
             // 初始化
             injector.getInstance(App.class);
+            // 触发配置完成事件
+            AbstractPlugin.getEventBus().post(new AfterConfigureCompleteEvent());
 
             DateTime end = DateTime.now();
             log.info("程序配置完成 耗时: {} ms", new Duration(start, end).getMillis());
@@ -72,6 +76,8 @@ public class App
     {
         // 开始调度
         getInjector().getInstance(App.class).setupSchedules();
+        // 触发完成事件
+        AbstractPlugin.getEventBus().post(new AfterAppStartedEvent());
     }
 
     public static void main(String[] args)

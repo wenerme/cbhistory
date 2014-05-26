@@ -1,18 +1,16 @@
 package me.wener.cbhistory.core.pluggable;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Module;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import me.wener.cbhistory.modules.AbstractPluginModule;
 import me.wener.cbhistory.modules.IPlugin;
-import me.wener.cbhistory.modules.PluggableModule;
 
 @Slf4j
-public class PluginLoadModule extends PluggableModule
+public class PluginLoadModule extends AbstractPluginModule
 {
     private final PlugInfo defaultInfo = new PlugInfo()
     {

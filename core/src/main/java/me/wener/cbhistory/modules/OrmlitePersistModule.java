@@ -1,6 +1,5 @@
 package me.wener.cbhistory.modules;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
@@ -22,7 +21,7 @@ import me.wener.cbhistory.service.impl.CommentServiceImpl;
 import me.wener.cbhistory.service.impl.RawDataServiceCacheImpl;
 
 @PlugInfo(name = "Ormlite 持久层模块", author = "wener<wenermail@gmail.com>")
-public class OrmlitePersistModule extends PluggableModule
+public class OrmlitePersistModule extends AbstractPluginModule
 {
 
     @Override

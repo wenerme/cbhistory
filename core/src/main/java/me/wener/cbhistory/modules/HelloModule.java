@@ -3,7 +3,7 @@ package me.wener.cbhistory.modules;
 import me.wener.cbhistory.core.pluggable.PlugInfo;
 
 @PlugInfo(name = "简单的测试模块", author = "wener<wenermail@gmail.com>")
-public class HelloModule extends PluggableModule
+public class HelloModule extends AbstractPluginModule
 {
     public HelloModule()
     {

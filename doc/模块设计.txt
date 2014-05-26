@@ -58,6 +58,8 @@
 		将 PersistsModule 拿出来
 		这里需要注意 也需要将 RawDataService 实现拿出来
 			但是core默认提供一个基于 缓存 实现的 RawDataService
+	实现一个简单的服务器 wsdl,因为 必须返回 xml,所以需要在外层套一个 <cbhistory /> 就好了
+		在客户端解析的时候,需要注意这一点
 	抽取出 ormlite 后,再实现 server-madvoc
 	如果在实现madvoc的过程中发现可以抽取的东西,再抽为 server
 		
@@ -86,3 +88,4 @@
 新的思路:
 	不再抽出 ormlite, core默认绑定一套持久层的实现,
 	如果需要集成 spring data 的时候,说明是其他的东西需要使用,core依然使用ormlite
+	
