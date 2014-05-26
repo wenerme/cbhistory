@@ -12,9 +12,8 @@ import org.joda.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @DatabaseTable(daoClass = CommentServiceImpl.class, tableName = Comment.TABLE_NAME)
-public class Comment implements Identifiable<Long>, CBHistoryTable
+public class Comment implements Identifiable<Long>, CommentTable
 {
-    public static final String TABLE_NAME = TABLE_PREFIX + "comment";
     /*
      "tid": "9041995",
       "pid": "0",
@@ -36,15 +35,15 @@ public class Comment implements Identifiable<Long>, CBHistoryTable
     private Long sid;
     @DatabaseField
     private LocalDateTime date;
-    @DatabaseField(width = 32)
+    @DatabaseField(width = NAME_LENGTH)
     private String name;
     /**
      * 所在地址
      */
     @SerializedName("host_name")
-    @DatabaseField(width = 32)
+    @DatabaseField(width = HOSTNAME_LENGTH)
     private String hostName;
-    @DatabaseField(width = 400)// 默认长度为320, 给 400足够了
+    @DatabaseField(width = COMMENT_LENGTH)
     private String comment;
     /**
      * 支持
@@ -61,7 +60,7 @@ public class Comment implements Identifiable<Long>, CBHistoryTable
     @SerializedName("userid")
     @DatabaseField
     private Integer userId;
-    @DatabaseField
+    @DatabaseField(width = ICON_LENGTH)
     private String icon;
 
     @Override

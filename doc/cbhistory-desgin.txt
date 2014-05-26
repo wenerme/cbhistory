@@ -84,6 +84,24 @@ H2 中这样导出 SQL
 
 script to 'filenam'
 
+-- 计算 最大长度, 主要用户优化实体类的定义
+SELECT 
+	(SELECT  LENGTH(title) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as max_title_len
+	,(SELECT  LENGTH(introduction) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as max_introduction_len
+	,(SELECT  LENGTH(token) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as max_token_len
+	,(SELECT  LENGTH(source) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as max_source_len
+	,(SELECT  LENGTH(sn) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as max_sn_len
+	,(SELECT now()) as `查询日期`
+	;
+-- comment 表
+SELECT 
+	(SELECT  LENGTH(`comment`) AS f_len FROM cbhistory_comment ORDER BY f_len DESC LIMIT 1) as comment_len
+	,(SELECT  LENGTH(hostname) AS f_len FROM cbhistory_comment ORDER BY f_len DESC LIMIT 1) as hostname_len
+	,(SELECT  LENGTH(name) AS f_len FROM cbhistory_comment ORDER BY f_len DESC LIMIT 1) as name_len
+	,(SELECT  LENGTH(icon) AS f_len FROM cbhistory_comment ORDER BY f_len DESC LIMIT 1) as icon_len
+	,(SELECT now()) as `查询日期`
+	;
+	
 统计记录
 =========
 

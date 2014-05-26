@@ -21,8 +21,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>core</module>
-        <module>server-jws</module>
+        <module>../core</module>
+        <module>../server-jws</module>
+        <module>../persistence-jpa</module>
     </modules>
 
     <properties>
@@ -48,6 +49,8 @@
         <c3p0.version>0.9.5-pre8</c3p0.version>
         <junit.version>4.11</junit.version>
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+        <spring-data-jpa.version>1.5.2.RELEASE</spring-data-jpa.version>
+        <spring-boot-starter.version>1.0.2.RELEASE</spring-boot-starter.version>
     </properties>
 
     <dependencies>

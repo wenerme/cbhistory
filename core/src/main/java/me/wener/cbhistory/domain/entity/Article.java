@@ -12,23 +12,22 @@ import org.joda.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @DatabaseTable(daoClass = ArticleServiceImpl.class, tableName = Article.TABLE_NAME)
-public class Article implements Identifiable<Long>, CBHistoryTable
+public class Article implements Identifiable<Long>, ArticleTable
 {
-    public static final String TABLE_NAME = TABLE_PREFIX + "article";
     @DatabaseField(id = true)
     @SerializedName("SID")
     private Long sid;
-    @DatabaseField(width = 16)
+    @DatabaseField(width = SN_LENGTH)
     @SerializedName("SN")
     private String sn;
-    @DatabaseField(width = 125)
+    @DatabaseField(width = TITLE_LENGTH)
     private String title;
-    @DatabaseField(width = 512)// 为了避免长度过长
+    @DatabaseField(width = INTRO_LENGTH)// 为了避免长度过长
     private String introduction;
     /**
      * 稿源
      */
-    @DatabaseField(width = 64)
+    @DatabaseField(width = SOURCE_LENGTH)
     private String source;
     @DatabaseField
     private LocalDateTime date;
