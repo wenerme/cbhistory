@@ -14,6 +14,7 @@ import lombok.SneakyThrows;
 import me.wener.cbhistory.core.pluggable.PlugInfo;
 import me.wener.cbhistory.persistence.ormlite.JodaDateType;
 import me.wener.cbhistory.domain.entity.Article;
+import me.wener.cbhistory.persistence.ormlite.service.ArticleServiceImpl;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
 import me.wener.cbhistory.service.RawDataService;
@@ -24,6 +25,10 @@ import me.wener.cbhistory.service.impl.RawDataServiceCacheImpl;
 public class OrmlitePersistModule extends AbstractPluginModule
 {
 
+    @Inject @Named("jdbc.url")
+    String jdbcUrl;
+    @Inject
+    DataSource dataSource;
     @Override
     protected void configure()
     {
@@ -32,45 +37,22 @@ public class OrmlitePersistModule extends AbstractPluginModule
         bind(RawDataService.class)
                 .to(RawDataServiceCacheImpl.class);
 
-        bind(ConnectionSource.class)
-                .toProvider(new Provider<ConnectionSource>()
-                {
-                    @Inject
-                    Provider<DataSource> dataSourceProvider;
-                    @Inject @Named("jdbc.url")
-                    String jdbcUrl;
-
-                    @Override
-                    public ConnectionSource get()
-                    {
-                        try
-                        {
-                            return new DataSourceConnectionSource(dataSourceProvider.get(), jdbcUrl);
-                        } catch (SQLException e)
-                        {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
+        try
+        {
+            DataSourceConnectionSource source = new DataSourceConnectionSource(dataSource, jdbcUrl);
+            bind(ConnectionSource.class)
+                    .toInstance(source);
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
 
 
         bind(ArticleService.class)
-                .toProvider(new Provider<ArticleService>()
-                {
-                    @Inject
-                    Provider<ConnectionSource> connectionSourceProvider;
-
-                    @Override
-                    @SneakyThrows
-                    public ArticleService get()
-                    {
-                        return (ArticleService) DaoManager.createDao(connectionSourceProvider.get(), Article.class);
-                    }
-                });
+                .to(ArticleServiceImpl.class);
 
         bind(CommentService.class)
-                .to(CommentServiceImpl.class)
-                .asEagerSingleton();
+                .to(CommentServiceImpl.class);
 
     }
 

@@ -6,7 +6,7 @@
         <artifactId>parent</artifactId>
         <groupId>me.wener.cbhistory</groupId>
         <version>${cbhistory.version}</version>
-        <relativePath>../</relativePath>
+        <relativePath>../parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

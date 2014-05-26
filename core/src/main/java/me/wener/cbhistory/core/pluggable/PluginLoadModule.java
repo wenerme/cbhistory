@@ -1,10 +1,12 @@
 package me.wener.cbhistory.core.pluggable;
 
 import com.google.common.collect.Maps;
+import com.google.inject.Injector;
 import com.google.inject.Module;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
 import java.util.Map;
+import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.modules.AbstractPluginModule;
 import me.wener.cbhistory.modules.IPlugin;
@@ -12,6 +14,8 @@ import me.wener.cbhistory.modules.IPlugin;
 @Slf4j
 public class PluginLoadModule extends AbstractPluginModule
 {
+    @Inject
+    Injector injector;
     private final PlugInfo defaultInfo = new PlugInfo()
     {
         @Override
@@ -83,7 +87,7 @@ public class PluginLoadModule extends AbstractPluginModule
 
             log.info("加载插件 {} {} BY {}", plugin.getClass().getSimpleName(), info.name(), info.author());
             //
-            requestInjection(plugin);
+            injector.injectMembers(plugin);
             plugin.init();
             if (plugin instanceof Module)
                 install((Module) plugin);

@@ -7,11 +7,13 @@ import com.j256.ormlite.support.ConnectionSource;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
+import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.domain.entity.Comment;
 import me.wener.cbhistory.service.CommentService;
 
 @Slf4j
+@Singleton
 public class CommentServiceImpl
         extends BasicServiceImpl<Comment, Long>
         implements CommentService

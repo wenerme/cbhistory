@@ -11,6 +11,7 @@ import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.domain.entity.Comment;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
+import me.wener.cbhistory.util.Same;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.junit.Ignore;
@@ -84,7 +85,7 @@ public class TestOrmliteOperation
     {
         String str = "2014-04-29 14:39:23.0";
 
-        DateTime.parse(str);
+        Same.getDateTimeFormatter().parseLocalDateTime(str);
     }
 
     @Test

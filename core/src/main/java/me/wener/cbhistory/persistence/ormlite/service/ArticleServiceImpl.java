@@ -6,12 +6,14 @@ import com.j256.ormlite.support.ConnectionSource;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
+import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.service.ArticleService;
 import org.joda.time.LocalDateTime;
 
 @Slf4j
+@Singleton
 public class ArticleServiceImpl
         extends BasicServiceImpl<Article, Long>
         implements ArticleService
