@@ -9,6 +9,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
+import me.wener.cbhistory.util.Same;
 import org.joda.time.LocalDateTime;
 
 public class LocalDateTimeTypeConvert
@@ -20,7 +21,7 @@ public class LocalDateTimeTypeConvert
                                      JsonDeserializationContext context)
             throws JsonParseException
     {
-        return !Strings.isNullOrEmpty(json.getAsString()) ? new LocalDateTime(json.getAsString()) : null;
+        return Strings.isNullOrEmpty(json.getAsString()) ? null: Same.getDateTimeFormatter().parseLocalDateTime(json.getAsString()) ;
     }
 
     @Override

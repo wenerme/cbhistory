@@ -9,6 +9,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
+import me.wener.cbhistory.util.Same;
 import org.joda.time.DateTime;
 
 public final class DateTimeTypeConvert
@@ -22,7 +23,7 @@ public final class DateTimeTypeConvert
             throws JsonParseException
     {
 
-        return Strings.isNullOrEmpty(json.getAsString()) ? null : new DateTime(json.getAsString());
+        return Strings.isNullOrEmpty(json.getAsString()) ? null : Same.getDateTimeFormatter().parseDateTime(json.getAsString());
     }
 
     @Override
