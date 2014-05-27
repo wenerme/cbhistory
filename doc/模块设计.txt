@@ -19,7 +19,12 @@
 		在这个模块里没有 rest 这些概念,定义返回值的类型,模式
 	server-spring: spring-data-jpa
 		使用 spring 来作为服务器实现,后端使用 spring-data-jpa
-	server-dropwizard: 依赖 spring-data 作为持久层
+	server-dropwizard: 
+		依赖 spring-data 作为持久层
+	persistence-jpa
+		虽然有了 ormlite 作为持久层
+		但是在分析数据的时候,需要使用jpa 和 spring data 来简化查询
+		并且便于使用 lucene 来建立索引
 		
 如果实现插件式的模块?
 	me.wener.cbhistory.modules

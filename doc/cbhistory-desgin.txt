@@ -74,23 +74,23 @@ select sid,date,title from cbhistory_article where sid = (select sid from cbhist
 -- 最新有评论的文章
 select sid,date,title from cbhistory_article where sid = (select sid from cbhistory_comment order by date desc limit 0,1);
 
--- 获取数据库的大小
+-- MYSQL 获取数据库的大小
 SELECT table_schema                                        "DB Name", 
    Round(Sum(data_length + index_length) / 1024 / 1024, 1) "DB Size in MB" 
-FROM   information_schema.tables 
+FROM   information_schema.tables
 GROUP  BY table_schema; 
 
-H2 中这样导出 SQL
+-- H2 中这样导出 SQL
 
 script to 'filenam'
 
--- 计算 最大长度, 主要用户优化实体类的定义
+-- 计算 最大长度, 主要用于优化实体类的定义
 SELECT 
-	(SELECT  LENGTH(title) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as max_title_len
-	,(SELECT  LENGTH(introduction) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as max_introduction_len
-	,(SELECT  LENGTH(token) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as max_token_len
-	,(SELECT  LENGTH(source) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as max_source_len
-	,(SELECT  LENGTH(sn) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as max_sn_len
+	(SELECT  LENGTH(title) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as title_len
+	,(SELECT  LENGTH(introduction) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as introduction_len
+	,(SELECT  LENGTH(token) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as token_len
+	,(SELECT  LENGTH(source) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as source_len
+	,(SELECT  LENGTH(sn) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as sn_len
 	,(SELECT now()) as `查询日期`
 	;
 -- comment 表
@@ -101,7 +101,33 @@ SELECT
 	,(SELECT  LENGTH(icon) AS f_len FROM cbhistory_comment ORDER BY f_len DESC LIMIT 1) as icon_len
 	,(SELECT now()) as `查询日期`
 	;
-	
+
+-- 每小时
+SELECT  HOUR(date), count(*) AS `每小时的评论数量`
+        FROM  cbhistory_comment 
+        GROUP BY HOUR(date);
+-- 每天
+SELECT  DATE(date), count(*) AS `每天的评论数量`
+        FROM  cbhistory_comment 
+        GROUP BY DATE(date);
+-- 一周中的每天
+SELECT  DAYOFWEEK(date), count(*) AS `一周中每天的评论数量`
+        FROM  cbhistory_comment 
+        GROUP BY DAYOFWEEK(date);
+		
+-- 平均每天的评论数量 不考虑 date 为 null
+SELECT  AVG(t.pre_day) as `平均每天的评论数`
+FROM  ( select count(*) as pre_day  from cbhistory_comment where date is not null GROUP BY DATE(date) ) t;
+
+-- 以评论者地区分类
+SELECT hostName, count(*) as NUM
+FROM cbhistory_comment GROUP BY hostName ORDER BY NUM DESC;
+-- 以发文章者分类
+SELECT source, count(*) as NUM
+FROM cbhistory_article GROUP BY source ORDER BY NUM DESC;
+
+-- 喷子走势, 选择一个 hostName 然后以每天分类
+
 统计记录
 =========
 
@@ -139,13 +165,22 @@ SELECT
 | 总数 | 2727 | 42240 |         2354 | 2014-05-22 14:55:00 |
 +------+------+-------+--------------+---------------------+
 
++------+------+-------+--------------+---------------------+
+| 统计 | 文章 | 评论  | 有评论的文章 | 查询日期            |
++------+------+-------+--------------+---------------------+
+| 总数 | 3294 | 53792 |         2885 | 2014-05-27 07:57:40 |
++------+------+-------+--------------+---------------------+
+
 查询 几天前的sql
 ----
 http://stackoverflow.com/questions/14497662
 
 mysql日期函数
--------------
-http://dev.mysql.com/doc/refman/5.1/en/date-and-time-functions.html
+: http://dev.mysql.com/doc/refman/5.1/en/date-and-time-functions.html
+JPQL 日期函数
+: http://www.datanucleus.org/products/accessplatform_2_2/jpa/jpql_functions.html
+JPQL 手册
+: http://docs.oracle.com/cd/E17904_01/apirefs.1111/e13946/ejb3_langref.html
 
 选择过去 6 - 7 天的
 ----

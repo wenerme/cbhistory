@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>persistence-jpa</artifactId>
+    <description>JPA 持久层</description>
 
     <dependencies>
 
