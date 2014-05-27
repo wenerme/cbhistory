@@ -10,13 +10,6 @@
 * 可只更新文章信息而不更新评论
 	在文章评论过期后,文章相关信息也还会在 rawdata 中,此时依然需要更新该信息
 
-* 实现服务模块
-	* jws
-
-
-* 使用 Spring + Hibernate 实现了一个底层
-
-* 实现一个简单的 servlet 作为服务器
 
 * 将发现调度的时间配置到 default.properties
 
@@ -26,7 +19,14 @@
 	目前和用户相关的有三个字段, icon name userid
 	但是 name 不一定需要用户存在
 	
-	
+v 0.5.0
+-------
+
+* 实现一个简单的 servlet 作为服务器
+	即 server-madvoc
+* 实现 server-madvoc 和 server-madvoc-jetty
+* 实现 persistence-jpa
+
 v 0.4.0
 --------
 

@@ -34,6 +34,7 @@ public class Same
         {
             DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
             ArrayList<DateTimeParser> parser = Lists.newArrayList();
+            parser.add(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS").getParser());
             parser.add(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSSSSS").getParser());
             parser.add(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").getParser());
             parser.add(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm").getParser());
