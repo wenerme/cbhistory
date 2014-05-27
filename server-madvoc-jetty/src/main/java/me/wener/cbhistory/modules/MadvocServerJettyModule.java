@@ -8,12 +8,14 @@ import javax.xml.ws.Endpoint;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.core.pluggable.AfterConfigureCompleteEvent;
+import me.wener.cbhistory.core.pluggable.PlugInfo;
 import me.wener.cbhistory.server.madvoc.MadvocServerFilter;
 import me.wener.cbhistory.service.RawDataService;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 @Slf4j
+@PlugInfo(name = "内置 jetty 运行 madvoc 服务",author = "wener<wenermail@gmail.com>")
 public class MadvocServerJettyModule extends AbstractPlugin
 {
     public MadvocServerJettyModule()

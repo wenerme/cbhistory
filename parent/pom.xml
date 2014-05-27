@@ -23,7 +23,7 @@
     <modules>
         <module>../core</module>
         <module>../server-jws</module>
-        <module>../persistence-jpa</module>
+        <module>../analysis</module>
         <module>../server-madvoc</module>
         <module>../server-madvoc-jetty</module>
     </modules>

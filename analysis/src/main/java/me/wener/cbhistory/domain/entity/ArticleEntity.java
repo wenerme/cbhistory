@@ -1,14 +1,10 @@
 package me.wener.cbhistory.domain.entity;
 
+import com.google.common.collect.Sets;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import java.util.Set;
+import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -16,11 +12,10 @@ import org.joda.time.LocalDateTime;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-@EqualsAndHashCode(callSuper = false)
 @Data
-@Accessors(chain = true)
-@Entity
 @Table(name = ArticleTable.TABLE_NAME)
+@Entity
+@Accessors(chain = true)
 public class ArticleEntity
         implements Persistable<Long>, Identifiable<Long>, ArticleTable
 {
@@ -53,6 +48,9 @@ public class ArticleEntity
     private Integer digNum;
     private Integer favNum;
     private LocalDateTime lastUpdateDate;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "article")
+    private Set<CommentEntity> comments = Sets.newHashSet();
 
     @Override
     public Long getId()
