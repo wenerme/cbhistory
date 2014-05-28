@@ -2,7 +2,7 @@ package me.wener.cbhistory.repo.test;
 
 import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.repo.ArticleRepo;
-import me.wener.cbhistory.spring.AppConfig;
+import me.wener.cbhistory.spring.SpringContextConfig;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -13,7 +13,7 @@ public class TestArticleRepo
     {
         App.getInjector();
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(AppConfig.class);
+        context.register(SpringContextConfig.class);
         context.refresh();
 
         ArticleRepo articleRepo = context.getBean(ArticleRepo.class);

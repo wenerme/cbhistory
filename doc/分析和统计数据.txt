@@ -64,8 +64,9 @@ https://code.google.com/p/paoding/
 ik 最后更新 2012
 paoding 最后更新 2008
 
-
-
+收集百度热词页
+-----------
+$('.keyword .list-title').each(function(){console.log($(this).text())})
 
 
 

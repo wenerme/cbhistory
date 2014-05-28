@@ -1,12 +1,12 @@
 package me.wener.cbhistory.modules;
 
-import me.wener.cbhistory.spring.AppConfig;
+import me.wener.cbhistory.spring.SpringContextConfig;
 
 public class SpringModule extends AbstractPluginModule
 {
     @Override
     protected void configure()
     {
-        requestStaticInjection(AppConfig.class);
+        requestStaticInjection(SpringContextConfig.class);
     }
 }

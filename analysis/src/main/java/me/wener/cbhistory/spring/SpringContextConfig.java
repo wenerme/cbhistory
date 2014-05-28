@@ -15,10 +15,10 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@ComponentScan(basePackageClasses = EntityPkg.class, includeFilters = @ComponentScan.Filter(Named.class))
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackageClasses = RepoPkg.class, includeFilters = @ComponentScan.Filter(Named.class))
-@ComponentScan(basePackageClasses = EntityPkg.class, includeFilters = @ComponentScan.Filter(Named.class))
-public class AppConfig
+public class SpringContextConfig
 {
     @Inject
     static DataSource dataSource;
@@ -31,8 +31,8 @@ public class AppConfig
         return dataSource;
     }
 
-    @Bean(name = "entityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean getLocalContainerEntityManagerFactoryBean()
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory()
     {
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
         bean.setDataSource(getDataSource());
@@ -40,8 +40,8 @@ public class AppConfig
         return bean;
     }
 
-    @Bean(name = "transactionManager")
-    public JpaTransactionManager getJpaTransactionManager()
+    @Bean
+    public JpaTransactionManager transactionManager()
     {
         JpaTransactionManager manager = new JpaTransactionManager();
         manager.setDataSource(getDataSource());
