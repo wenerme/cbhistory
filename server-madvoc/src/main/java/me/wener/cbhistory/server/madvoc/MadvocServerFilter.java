@@ -11,8 +11,8 @@ public class MadvocServerFilter extends MadvocServletFilter
     @Override
     public void init(FilterConfig filterConfig) throws ServletException
     {
-//        App.start();
-        App.getInjector();
+        App.start();
+//        App.getInjector();
 
         ServletContext ctx = filterConfig.getServletContext();
         ctx.setInitParameter("madvoc.webapp", MadvocApp.class.getCanonicalName());
