@@ -4,16 +4,15 @@ import com.google.common.base.Strings;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
 import java.util.Collection;
-import java.util.Date;
 import javax.inject.Named;
 import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.CBHistory;
 import me.wener.cbhistory.core.Events;
-import me.wener.cbhistory.core.event.TryFoundArticleEvent;
-import me.wener.cbhistory.core.event.TryUpdateCommentEvent;
-import me.wener.cbhistory.core.event.UpdateCommentEvent;
+import me.wener.cbhistory.core.event.process.TryFoundArticleEvent;
+import me.wener.cbhistory.core.event.process.TryUpdateCommentEvent;
+import me.wener.cbhistory.core.event.process.UpdateCommentEvent;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.domain.entity.Comment;
 import me.wener.cbhistory.domain.RawComment;
@@ -65,6 +64,11 @@ public class CommentProcess extends CommonProcess
         }
 
         RawData raw = gson.fromJson(response.bodyText(), RawData.class);
+        if (raw == null)
+        {
+            log.error("转换的 rawData 为 null SID: {}", article.getSid());
+            return;
+        }
         if (!raw.getStatus().equals("success"))
         {
             log.error("获取到的评论内容状态异常 :{}, SID: {}. 可能请求太频繁", raw, article.getSid());

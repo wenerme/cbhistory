@@ -1,7 +1,8 @@
-package me.wener.cbhistory.core.event;
+package me.wener.cbhistory.core.event.process;
 
 import lombok.Getter;
 import lombok.ToString;
+import me.wener.cbhistory.core.event.AbstractEvent;
 
 @ToString
 public class TryFoundArticleEvent extends AbstractEvent

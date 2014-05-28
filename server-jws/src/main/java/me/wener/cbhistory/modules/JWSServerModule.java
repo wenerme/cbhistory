@@ -5,11 +5,9 @@ import com.google.inject.Injector;
 import javax.xml.ws.Endpoint;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.App;
-import me.wener.cbhistory.core.pluggable.AfterConfigureCompleteEvent;
+import me.wener.cbhistory.core.pluggable.event.AfterConfigureCompleteEvent;
 import me.wener.cbhistory.core.pluggable.PlugInfo;
 import me.wener.cbhistory.server.jws.JWSCommentProvider;
-import me.wener.cbhistory.service.ArticleService;
-import me.wener.cbhistory.service.CommentService;
 import me.wener.cbhistory.service.RawDataService;
 
 @PlugInfo(name = "使用自带的 jws 来部署一个获取评论的服务器"

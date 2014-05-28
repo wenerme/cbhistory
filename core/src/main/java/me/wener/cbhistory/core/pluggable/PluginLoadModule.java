@@ -8,6 +8,9 @@ import java.lang.reflect.Modifier;
 import java.util.Map;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import me.wener.cbhistory.core.pluggable.event.AfterLoadPluginEvent;
+import me.wener.cbhistory.core.pluggable.event.BeforeLoadPluginEvent;
+import me.wener.cbhistory.core.pluggable.event.CancelPluginLoadingEvent;
 import me.wener.cbhistory.modules.AbstractPluginModule;
 import me.wener.cbhistory.modules.IPlugin;
 

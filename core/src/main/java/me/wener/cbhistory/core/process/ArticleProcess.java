@@ -18,16 +18,15 @@ import jodd.http.HttpResponse;
 import jodd.jerry.Jerry;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.Events;
-import me.wener.cbhistory.core.event.DiscoverArticleEvent;
-import me.wener.cbhistory.core.event.FoundArticleEvent;
-import me.wener.cbhistory.core.event.TryDiscoverArticleBetweenDateEvent;
-import me.wener.cbhistory.core.event.TryDiscoverArticleByUrlEvent;
-import me.wener.cbhistory.core.event.TryFoundAllArticleEvent;
-import me.wener.cbhistory.core.event.TryFoundArticleEvent;
-import me.wener.cbhistory.core.event.TryUpdateCommentEvent;
+import me.wener.cbhistory.core.event.process.DiscoverArticleEvent;
+import me.wener.cbhistory.core.event.process.FoundArticleEvent;
+import me.wener.cbhistory.core.event.process.TryDiscoverArticleBetweenDateEvent;
+import me.wener.cbhistory.core.event.process.TryDiscoverArticleByUrlEvent;
+import me.wener.cbhistory.core.event.process.TryFoundAllArticleEvent;
+import me.wener.cbhistory.core.event.process.TryFoundArticleEvent;
+import me.wener.cbhistory.core.event.process.TryUpdateCommentEvent;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.util.CodecUtils;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 
 /**
@@ -202,7 +201,7 @@ public class ArticleProcess extends CommonProcess
         final String content = e.getContent();
         final Jerry doc = Jerry.jerry(content);
 
-        Article article = articleSvc.findOne(e.getArticleId());
+        Article article = articleSvc.findOne(e.getId());
 
         // 解析出文章的详细信息
         Matcher matcher = regGV.matcher(content);
@@ -219,7 +218,7 @@ public class ArticleProcess extends CommonProcess
                 CodecUtils.jsonMergeTo(data, article);
         } else
         {
-            log.error("无法匹配出 GvDetail 的内容. sid: {}", e.getArticleId());
+            log.error("无法匹配出 GvDetail 的内容. sid: {}", e.getId());
             return;
         }
 

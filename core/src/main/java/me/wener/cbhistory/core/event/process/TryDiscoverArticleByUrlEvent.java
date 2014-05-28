@@ -1,7 +1,8 @@
-package me.wener.cbhistory.core.event;
+package me.wener.cbhistory.core.event.process;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import me.wener.cbhistory.core.event.AbstractEvent;
 
 @EqualsAndHashCode(callSuper = false)
 @Data

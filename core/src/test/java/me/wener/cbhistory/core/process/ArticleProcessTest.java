@@ -2,8 +2,8 @@ package me.wener.cbhistory.core.process;
 
 import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.core.Events;
-import me.wener.cbhistory.core.event.TryDiscoverArticleBetweenDateEvent;
-import me.wener.cbhistory.core.event.TryUpdateCommentEvent;
+import me.wener.cbhistory.core.event.process.TryDiscoverArticleBetweenDateEvent;
+import me.wener.cbhistory.core.event.process.TryUpdateCommentEvent;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.util.Same;
 import org.junit.Ignore;

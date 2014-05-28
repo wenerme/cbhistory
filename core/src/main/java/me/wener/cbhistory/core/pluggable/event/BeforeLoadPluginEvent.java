@@ -1,4 +1,4 @@
-package me.wener.cbhistory.core.pluggable;
+package me.wener.cbhistory.core.pluggable.event;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

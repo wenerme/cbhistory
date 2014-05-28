@@ -1,7 +1,8 @@
-package me.wener.cbhistory.core.event;
+package me.wener.cbhistory.core.event.process;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import me.wener.cbhistory.core.event.Event;
 import org.joda.time.LocalDateTime;
 
 @Data

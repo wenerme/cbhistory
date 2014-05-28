@@ -1,8 +1,8 @@
 package me.wener.cbhistory.core;
 
 import com.google.inject.Injector;
-import me.wener.cbhistory.core.event.TryDiscoverArticleByUrlEvent;
-import me.wener.cbhistory.core.event.TryFoundArticleEvent;
+import me.wener.cbhistory.core.event.process.TryDiscoverArticleByUrlEvent;
+import me.wener.cbhistory.core.event.process.TryFoundArticleEvent;
 import org.junit.Ignore;
 import org.junit.Test;
 
