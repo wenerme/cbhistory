@@ -61,6 +61,10 @@ public class CommentProcess extends CommonProcess
             log.error("获取 URL 返回状态码异常 status: {} 请求的url为: {},参数op: {} 文章: {}"
                     , response.statusCode(), url, op, article);
             return;
+        }else if (Strings.isNullOrEmpty(response.bodyText()))
+        {
+            log.warn("请求返回空字符串 请求的url为: {}, op:{} SID:{}",url, op, article.getSid());
+            return;
         }
 
         RawData raw = gson.fromJson(response.bodyText(), RawData.class);
@@ -119,14 +123,14 @@ public class CommentProcess extends CommonProcess
         articleSvc.save(article);
         commentSvc.save(comments);
 
-        log.info("更新文章评论第 {} 页, 共 {} 条评论. 文章 sid: {}"
+        log.debug("更新文章评论第 {} 页, 共 {} 条评论. 文章 sid: {}"
                 , e.getPage(), comments.size(), article.getSid());
 
 
         // 如果文章的条数少于默认文章一页的条数,则尝试更新下一页
         if (comments.size() < COMMENTS_PRE_PAGE)
         {
-            log.info("完成文章评论的更新. sid: {}", article.getSid());
+            log.debug("完成文章评论的更新. sid: {}", article.getSid());
             Events.finish(e);
         } else
         {

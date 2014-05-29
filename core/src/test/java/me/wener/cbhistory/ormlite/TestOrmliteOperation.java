@@ -3,6 +3,7 @@ package me.wener.cbhistory.ormlite;
 import com.google.inject.Injector;
 import java.io.IOException;
 import java.util.Collection;
+import javax.sql.DataSource;
 import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.core.CBHistory;
 import me.wener.cbhistory.domain.RawComment;
@@ -19,6 +20,15 @@ import org.junit.Test;
 
 public class TestOrmliteOperation
 {
+    @Test
+    @Ignore
+    public void testSource()
+    {
+        Injector injector = App.getInjector();
+        DataSource source = injector.getInstance(DataSource.class);
+        ArticleService articleService = injector.getInstance(ArticleService.class);
+        assert articleService.count() > 0;
+    }
     @Test
     public void testTable() throws IOException
     {

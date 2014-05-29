@@ -66,7 +66,7 @@ paoding 最后更新 2008
 
 收集百度热词页
 -----------
-$('.keyword .list-title').each(function(){console.log($(this).text())})
+$.makeArray($('.keyword .list-title').map(function(){return $(this).text()})).join('\n')+'\n'
 
 
 

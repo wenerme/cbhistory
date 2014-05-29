@@ -115,23 +115,23 @@ public class App
                 new TryDiscoverArticleByUrlEvent("http://www.cnbeta.com/home/rank/show.htm"))
                 , 2 * MINUTE_MS, 1 * HOUR_MS);
 
-        // 每 10 小时发现过去 6-7 天的文章
+        // 发现过去 5-6 天的文章
         timer.schedule(new EventDiscoverArticleAgoTask()
-                .setStartAgo(Days.days(7))
-                .setEndAgo(Days.days(6))
-                , 40 * SECOND_MS, 10 * HOUR_MS);
+                .setStartAgo(Days.days(6))
+                .setEndAgo(Days.days(5))
+                , 40 * SECOND_MS, 8 * HOUR_MS);
 
-        // 每 6 小时发现过去 3-4 天的文章
+        // 发现过去 3-4 天的文章
         timer.schedule(new EventDiscoverArticleAgoTask()
                 .setStartAgo(Days.days(4))
                 .setEndAgo(Days.days(3))
-                , 20 * MINUTE_MS, 6 * HOUR_MS);
+                , 4 * MINUTE_MS, 4 * HOUR_MS);
 
-        // 每 8 小时发现过去 1-2 天的文章
+        // 发现过去 1-2 天的文章
         timer.schedule(new EventDiscoverArticleAgoTask()
                 .setStartAgo(Days.days(2))
                 .setEndAgo(Days.days(1))
-                , 40 * MINUTE_MS, 8 * HOUR_MS);
+                , 6 * MINUTE_MS, 2 * HOUR_MS);
     }
 
     @EqualsAndHashCode(callSuper = false)

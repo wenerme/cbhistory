@@ -213,7 +213,7 @@ public class ArticleProcess extends CommonProcess
             {
                 article = gson.fromJson(data, Article.class);
                 if (log.isInfoEnabled())
-                    log.info("发现新文章: {}", article);
+                    log.info("发现新文章: SID: {} SN: {}", article.getSid(), article.getSn());
             } else
                 CodecUtils.jsonMergeTo(data, article);
         } else
