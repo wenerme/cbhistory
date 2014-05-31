@@ -20,6 +20,18 @@ public class TestArticleRepo
         System.out.println(articleRepo.count());
         reportMemory();
     }
+   @Test
+    public void testSum()
+    {
+        App.getInjector();
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.register(SpringContextConfig.class);
+        context.refresh();
+
+        ArticleRepo articleRepo = context.getBean(ArticleRepo.class);
+
+        System.out.println(articleRepo.sumOfDiscussCount());
+    }
 
     private static void reportMemory()
     {
