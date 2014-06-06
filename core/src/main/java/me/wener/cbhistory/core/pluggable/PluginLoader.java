@@ -9,7 +9,9 @@ import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Set;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class PluginLoader<T>
 {
     private Collection<Class<T>> plugins = null;
@@ -44,24 +46,27 @@ public class PluginLoader<T>
     {
         if (plugins != null)
             return;
+        plugins = Sets.newHashSet();
 
         ClassPath classPath;
         try
         {
             classPath = ClassPath.from(pluginType.getClassLoader());
-        } catch (IOException e)
+
+            ImmutableSet<ClassPath.ClassInfo> infos = classPath.getTopLevelClasses(packageName);
+            for (ClassPath.ClassInfo info : infos)
+            {
+                Class<?> clazz = info.load();
+                if (pluginType.isAssignableFrom(clazz))
+                    plugins.add((Class<T>) clazz);
+            }
+        } catch (Exception e)
         {
-            throw new RuntimeException(e);
+            // 有可能当前环境无法访问 path, 这时候这里会抛出异常
+            log.warn("扫描 ClassPath 时出现异常, 可能当前环境无法操作, 已略过插件( {} )扫描. 异常信息: {}"
+                    , pluginType, e.getMessage());
         }
 
-        plugins = Sets.newHashSet();
-        ImmutableSet<ClassPath.ClassInfo> infos = classPath.getTopLevelClasses(packageName);
-        for (ClassPath.ClassInfo info : infos)
-        {
-            Class<?> clazz = info.load();
-            if (pluginType.isAssignableFrom(clazz))
-                plugins.add((Class<T>) clazz);
-        }
     }
 
     public ImmutableSet<Class<T>> getPlugins()

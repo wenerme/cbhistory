@@ -104,30 +104,40 @@ public class PropertiesModule extends AbstractModule
 
         if (is == null)
         {
-            File file = new File(path);
-            if (file.exists() || (file = file.getAbsoluteFile()).exists())
+            try
             {
-                log.info("在目录中发现文件 {}, 尝试加载", file.getPath());
-                try
+                File file = new File(path);
+                if (file.exists() || (file = file.getAbsoluteFile()).exists())
                 {
-                    is = new FileInputStream(file);
-                } catch (FileNotFoundException ignored)
-                {
-                    // 已经判断文件存在
-                    log.error("属性文件异常",ignored);
+                    log.info("在目录中发现文件 {}, 尝试加载", file.getPath());
+                    try
+                    {
+                        is = new FileInputStream(file);
+                    } catch (FileNotFoundException ignored)
+                    {
+                        // 已经判断文件存在
+                        log.error("属性文件异常", ignored);
+                    }
                 }
+            } catch (SecurityException ex)
+            {
+                log.warn("当前环境无法操作本地文件, 加载 {} 失败", path);
             }
         }
 
-        if (is != null) {
-            try {
+        if (is != null)
+        {
+            try
+            {
                 Properties prop = new Properties();
                 prop.load(is);
                 withProperties(prop);
                 is.close();
-            } catch (IOException e) {
+            } catch (IOException e)
+            {
                 log.error("加载属性文件 " + path + " 出现异常", e);
-            } finally {
+            } finally
+            {
                 Closeables.closeQuietly(is);
             }
 

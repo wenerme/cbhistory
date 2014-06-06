@@ -2,6 +2,7 @@ package me.wener.cbhistory.server.madvoc;
 
 import jodd.madvoc.WebApplication;
 import jodd.madvoc.component.MadvocConfig;
+import jodd.madvoc.config.MadvocConfigurator;
 import me.wener.cbhistory.core.App;
 
 
@@ -15,4 +16,5 @@ public class MadvocApp extends WebApplication
 
         registerComponent(commentAction);
     }
+
 }

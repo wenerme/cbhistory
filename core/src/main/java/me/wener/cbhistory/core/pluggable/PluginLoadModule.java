@@ -1,10 +1,15 @@
 package me.wener.cbhistory.core.pluggable;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +23,8 @@ import me.wener.cbhistory.modules.IPlugin;
 public class PluginLoadModule extends AbstractPluginModule
 {
     @Inject
-    Injector injector;
+    private Injector injector;
+    private static Collection<Class<? extends IPlugin>> pluginClass = Lists.newCopyOnWriteArrayList();
     private final PlugInfo defaultInfo = new PlugInfo()
     {
         @Override
@@ -46,14 +52,28 @@ public class PluginLoadModule extends AbstractPluginModule
         }
     };
 
+    /**
+     * 静态添加插件
+     */
+    public static void with(Class<? extends IPlugin> clazz)
+    {
+        pluginClass.add(clazz);
+    }
+    public static void with(Iterable<Class<? extends IPlugin>> clazz)
+    {
+        Iterables.addAll(pluginClass, clazz);
+    }
     @Override
     protected void configure()
     {
         PluginLoader<? extends IPlugin> loader = PluginLoader.of(IPlugin.class);
         Map<IPlugin, PlugInfo> plugins = Maps.newHashMap();
 
-        // 实例化
-        for (Class<? extends IPlugin> clazz : loader.getPlugins())
+        // 解析出插件信息 并实例化
+        pluginClass.addAll(loader.getPlugins());
+        pluginClass = Lists.newCopyOnWriteArrayList(Sets.newHashSet(pluginClass));
+
+        for (Class<? extends IPlugin> clazz : pluginClass)
         {
             PlugInfo plugInfo = clazz.getAnnotation(PlugInfo.class);
             if (plugInfo == null)
@@ -62,6 +82,7 @@ public class PluginLoadModule extends AbstractPluginModule
                     || Modifier.isAbstract(clazz.getModifiers())
                     || !plugInfo.load())
             {
+                pluginClass.remove(clazz);
                 continue;
             }
             try
@@ -72,7 +93,7 @@ public class PluginLoadModule extends AbstractPluginModule
                 throw new RuntimeException("初始化插件时发生异常: ", e);
             }
         }
-
+        log.info("共发现插件 {} 个", pluginClass.size());
         // 加载插件
         for (Map.Entry<IPlugin, PlugInfo> entry : plugins.entrySet())
         {
