@@ -11,8 +11,10 @@ import com.google.common.collect.Sets;
 import com.google.common.primitives.Ints;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -85,7 +87,7 @@ public class CBHistory
     }
     // endregion
 
-    public static OpInfo parseOp(String op)
+    public static OpInfo parseOp(String op) throws IllegalArgumentException
     {
         OpInfo info = new OpInfo();
         op = CodecUtils.decodeURIComponent(op);

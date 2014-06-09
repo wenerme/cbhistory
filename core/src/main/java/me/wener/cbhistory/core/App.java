@@ -6,6 +6,7 @@ import com.mycila.guice.ext.jsr250.Jsr250Module;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,15 +19,15 @@ import me.wener.cbhistory.core.event.process.TryDiscoverArticleBetweenDateEvent;
 import me.wener.cbhistory.core.event.process.TryDiscoverArticleByUrlEvent;
 import me.wener.cbhistory.core.modules.ChainInjector;
 import me.wener.cbhistory.core.modules.ConfigureModule;
-import me.wener.cbhistory.core.pluggable.event.AfterAppStartedEvent;
-import me.wener.cbhistory.core.pluggable.event.AfterConfigureCompleteEvent;
-import me.wener.cbhistory.core.pluggable.PluginLoadModule;
-import me.wener.cbhistory.modules.AbstractPlugin;
 import me.wener.cbhistory.core.modules.PersistModule;
 import me.wener.cbhistory.core.modules.PropertiesModule;
+import me.wener.cbhistory.core.pluggable.PluginLoadModule;
+import me.wener.cbhistory.core.pluggable.event.AfterAppStartedEvent;
+import me.wener.cbhistory.core.pluggable.event.AfterConfigureCompleteEvent;
 import me.wener.cbhistory.core.process.ArticleProcess;
 import me.wener.cbhistory.core.process.AuxiliaryProcess;
 import me.wener.cbhistory.core.process.CommentProcess;
+import me.wener.cbhistory.modules.AbstractPlugin;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Duration;
@@ -42,6 +43,9 @@ public class App
     public static final long HOUR_MS = MINUTE_MS * 60;
     public static final long DAY_MS = HOUR_MS * 24;
     private static Injector injector;
+    @Inject
+    @Named("app.run.schedule.auto")
+    private boolean autoSchedule;
 
     public static Injector getInjector()
     {
@@ -75,7 +79,9 @@ public class App
     public static void start()
     {
         // 开始调度
-        getInjector().getInstance(App.class).setupSchedules();
+        App app = getInjector().getInstance(App.class);
+        if (app.autoSchedule)
+            app.startSchedules();
         // 触发完成事件
         AbstractPlugin.getEventBus().post(new AfterAppStartedEvent());
     }
@@ -99,7 +105,7 @@ public class App
     /**
      * 这个需要手动调用,以便于测试时不用每次都启动
      */
-    private void setupSchedules()
+    public void startSchedules()
     {
         Timer timer = new Timer();
 
