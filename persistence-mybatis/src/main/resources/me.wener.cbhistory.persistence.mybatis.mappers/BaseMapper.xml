@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.wener.pratices.mybatis.mapper.BaseMapper">
+
+    <cache/>
+    <sql id="table-name">cbhistory_article</sql>
+    <sql id="table-id">sid</sql>
+
+    <resultMap id="Result" type="">
+    </resultMap>
+
+
+    <select id="findAll" resultMap="Result">
+        select * from <include refid="table-name"/>
+    </select>
+
+    <select id="findById"
+            parameterType="long"
+            resultMap="Result"
+            useCache="true">
+        select * from <include refid="table-name"/>
+        where <include refid="table-id"/> = #{id}
+    </select>
+
+    <select id="findByIds" parameterType="list" resultMap="Result" useCache="true">
+        select * from user
+        where <include refid="table-name"/> in
+        <foreach collection="list"
+                 item="id"
+                 separator=","
+                 open="("
+                 close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="count" resultType="long">
+        select count(<include refid="table-name"/>) from <include refid="table-name"/>
+    </select>
+
+    <delete id="deleteById" parameterType="long">
+        delete from <include refid="table-name"/>
+        where <include refid="table-id"/>=#{id}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="list">
+        delete from <include refid="table-name"/>
+        where <include refid="table-id"/> in
+        <foreach collection="list"
+                 item="id"
+                 separator=","
+                 open="("
+                 close=")">
+        #{id}
+        </foreach>
+    </delete>
+
+    <!--需要具体类型参数的方法-->
+    <delete id="delete" parameterType="Article">
+        delete from <include refid="table-name"/>
+        where <include refid="table-id"/>=#{<include refid="table-id"/>}
+    </delete>
+</mapper>
