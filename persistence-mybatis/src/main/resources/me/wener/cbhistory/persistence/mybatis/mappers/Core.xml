@@ -2,26 +2,26 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="me.wener.pratices.mybatis.mapper.BaseMapper">
+<mapper namespace="Core">
 
-    <cache/>
-    <sql id="table-name">cbhistory_</sql>
-    <sql id="table-id">sid</sql>
+    <sql id="table-name">tableName</sql>
+    <sql id="table-id">id</sql>
 
+    <sql id="count">
+        select count(<include refid="table-id"/>) from <include refid="table-name"/>
+    </sql>
 
-    <select id="findAll" resultMap="Result">
+    <sql id="findAll">
         select * from <include refid="table-name"/>
-    </select>
+    </sql>
 
-    <select id="findById"
-            parameterType="long"
-            resultMap="Result"
-            useCache="true">
+    <sql id="findById">
         select * from <include refid="table-name"/>
         where <include refid="table-id"/> = #{id}
-    </select>
+    </sql>
 
-    <select id="findByIds" parameterType="list" resultMap="Result" useCache="true">
+     <!--需要 list 参数-->
+    <sql id="findByIds">
         select * from user
         where <include refid="table-name"/> in
         <foreach collection="list"
@@ -31,22 +31,15 @@
                  close=")">
             #{id}
         </foreach>
-    </select>
-
-    <sql id="count">
-        select count(<include refid="table-id"/>) from <include refid="table-name"/>
     </sql>
 
-    <select id="count_it" resultType="long">
-        select count(<include refid="table-id"/>) from <include refid="table-name"/>
-    </select>
-
-    <delete id="deleteById" parameterType="long">
+    <sql id="deleteById">
         delete from <include refid="table-name"/>
         where <include refid="table-id"/>=#{id}
-    </delete>
+    </sql>
 
-    <delete id="deleteByIds" parameterType="list">
+    <!--需要 list 参数-->
+    <sql id="deleteByIds">
         delete from <include refid="table-name"/>
         where <include refid="table-id"/> in
         <foreach collection="list"
@@ -54,13 +47,14 @@
                  separator=","
                  open="("
                  close=")">
-        #{id}
+            #{id}
         </foreach>
-    </delete>
+    </sql>
 
-    <!--需要具体类型参数的方法-->
-    <delete id="delete" parameterType="Article">
+    <!--需要具体类型参数-->
+    <sql id="delete">
         delete from <include refid="table-name"/>
         where <include refid="table-id"/>=#{<include refid="table-id"/>}
-    </delete>
+    </sql>
+
 </mapper>

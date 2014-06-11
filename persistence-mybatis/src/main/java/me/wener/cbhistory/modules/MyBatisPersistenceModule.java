@@ -2,6 +2,7 @@ package me.wener.cbhistory.modules;
 
 import com.google.common.eventbus.Subscribe;
 import java.io.InputStream;
+import java.util.Map;
 import javax.inject.Inject;
 import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.core.pluggable.PlugInfo;
@@ -11,8 +12,11 @@ import me.wener.cbhistory.domain.entity.Comment;
 import me.wener.cbhistory.persistence.mybatis.DateTimeTypeHandler;
 import me.wener.cbhistory.persistence.mybatis.LocalDateTimeTypeHandler;
 import me.wener.cbhistory.persistence.mybatis.mappers.ArticleMapper;
+import me.wener.cbhistory.persistence.mybatis.mappers.BaseMapper;
 import me.wener.cbhistory.persistence.mybatis.mappers.CommentMapper;
 import org.apache.ibatis.builder.xml.XMLConfigBuilder;
+import org.apache.ibatis.builder.xml.XMLStatementBuilder;
+import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
@@ -41,6 +45,8 @@ public class MyBatisPersistenceModule extends MyBatisModule implements IPlugin
 //        environmentId("dev");
 //
 
+        failFast(false);
+
         addMapperClass(ArticleMapper.class);
         addMapperClass(CommentMapper.class);
 
@@ -66,17 +72,22 @@ public class MyBatisPersistenceModule extends MyBatisModule implements IPlugin
         SqlSessionFactory factory = App.getInjector().getInstance(SqlSessionFactory.class);
         Configuration config = factory.getConfiguration();
 
-        if (config.getMappedStatementNames().size() == 0)
+        if (false)
         {
             try (InputStream in = getClass().getClassLoader().getResourceAsStream(XML_CONFIG))
             {
                 Configuration xmlConfig = new XMLConfigBuilder(in)
                         .parse();
-                for (String name : xmlConfig.getMappedStatementNames())
+                Map<String, XNode> fragments = config.getSqlFragments();
+                for (Map.Entry<String, XNode> entry : xmlConfig.getSqlFragments().entrySet())
                 {
-                    if (name.indexOf('.') > 0)
-                        config.addMappedStatement(xmlConfig.getMappedStatement(name));
+                    if (! fragments.containsKey(entry.getKey()))
+                    {
+                        fragments.put(entry.getKey(),entry.getValue());
+                    }
                 }
+                // 配置已完成, 确认不会出错.
+                config.getMappedStatements().clear();
             } catch (Exception ex)
             {
                 ex.printStackTrace();
