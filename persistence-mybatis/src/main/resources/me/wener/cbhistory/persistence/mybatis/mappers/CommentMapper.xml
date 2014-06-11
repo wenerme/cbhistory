@@ -2,15 +2,26 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="me.wener.pratices.mybatis.mapper.BaseMapper">
+<mapper namespace="me.wener.cbhistory.persistence.mybatis.mappers.CommentMapper">
 
     <cache/>
-    <sql id="table-name">cbhistory_article</sql>
-    <sql id="table-id">sid</sql>
 
-    <resultMap id="Result" type="">
+    <sql id="table-name">cbhistory_comment</sql>
+    <sql id="table-id">tid</sql>
+
+    <resultMap id="Result" type="Article">
+        <id property="tid" column="tid"/>
+        <result property="pid" column="pid"/>
+        <result property="sid" column="sid"/>
+        <result property="date" column="date"/>
+        <result property="name" column="name"/>
+        <result property="hostName" column="hostName"/>
+        <result property="comment" column="comment"/>
+        <result property="pros" column="pros"/>
+        <result property="cons" column="cons"/>
+        <result property="userId" column="userId"/>
+        <result property="icon" column="icon"/>
     </resultMap>
-
 
     <select id="findAll" resultMap="Result">
         select * from <include refid="table-name"/>
@@ -37,7 +48,7 @@
     </select>
 
     <select id="count" resultType="long">
-        select count(<include refid="table-name"/>) from <include refid="table-name"/>
+        select count(<include refid="table-id"/>) from <include refid="table-name"/>
     </select>
 
     <delete id="deleteById" parameterType="long">
@@ -53,12 +64,12 @@
                  separator=","
                  open="("
                  close=")">
-        #{id}
+            #{id}
         </foreach>
     </delete>
 
     <!--需要具体类型参数的方法-->
-    <delete id="delete" parameterType="Article">
+    <delete id="delete" parameterType="Comment">
         delete from <include refid="table-name"/>
         where <include refid="table-id"/>=#{<include refid="table-id"/>}
     </delete>

@@ -48,9 +48,8 @@
             #{id}
         </foreach>
     </select>
-
     <select id="count" resultType="long">
-        select count(<include refid="table-name"/>) from <include refid="table-name"/>
+        select count(<include refid="table-id"/>) from <include refid="table-name"/>
     </select>
 
     <delete id="deleteById" parameterType="long">

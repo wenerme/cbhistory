@@ -7,6 +7,7 @@ import me.wener.cbhistory.persistence.mybatis.mappers.ArticleMapper;
 import me.wener.cbhistory.persistence.mybatis.mappers.CommentMapper;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
+import org.apache.ibatis.session.SqlSession;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +21,8 @@ public class TestMyBatis
     ArticleService articleService;
     @Inject
     CommentService commentService;
-
+    @Inject
+    SqlSession sqlSession;
     @Before
     public void test()
     {

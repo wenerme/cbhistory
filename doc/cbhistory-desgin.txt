@@ -110,6 +110,14 @@ SELECT  HOUR(date), count(*) AS `每小时的评论数量`
 SELECT  DATE(date), count(*) AS `每天的评论数量`
         FROM  cbhistory_comment 
         GROUP BY DATE(date);
+-- 平均每天的评论数量, 不包含日期为空的, 不包含当天的
+SELECT  avg(a.c) as '平均每天评论数量'
+FROM ( 
+	SELECT count(*) AS c
+	FROM  cbhistory_comment
+	WHERE date is not null and DATE(date) <> current_date
+	GROUP BY DATE(date)
+) a;
 -- 一周中的每天
 SELECT  DAYOFWEEK(date), count(*) AS `一周中每天的评论数量`
         FROM  cbhistory_comment 
@@ -175,6 +183,12 @@ FROM cbhistory_article GROUP BY source ORDER BY NUM DESC;
 | 统计 | 文章 | 评论  | 有评论的文章 | 查询日期            |
 +------+------+-------+--------------+---------------------+
 | 总数 | 4701 | 75476 |         4132 | 2014-06-06 03:09:51 |
++------+------+-------+--------------+---------------------+
+
++------+------+-------+--------------+---------------------+
+| 统计 | 文章 | 评论  | 有评论的文章 | 查询日期            |
++------+------+-------+--------------+---------------------+
+| 总数 | 5405 | 85263 |         4758 | 2014-06-11 09:15:15 |
 +------+------+-------+--------------+---------------------+
 
 查询 几天前的sql
