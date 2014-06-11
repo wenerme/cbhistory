@@ -9,7 +9,7 @@ public interface BaseMapper<T, ID extends Serializable>
     int deleteById(ID id);
     int deleteByIds(List<ID> ids);
     List<T> findAll();
-    List<T> findById();
+    T findById(ID id);
     List<T> findByIds(List<ID> ids);
     long count();
 }

@@ -30,9 +30,21 @@ public class TestMyBatis
     }
 
     @Test
-    public void testSelectAll()
+    public void testCount()
     {
         assert articleMapper.count() == articleService.count();
         assert commentMapper.count() == commentService.count();
+    }
+    @Test
+    public void testById()
+    {
+        long aid = 287295;
+        assert articleMapper.findById(aid).equals(articleService.findOne(aid));
+
+        long cid = 9059525;
+        assert commentMapper.findById(cid).equals(commentService.findOne(cid));
+        // 查找不到都返回 null
+        assert articleMapper.findById(0l) == articleService.findOne(0l);
+        assert commentMapper.findById(0l) == commentService.findOne(0l);
     }
 }

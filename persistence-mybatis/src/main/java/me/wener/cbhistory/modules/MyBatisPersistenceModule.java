@@ -4,6 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import java.io.InputStream;
 import java.util.Map;
 import javax.inject.Inject;
+import javax.sql.DataSource;
 import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.core.pluggable.PlugInfo;
 import me.wener.cbhistory.core.pluggable.event.AfterConfigureCompleteEvent;
@@ -44,8 +45,6 @@ public class MyBatisPersistenceModule extends MyBatisModule implements IPlugin
 
 //        environmentId("dev");
 //
-
-        failFast(false);
 
         addMapperClass(ArticleMapper.class);
         addMapperClass(CommentMapper.class);

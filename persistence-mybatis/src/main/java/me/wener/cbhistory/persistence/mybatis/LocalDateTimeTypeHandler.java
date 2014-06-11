@@ -22,18 +22,18 @@ public class LocalDateTimeTypeHandler extends BaseTypeHandler<LocalDateTime>
     @Override
     public LocalDateTime getNullableResult(ResultSet rs, String columnName) throws SQLException
     {
-        return new LocalDateTime(rs.getDate(columnName));
+        return new LocalDateTime(rs.getTimestamp(columnName));
     }
 
     @Override
     public LocalDateTime getNullableResult(ResultSet rs, int columnIndex) throws SQLException
     {
-        return new LocalDateTime(rs.getDate(columnIndex));
+        return new LocalDateTime(rs.getTimestamp(columnIndex));
     }
 
     @Override
     public LocalDateTime getNullableResult(CallableStatement cs, int columnIndex) throws SQLException
     {
-        return new LocalDateTime(cs.getDate(columnIndex));
+        return new LocalDateTime(cs.getTimestamp(columnIndex));
     }
 }

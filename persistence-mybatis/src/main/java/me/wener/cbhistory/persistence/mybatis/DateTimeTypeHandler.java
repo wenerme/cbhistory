@@ -21,18 +21,18 @@ public class DateTimeTypeHandler extends BaseTypeHandler<DateTime>
     @Override
     public DateTime getNullableResult(ResultSet rs, String columnName) throws SQLException
     {
-        return new DateTime(rs.getDate(columnName));
+        return new DateTime(rs.getTimestamp(columnName));
     }
 
     @Override
     public DateTime getNullableResult(ResultSet rs, int columnIndex) throws SQLException
     {
-        return new DateTime(rs.getDate(columnIndex));
+        return new DateTime(rs.getTimestamp(columnIndex));
     }
 
     @Override
     public DateTime getNullableResult(CallableStatement cs, int columnIndex) throws SQLException
     {
-        return new DateTime(cs.getDate(columnIndex));
+        return new DateTime(cs.getTimestamp(columnIndex));
     }
 }

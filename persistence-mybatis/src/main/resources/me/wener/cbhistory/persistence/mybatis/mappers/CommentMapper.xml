@@ -9,7 +9,7 @@
     <sql id="table-name">cbhistory_comment</sql>
     <sql id="table-id">tid</sql>
 
-    <resultMap id="Result" type="Article">
+    <resultMap id="Result" type="Comment">
         <id property="tid" column="tid"/>
         <result property="pid" column="pid"/>
         <result property="sid" column="sid"/>
