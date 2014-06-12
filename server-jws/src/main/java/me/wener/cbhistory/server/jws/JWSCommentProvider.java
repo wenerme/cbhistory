@@ -21,10 +21,8 @@ import me.wener.cbhistory.core.CBHistory;
 import me.wener.cbhistory.domain.OpInfo;
 import me.wener.cbhistory.domain.RawData;
 import me.wener.cbhistory.domain.StatusResponse;
-import me.wener.cbhistory.service.ArticleService;
-import me.wener.cbhistory.service.CommentService;
 import me.wener.cbhistory.service.RawDataService;
-import me.wener.cbhistory.util.Same;
+import me.wener.cbhistory.utils.Same;
 
 @WebServiceProvider
 @BindingType(HTTPBinding.HTTP_BINDING)

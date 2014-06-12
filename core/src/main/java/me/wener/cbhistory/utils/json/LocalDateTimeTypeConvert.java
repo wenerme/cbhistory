@@ -1,4 +1,4 @@
-package me.wener.cbhistory.util.json;
+package me.wener.cbhistory.utils.json;
 
 import com.google.common.base.Strings;
 import com.google.gson.JsonDeserializationContext;
@@ -9,7 +9,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
-import me.wener.cbhistory.util.Same;
+import me.wener.cbhistory.utils.Same;
 import org.joda.time.LocalDateTime;
 
 public class LocalDateTimeTypeConvert

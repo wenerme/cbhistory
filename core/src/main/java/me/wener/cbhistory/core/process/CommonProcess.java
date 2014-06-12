@@ -3,7 +3,6 @@ package me.wener.cbhistory.core.process;
 import static com.google.common.base.Preconditions.*;
 
 import com.google.gson.Gson;
-import java.util.Date;
 import javax.inject.Inject;
 import javax.inject.Named;
 import jodd.http.HttpRequest;
@@ -13,11 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
-import me.wener.cbhistory.service.RawDataService;
-import me.wener.cbhistory.util.Same;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.Hours;
+import me.wener.cbhistory.utils.Same;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Minutes;
 

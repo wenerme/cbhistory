@@ -5,7 +5,7 @@ import java.util.List;
 import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.service.ArticleService;
-import me.wener.cbhistory.util.Same;
+import me.wener.cbhistory.utils.Same;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;

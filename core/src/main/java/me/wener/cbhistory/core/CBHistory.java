@@ -11,10 +11,8 @@ import com.google.common.collect.Sets;
 import com.google.common.primitives.Ints;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
-import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,8 +24,8 @@ import me.wener.cbhistory.domain.HotCommentInfo;
 import me.wener.cbhistory.domain.OpInfo;
 import me.wener.cbhistory.domain.RawComment;
 import me.wener.cbhistory.domain.RawData;
-import me.wener.cbhistory.util.CodecUtils;
-import me.wener.cbhistory.util.ExcludeNotExposedField;
+import me.wener.cbhistory.utils.CodecUtils;
+import me.wener.cbhistory.utils.ExcludeNotExposedField;
 
 public class CBHistory
 {

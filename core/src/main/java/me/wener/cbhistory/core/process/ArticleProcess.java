@@ -26,7 +26,7 @@ import me.wener.cbhistory.core.event.process.TryFoundAllArticleEvent;
 import me.wener.cbhistory.core.event.process.TryFoundArticleEvent;
 import me.wener.cbhistory.core.event.process.TryUpdateCommentEvent;
 import me.wener.cbhistory.domain.entity.Article;
-import me.wener.cbhistory.util.CodecUtils;
+import me.wener.cbhistory.utils.CodecUtils;
 import org.joda.time.LocalDateTime;
 
 /**

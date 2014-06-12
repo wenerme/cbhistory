@@ -1,4 +1,4 @@
-package me.wener.cbhistory.util;
+package me.wener.cbhistory.utils;
 
 import com.google.gson.InstanceCreator;
 import java.lang.reflect.Type;

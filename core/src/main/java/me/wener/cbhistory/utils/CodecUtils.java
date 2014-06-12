@@ -1,8 +1,7 @@
-package me.wener.cbhistory.util;
+package me.wener.cbhistory.utils;
 
 
 import com.google.common.base.Charsets;
-import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

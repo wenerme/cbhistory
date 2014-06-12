@@ -1,8 +1,8 @@
-package me.wener.cbhistory.util.json;
+package me.wener.cbhistory.utils.json;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import me.wener.cbhistory.util.Same;
+import me.wener.cbhistory.utils.Same;
 import org.joda.time.DateTime;
 import org.joda.time.Instant;
 import org.joda.time.LocalDateTime;

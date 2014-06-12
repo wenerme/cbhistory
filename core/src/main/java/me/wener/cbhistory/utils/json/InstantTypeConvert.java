@@ -1,4 +1,4 @@
-package me.wener.cbhistory.util.json;
+package me.wener.cbhistory.utils.json;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

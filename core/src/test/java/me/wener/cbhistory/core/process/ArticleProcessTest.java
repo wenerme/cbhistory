@@ -5,7 +5,7 @@ import me.wener.cbhistory.core.Events;
 import me.wener.cbhistory.core.event.process.TryDiscoverArticleBetweenDateEvent;
 import me.wener.cbhistory.core.event.process.TryUpdateCommentEvent;
 import me.wener.cbhistory.domain.entity.Article;
-import me.wener.cbhistory.util.Same;
+import me.wener.cbhistory.utils.Same;
 import org.junit.Ignore;
 import org.junit.Test;
 

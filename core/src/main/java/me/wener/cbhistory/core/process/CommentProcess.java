@@ -17,7 +17,7 @@ import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.domain.entity.Comment;
 import me.wener.cbhistory.domain.RawComment;
 import me.wener.cbhistory.domain.RawData;
-import me.wener.cbhistory.util.CodecUtils;
+import me.wener.cbhistory.utils.CodecUtils;
 import org.joda.time.LocalDateTime;
 
 @Named

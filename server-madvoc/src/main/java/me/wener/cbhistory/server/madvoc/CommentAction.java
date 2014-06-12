@@ -8,12 +8,9 @@ import jodd.madvoc.meta.MadvocAction;
 import jodd.madvoc.result.RawData;
 import jodd.util.MimeTypes;
 import lombok.extern.slf4j.Slf4j;
-import me.wener.cbhistory.core.CBHistory;
-import me.wener.cbhistory.domain.OpInfo;
-import me.wener.cbhistory.domain.StatusResponse;
 import me.wener.cbhistory.server.BaseServer;
 import me.wener.cbhistory.service.RawDataService;
-import me.wener.cbhistory.util.Same;
+import me.wener.cbhistory.utils.Same;
 
 @Slf4j
 @MadvocAction
