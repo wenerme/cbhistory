@@ -11,4 +11,9 @@ public class EasyTest
     {
         App.getInjector();
     }
+    @Test
+    public void report()
+    {
+        App.reportSystemInfo();
+    }
 }

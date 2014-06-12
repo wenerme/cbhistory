@@ -3,6 +3,7 @@ package me.wener.cbhistory.core;
 import com.google.inject.Injector;
 import com.mycila.guice.ext.closeable.CloseableModule;
 import com.mycila.guice.ext.jsr250.Jsr250Module;
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.inject.Inject;
@@ -62,7 +63,7 @@ public class App
                             .withOptionalResource("default.properties", "db.properties", "app.properties"))
                     .and(PropsModule
                             .none()
-                            .withOptionalResource("default.props","app.props"))
+                            .withOptionalResource("default.props", "app.props"))
                     .and(Jsr250Module.class, CloseableModule.class)
                     .then(PersistModule.class)
                     .then(PluginLoadModule.class)
@@ -77,6 +78,8 @@ public class App
 
             DateTime end = DateTime.now();
             log.info("程序配置完成 耗时: {} ms", new Duration(start, end).getMillis());
+
+            App.reportSystemInfo();
         }
         return injector;
     }
@@ -94,6 +97,47 @@ public class App
     public static void main(String[] args)
     {
         App.start();
+    }
+
+    public static void reportSystemInfo()
+    {
+        Runtime runtime = Runtime.getRuntime();
+        StringBuilder builder = new StringBuilder();
+        long maxMemory = runtime.maxMemory();
+
+        builder.append("====== ReportSystemInfo ======\n")
+                /* Total number of processors or cores available to the JVM */
+                .append("Available processors (cores): ")
+                .append(runtime.availableProcessors())
+                .append('\n')
+                /* This will return Long.MAX_VALUE if there is no preset limit */
+                .append("Maximum memory: ")
+                .append(maxMemory == Long.MAX_VALUE ? "no limit" : reportMemory(maxMemory))
+                .append('\n')
+                /* Total amount of free memory available to the JVM */
+                .append("Free memory: ")
+                .append(reportMemory(runtime.freeMemory()))
+                .append('\n')
+                /* Total memory currently available to the JVM */
+                .append("Total memory available to JVM: ")
+                .append(reportMemory(runtime.totalMemory()))
+                .append('\n')
+                .append("Used memory: ")
+                .append(reportMemory(runtime.totalMemory()-runtime.freeMemory()))
+                .append('\n')
+                .append("Memory usage: ")
+                .append((1-runtime.freeMemory()/(double)runtime.totalMemory()) * 100)
+                .append(" %")
+                .append('\n')
+        ;
+
+        log.info(builder.toString());
+    }
+
+    private static String reportMemory(double val)
+    {
+        val /= 1024;
+        return String.format(" %.4f KB | %.4f MB | %.4f GB", val, val/1024, val/1024/1024);
     }
 
     /**
