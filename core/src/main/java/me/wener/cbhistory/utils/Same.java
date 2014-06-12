@@ -21,6 +21,7 @@ import org.joda.time.format.ISODateTimeFormat;
  */
 public class Same
 {
+    private final static Same self = new Same();
     private Same() {}
 
     public static DateTimeFormatter getDateTimeFormatter()
@@ -31,6 +32,11 @@ public class Same
     public static Gson getGson()
     {
         return LazyHolder.GSON;
+    }
+
+    public static ClassLoader getClassLoader()
+    {
+        return self.getClass().getClassLoader();
     }
 
     private static class LazyHolder

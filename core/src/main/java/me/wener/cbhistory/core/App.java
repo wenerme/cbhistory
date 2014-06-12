@@ -18,7 +18,7 @@ import me.wener.cbhistory.core.event.Event;
 import me.wener.cbhistory.core.event.process.TryDiscoverArticleBetweenDateEvent;
 import me.wener.cbhistory.core.event.process.TryDiscoverArticleByUrlEvent;
 import me.wener.cbhistory.core.modules.ChainInjector;
-import me.wener.cbhistory.core.modules.ConfigureModule;
+import me.wener.cbhistory.core.modules.ConfigureAndReport;
 import me.wener.cbhistory.core.modules.PersistModule;
 import me.wener.cbhistory.core.modules.PropertiesModule;
 import me.wener.cbhistory.core.pluggable.PluginLoadModule;
@@ -28,6 +28,7 @@ import me.wener.cbhistory.core.process.ArticleProcess;
 import me.wener.cbhistory.core.process.AuxiliaryProcess;
 import me.wener.cbhistory.core.process.CommentProcess;
 import me.wener.cbhistory.modules.AbstractPlugin;
+import me.wener.cbhistory.utils.PropsModule;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Duration;
@@ -59,14 +60,18 @@ public class App
                             .none()
                             .withSystemProperties()
                             .withOptionalResource("default.properties", "db.properties", "app.properties"))
+                    .and(PropsModule
+                            .none()
+                            .withOptionalResource("default.props","app.props"))
                     .and(Jsr250Module.class, CloseableModule.class)
-                    .then(ConfigureModule.class)
                     .then(PersistModule.class)
                     .then(PluginLoadModule.class)
                     .getInjector();
 
             // 初始化
+            injector.getInstance(ConfigureAndReport.class);
             injector.getInstance(App.class);
+
             // 触发配置完成事件
             AbstractPlugin.getEventBus().post(new AfterConfigureCompleteEvent());
 

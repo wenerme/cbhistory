@@ -19,8 +19,8 @@ public class PersistModule extends AbstractModule
     @Override
     protected void configure()
     {
-        log.info("当前数据库连接地址为: {}", jdbcUrl);
-        log.info("当前数据库用户为: {}", jdbcUser);
+        log.debug("当前数据库连接地址为: {}", jdbcUrl);
+        log.debug("当前数据库用户为: {}", jdbcUser);
         // 绑定 C3p0 连接池
         bind(DataSource.class)
                 .toProvider(C3p0DataSourceProvider.class);

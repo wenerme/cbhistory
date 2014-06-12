@@ -1,22 +1,34 @@
 package me.wener.cbhistory.utils;
 
+import static me.wener.cbhistory.utils.SysUtils.tryGetResourceAsString;
+
+import com.google.common.io.Closeables;
 import com.google.inject.AbstractModule;
 import com.google.inject.MembersInjector;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import jodd.props.Props;
 import lombok.Getter;
-
+import lombok.extern.slf4j.Slf4j;
+import me.wener.cbhistory.core.modules.PropertiesModule;
+@Slf4j
 public class PropsModule extends AbstractModule
 {
     @Getter
     private final Props props;
+    @Getter
     private final InProps inProps;
 
     private PropsModule(Props props)
@@ -29,10 +41,33 @@ public class PropsModule extends AbstractModule
     {
         return new PropsModule(props);
     }
+    public static PropsModule none()
+    {
+        return of(new Props());
+    }
+
+    public PropsModule withOptionalResource(String ... paths)
+    {
+        for (String path : paths)
+        {
+            withOptionalResource(path);
+        }
+        return this;
+    }
+    public PropsModule withOptionalResource(String path)
+    {
+        String data = tryGetResourceAsString(path);
+        if (data != null)
+            props.load(data);
+
+        return this;
+    }
 
     @Override
     protected void configure()
     {
+        bind(PropsModule.class).toInstance(this);
+
         bindListener(Matchers.any(), new TypeListener()
         {
             @Override

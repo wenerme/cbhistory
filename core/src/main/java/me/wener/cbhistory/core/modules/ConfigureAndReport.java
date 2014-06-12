@@ -8,26 +8,34 @@ import javax.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import me.wener.cbhistory.utils.Prop;
+import me.wener.cbhistory.utils.PropsModule;
 import org.slf4j.LoggerFactory;
 
 @Slf4j
-public class ConfigureModule extends AbstractModule
+public class ConfigureAndReport
 {
-//    @Inject
-//    @Named("cbhistory.version")
+    @Prop(value = "app.info.version", optional = true)
     private String appVersion = "";
+
+    @Prop("app.info.title")
+    private String title;
+    @Prop("app.info.logo")
+    private String logo;
+    @Prop("app.info.author.name")
+    private String authorName;
+    @Prop("app.info.author.email")
+    private String authorEmail;
+
     @Inject
     @Named("app.log.level")
     String logLevel;
 
-    @Override
-    protected void configure()
-    {
-
-    }
     @PostConstruct
     private void report()
     {
+        log.warn("{} - {}", title, logo);
+        log.warn("Written by {} <{}>", authorName, authorEmail);
 
         try
         {
@@ -43,7 +51,5 @@ public class ConfigureModule extends AbstractModule
         {
             log.warn("当前无 logback 支持, 忽略 loglevel");
         }
-
-
     }
 }

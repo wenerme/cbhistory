@@ -8,12 +8,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.Map;
 import java.util.Properties;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import me.wener.cbhistory.utils.SysUtils;
 
 /**
  * 辅助加载 properties 的模块,后添加的会覆盖先添加的
@@ -99,48 +101,18 @@ public class PropertiesModule extends AbstractModule
      */
     public PropertiesModule withOptionalResource(String path)
     {
-        InputStream is = getClass().getClassLoader().getResourceAsStream(path);
-        log.info("尝试加载属性文件 {} {}", path, is == null ? "文件未找到!" : "");
-
-        if (is == null)
+        Properties prop = new Properties();
+        String data = SysUtils.tryGetResourceAsString(path);
+        if (data != null)
         {
             try
             {
-                File file = new File(path);
-                if (file.exists() || (file = file.getAbsoluteFile()).exists())
-                {
-                    log.info("在目录中发现文件 {}, 尝试加载", file.getPath());
-                    try
-                    {
-                        is = new FileInputStream(file);
-                    } catch (FileNotFoundException ignored)
-                    {
-                        // 已经判断文件存在
-                        log.error("属性文件异常", ignored);
-                    }
-                }
-            } catch (SecurityException ex)
-            {
-                log.warn("当前环境无法操作本地文件, 加载 {} 失败", path);
-            }
-        }
-
-        if (is != null)
-        {
-            try
-            {
-                Properties prop = new Properties();
-                prop.load(is);
-                withProperties(prop);
-                is.close();
+                prop.load(new StringReader(data));
             } catch (IOException e)
             {
-                log.error("加载属性文件 " + path + " 出现异常", e);
-            } finally
-            {
-                Closeables.closeQuietly(is);
+                log.warn("加载 "+path+" 属性文件时发生异常", e);
             }
-
+            withProperties(prop);
         }
 
         return this;
