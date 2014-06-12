@@ -82,10 +82,6 @@ parent
 	项目中实体数据均是使用的 joda-time,在计算的时候也便于处理
 	jpa 和 ormlite 均使用了相应的办法来支持 joda-time
 	实体类上主要用的是 LocalDateTime, 没有储存时区,这样操作也比较合理
-* slf4j, log4j-over-slf4j, jcl-over-slf4j
-	整个日志记录系统是使用的 slf4j 的来做的转接
-* logback-classic
-	slf4j 使用 logback 来记录的日志
 	
 core
 -----
@@ -97,6 +93,8 @@ core
 	辅助网络获取的操作
 * jodd-largarto
 	解析网页
+* jodd-props
+	使用 props 作为配置文件
 * jodd-bean
 	beanUtils, 主要用来偷懒, 拷贝bean属性
 * guice
@@ -109,6 +107,10 @@ core
 	在 core 中使用的轻量级的 orm 工具
 * c3p0
 	连接池咯
+* slf4j, log4j-over-slf4j, jcl-over-slf4j
+	整个日志记录系统是使用的 slf4j 的来做的转接
+* logback-classic
+	slf4j 使用 logback 来记录的日志
 
 ### 实现细节
 
@@ -117,6 +119,8 @@ core
 core 中主要是使用的 guice 来实现的 `DI`, guice 够轻量级,而且专注于依赖注入, 配置模块的 dsl 也非常友好.在这里还实现了注入可选的 properties 文件,注入插件式的模块. 插件式的模块加载是使用的 guava 中的反射来扫描的 `me.wener.cbhistory.modules` 包进行动态的模块发现和加载,有了这一步后才能能动态的加载其他模块.
 
 在 core 里,为了尽量的简单,所以使用的是 ormlite 来做的 orm, 虽然是轻量级的框架, 但是操作起来也非常方便和省力.主要便于直接操作 dao 对象.
+
+除此之外, 在 core 里还有强大的配置实现和动态的配置加载功能. 对于插件来说, 配置信息是可以动态加载的. 非常便于插件的协调配置, 并且 props 的配置非常简单而且实用, 也是支持 utf-8 的, 程序中还实现了注入 list 和 map 两种简单的容器配置. 配置能力非常强.
 
 定时发现调度非常简单, 数量也不是很多, 所以干脆就直接使用的 Timer, 而没有引入其他的调度库. So far so good.
 
@@ -130,7 +134,7 @@ server-madvoc
 * jodd-madvo
     一款简单的 mvc 框架
 
-非常轻量级的服务器解决方案, 使用 servlet 作为容易.
+非常轻量级的服务器解决方案, 使用 servlet 作为容器.
 
 server-madvoc-jetty
 -------------------
@@ -153,7 +157,11 @@ analysis
 
 作为统计分析的基础模块, 主要提供 jap+spring data 的持久层解决方案, 为了辅助查询, 引入了 querydsl. 虽然直接依赖较少, 但是在背后是引入了非常的东西的, 整套的 hibernate 和 spring
 都引入了进来. 为其他的操作做一个铺垫.
-	
+
+persistence-mybatis
+------------------
+在学习 MyBatis 的时候引入了该模块, 目前实现了简单的查询, MyBatis 的主要优势也是高效的查询. 而且并没有引入新的实体类型, MaBatis 的 Mapper 操作返回的依然是 Core 中的实体类型. 因为实体类型中使用了 joda-time, 添加了对 DateTime 和 LocalDateTime 类型的支持.
+
 相关项目
 --------
 * [cbhistory 服务端][cbhistory-server]

@@ -17,16 +17,23 @@
 	存储的时候也比较麻烦,需要每个对象分离出来存储
 	目前和用户相关的有三个字段, icon name userid
 	但是 name 不一定需要用户存在
-	
+
+v 0.5.8
+-------
+* 实现 Props 配置支持
+
+v 0.5.5
+-------
+* 添加 MyBatis 模块
 * 抽取出一个通用的 server 层,也便于抽取出统一的响应处理
-	
+* 实现 server-madvoc-ace
+
 v 0.5.0
 -------
 
 * 实现一个简单的 servlet 作为服务器
 	即 server-madvoc
 * 实现 server-madvoc 和 server-madvoc-jetty
-* 实现 persistence-jpa
 
 v 0.4.0
 --------
