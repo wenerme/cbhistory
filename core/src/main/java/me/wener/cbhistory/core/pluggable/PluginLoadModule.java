@@ -25,7 +25,7 @@ public class PluginLoadModule extends AbstractPluginModule
     @Inject
     private Injector injector;
     private static Collection<Class<? extends IPlugin>> pluginClass = Lists.newCopyOnWriteArrayList();
-    private final PlugInfo defaultInfo = new PlugInfo()
+    private static final PlugInfo defaultInfo = new PlugInfo()
     {
         @Override
         public boolean load()
