@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-public class BaseCustom
+public class BasicCustom
 {
     @Inject
     @Getter

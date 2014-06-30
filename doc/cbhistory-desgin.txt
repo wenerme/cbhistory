@@ -74,16 +74,6 @@ select sid,date,title from cbhistory_article where sid = (select sid from cbhist
 -- 最新有评论的文章
 select sid,date,title from cbhistory_article where sid = (select sid from cbhistory_comment order by date desc limit 0,1);
 
--- MYSQL 获取数据库的大小
-SELECT table_schema                                        "DB Name", 
-   Round(Sum(data_length + index_length) / 1024 / 1024, 1) "DB Size in MB" 
-FROM   information_schema.tables
-GROUP  BY table_schema; 
-
--- H2 中这样导出 SQL
-
-script to 'filenam'
-
 -- 计算 最大长度, 主要用于优化实体类的定义
 SELECT 
 	(SELECT  LENGTH(title) AS f_len FROM    cbhistory_article ORDER BY f_len DESC LIMIT 1) as title_len
@@ -136,6 +126,15 @@ FROM cbhistory_article GROUP BY source ORDER BY NUM DESC;
 
 -- 喷子走势, 选择一个 hostName 然后以每天分类
 
+
+--- 查询最后更新时间
+SELECT date as '最近文章更新时间',  sid as '最近更新文章 ID', title as '最近更新文章标题'
+	, (SELECT  max(date) FROM  cbhistory_comment) as '最后评论更新时间'
+FROM  cbhistory_article 
+WHERE date = (SELECT  max(date) FROM  cbhistory_article);
+
+-- 查询一天内热门文章
+	
 统计记录
 =========
 
@@ -191,6 +190,12 @@ FROM cbhistory_article GROUP BY source ORDER BY NUM DESC;
 | 总数 | 5405 | 85263 |         4758 | 2014-06-11 09:15:15 |
 +------+------+-------+--------------+---------------------+
 
++------+------+--------+--------------+---------------------+
+| 统计 | 文章 | 评论   | 有评论的文章 | 查询日期            |
++------+------+--------+--------------+---------------------+
+| 总数 | 6856 | 105473 |         6039 | 2014-06-21 10:39:21 |
++------+------+--------+--------------+---------------------+
+
 查询 几天前的sql
 ----
 http://stackoverflow.com/questions/14497662
@@ -216,7 +221,7 @@ select count(*) from cbhistory_article
 	DATE_SUB(NOW(), INTERVAL 24*7 + 1 HOUR)
 	AND DATE_SUB(DATE(NOW()), INTERVAL 24*6 + 12 HOUR);
 
-	
+
 并发控制
 --------
 map: id -> date/event
