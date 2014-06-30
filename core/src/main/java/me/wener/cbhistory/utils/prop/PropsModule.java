@@ -1,28 +1,22 @@
-package me.wener.cbhistory.utils;
+package me.wener.cbhistory.utils.prop;
+
 
 import static me.wener.cbhistory.utils.SysUtils.tryGetResourceAsString;
 
-import com.google.common.io.Closeables;
 import com.google.inject.AbstractModule;
 import com.google.inject.MembersInjector;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import jodd.props.Props;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import me.wener.cbhistory.core.modules.PropertiesModule;
+
 @Slf4j
 public class PropsModule extends AbstractModule
 {
@@ -41,12 +35,13 @@ public class PropsModule extends AbstractModule
     {
         return new PropsModule(props);
     }
+
     public static PropsModule none()
     {
         return of(new Props());
     }
 
-    public PropsModule withOptionalResource(String ... paths)
+    public PropsModule withOptionalResource(String... paths)
     {
         for (String path : paths)
         {
@@ -54,6 +49,7 @@ public class PropsModule extends AbstractModule
         }
         return this;
     }
+
     public PropsModule withOptionalResource(String path)
     {
         String data = tryGetResourceAsString(path);
@@ -85,10 +81,12 @@ public class PropsModule extends AbstractModule
             }
         });
     }
+
     private static enum TargetType
     {
         Normal, List, Map
     }
+
     private static class PropInjectException extends RuntimeException
     {
         public PropInjectException(String message)
@@ -101,64 +99,80 @@ public class PropsModule extends AbstractModule
             super(message, cause);
         }
     }
+
     private class PropInjector<T> implements MembersInjector<T>
     {
         private final Prop prop;
         private final Field field;
+        private final PropSection propSection;
         private TargetType targetType = TargetType.Normal;
-        private Class<?> type;
+        private Class<?> fieldType;
+        private String key;
 
         PropInjector(Prop prop, Field field)
         {
+            this(prop, null, field);
+        }
+
+        PropInjector(Prop prop, PropSection propSection, Field field)
+        {
             this.prop = prop;
             this.field = field;
+            this.propSection = propSection;
+
+            key = prop.value();
+            if (propSection != null && !prop.ignoreSection())
+                key += "." + propSection.value();
+
             field.setAccessible(true);
 
-            type = field.getType();
-            if (type == List.class)
+            fieldType = field.getType();
+            if (fieldType == List.class)
             {
                 targetType = TargetType.List;
                 ParameterizedType genericType = (ParameterizedType) field.getGenericType();
-                type = (Class<?>) genericType.getActualTypeArguments()[0];
-            }else if (type == Map.class)
+                fieldType = (Class<?>) genericType.getActualTypeArguments()[0];
+            } else if (fieldType == Map.class)
             {
                 targetType = TargetType.Map;
                 ParameterizedType genericType = (ParameterizedType) field.getGenericType();
-                type = (Class<?>) genericType.getActualTypeArguments()[1];
+                fieldType = (Class<?>) genericType.getActualTypeArguments()[1];
             }
         }
 
         @Override
         public void injectMembers(T instance)
         {
-            try {
+            try
+            {
                 Object val = null;
                 switch (targetType)
                 {
                     case Normal:
-                        val = inProps.as(prop.value(), type);
+                        val = inProps.as(key, fieldType);
                         break;
                     case List:
-                        val = inProps.asList(prop.value(), type, prop.withSubValue());
+                        val = inProps.asList(key, fieldType, prop.withSubValue());
                         break;
                     case Map:
-                        val = inProps.asMap(prop.value(), type, prop.fullKey(), prop.withSubValue());
+                        val = inProps.asMap(key, fieldType, prop.fullKey(), prop.withSubValue());
                         break;
                 }
 
-                if (! prop.optional())
+                if (!prop.optional())
                 {
                     if (val == null
                             || (val instanceof Map && ((Map) val).isEmpty())
                             || (val instanceof List && ((List) val).isEmpty()))
                     {
                         String msg = "以 %s 方式注入 %s 失败, 注入类型为 %s.";
-                        throw new PropInjectException(String.format(msg, targetType, prop.value(), type));
+                        throw new PropInjectException(String.format(msg, targetType, key, fieldType));
                     }
                 }
 
                 field.set(instance, val);
-            } catch (IllegalAccessException e) {
+            } catch (IllegalAccessException e)
+            {
                 throw new RuntimeException(e);
             }
         }

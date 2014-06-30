@@ -8,8 +8,8 @@ import javax.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import me.wener.cbhistory.utils.Prop;
-import me.wener.cbhistory.utils.PropsModule;
+import me.wener.cbhistory.utils.prop.Prop;
+import me.wener.cbhistory.utils.prop.PropsModule;
 import org.slf4j.LoggerFactory;
 
 @Slf4j

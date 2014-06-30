@@ -9,7 +9,7 @@ author.blog=http://blog.wener.me
 # 开发时的 jdbc 连接配置
 [jdbc<dev>]
 driver=com.mysql.jdbc.Driver
-url=jdbc:mysql://localhost:3306/cbh?useUnicode=true&characterEncoding=UTF-8
+url=jdbc:mysql://localhost:3306/cbh?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
 username=root
 password=root
 
@@ -41,3 +41,15 @@ expired.hours = 168
 [app.run.schedule]
 # 运行时 是否自动开始调度
 auto = true
+
+[]
+@profiles=dev
+
+[c3p0]
+# 默认值
+initialPoolSize=3
+maxPoolSize=15
+minPoolSize=3
+# 尝试性的连接参数
+maxConnectionAge=7200
+maxIdleTime=3600

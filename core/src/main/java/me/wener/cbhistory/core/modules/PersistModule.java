@@ -23,6 +23,6 @@ public class PersistModule extends AbstractModule
         log.debug("当前数据库用户为: {}", jdbcUser);
         // 绑定 C3p0 连接池
         bind(DataSource.class)
-                .toProvider(C3p0DataSourceProvider.class);
+                .toProvider(C3p0DataSourcePropProvider.class);
     }
 }

@@ -1,4 +1,4 @@
-package me.wener.cbhistory.utils;
+package me.wener.cbhistory.utils.prop;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -26,4 +26,9 @@ public @interface Prop
 
     boolean fullKey() default false;
     boolean withSubValue() default false;
+
+    /**
+     * 是否忽略定义的 {@link PropSection}
+     */
+    boolean ignoreSection() default false;
 }

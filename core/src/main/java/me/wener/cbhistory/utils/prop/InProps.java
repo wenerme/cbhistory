@@ -1,4 +1,4 @@
-package me.wener.cbhistory.utils;
+package me.wener.cbhistory.utils.prop;
 
 import java.util.ArrayList;
 import java.util.HashMap;

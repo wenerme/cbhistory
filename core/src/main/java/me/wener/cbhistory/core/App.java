@@ -29,7 +29,7 @@ import me.wener.cbhistory.core.process.ArticleProcess;
 import me.wener.cbhistory.core.process.AuxiliaryProcess;
 import me.wener.cbhistory.core.process.CommentProcess;
 import me.wener.cbhistory.modules.AbstractPlugin;
-import me.wener.cbhistory.utils.PropsModule;
+import me.wener.cbhistory.utils.prop.PropsModule;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Duration;
