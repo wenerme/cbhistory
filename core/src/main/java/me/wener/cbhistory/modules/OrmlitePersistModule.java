@@ -20,12 +20,13 @@ import me.wener.cbhistory.service.CommentService;
 import me.wener.cbhistory.service.RawDataService;
 import me.wener.cbhistory.persistence.ormlite.service.CommentServiceImpl;
 import me.wener.cbhistory.service.impl.RawDataServiceCacheImpl;
+import me.wener.cbhistory.utils.prop.Prop;
 
 @PlugInfo(name = "Ormlite 持久层模块", author = "wener<wenermail@gmail.com>")
 public class OrmlitePersistModule extends AbstractPluginModule
 {
 
-    @Inject @Named("jdbc.url")
+    @Prop("jdbc.url")
     String jdbcUrl;
     @Inject
     DataSource dataSource;

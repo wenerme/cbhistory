@@ -29,6 +29,7 @@ import me.wener.cbhistory.core.process.ArticleProcess;
 import me.wener.cbhistory.core.process.AuxiliaryProcess;
 import me.wener.cbhistory.core.process.CommentProcess;
 import me.wener.cbhistory.modules.AbstractPlugin;
+import me.wener.cbhistory.utils.prop.Prop;
 import me.wener.cbhistory.utils.prop.PropsModule;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -45,8 +46,7 @@ public class App
     public static final long HOUR_MS = MINUTE_MS * 60;
     public static final long DAY_MS = HOUR_MS * 24;
     private static Injector injector;
-    @Inject
-    @Named("app.run.schedule.auto")
+    @Prop("app.run.schedule.auto")
     private boolean autoSchedule;
 
     public static Injector getInjector()
@@ -57,10 +57,11 @@ public class App
             log.info("正在启动程序...");
 
             injector = ChainInjector
-                    .start(PropertiesModule
-                            .none()
-                            .withSystemProperties()
-                            .withOptionalResource("default.properties", "db.properties", "app.properties"))
+                    .none()
+//                    .and(PropertiesModule
+//                            .none()
+//                            .withSystemProperties()
+//                            .withOptionalResource("default.properties", "db.properties", "app.properties"))
                     .and(PropsModule
                             .none()
                             .withOptionalResource("default.props", "app.props"))

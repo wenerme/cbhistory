@@ -5,15 +5,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
+import me.wener.cbhistory.utils.prop.Prop;
 
 @Slf4j
 public class PersistModule extends AbstractModule
 {
-    @Inject
-    @Named("jdbc.url")
+    @Prop("jdbc.url")
     String jdbcUrl;
-    @Inject
-    @Named("jdbc.username")
+    @Prop("jdbc.username")
     String jdbcUser;
 
     @Override

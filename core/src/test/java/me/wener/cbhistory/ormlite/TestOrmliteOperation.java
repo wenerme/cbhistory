@@ -27,6 +27,7 @@ public class TestOrmliteOperation
         DataSource source = injector.getInstance(DataSource.class);
         ArticleService articleService = injector.getInstance(ArticleService.class);
         assert articleService.count() > 0;
+        System.out.println("articleService.count: "+articleService.count());
     }
     @Test
     public void testTable() throws IOException

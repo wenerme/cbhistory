@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class ChainInjector
 {
-    private Injector injector;
     List<Module> moduleList = Lists.newArrayList();
+    private Injector injector;
 
     public ChainInjector()
     {
@@ -26,10 +26,14 @@ public class ChainInjector
         this.injector = injector;
     }
 
+    public static ChainInjector none()
+    {
+        return new ChainInjector();
+    }
+
     public static ChainInjector start(Module... modules)
     {
-        ChainInjector chainInjector = new ChainInjector();
-        return chainInjector.and(modules);
+        return none().and(modules);
     }
 
     public static ChainInjector start(Injector injector)
@@ -46,12 +50,15 @@ public class ChainInjector
     @SafeVarargs
     public final ChainInjector and(Class<? extends Module>... modules)
     {
-        for (Class<? extends Module> module : modules) {
+        for (Class<? extends Module> module : modules)
+        {
             Module m;
 
-            try {
+            try
+            {
                 m = module.newInstance();
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 throw new RuntimeException(e);
             }
 
@@ -69,7 +76,8 @@ public class ChainInjector
     private ChainInjector installBefore()
     {
         if (injector != null)
-            for (Module module : moduleList) {
+            for (Module module : moduleList)
+            {
                 injector.injectMembers(module);
             }
 

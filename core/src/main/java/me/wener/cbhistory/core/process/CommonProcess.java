@@ -13,6 +13,7 @@ import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
 import me.wener.cbhistory.utils.Same;
+import me.wener.cbhistory.utils.prop.Prop;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Minutes;
 
@@ -30,8 +31,7 @@ public abstract class CommonProcess
      * 默认 5 * 60
      * </pre>
      */
-    @Inject
-    @Named("app.article.update.interval")
+    @Prop("app.article.update.interval")
     @Getter
     private int articleUpdateInterval = 5 * 60;
     /**
@@ -42,15 +42,13 @@ public abstract class CommonProcess
      * 默认 2 * 60
      * </pre>
      */
-    @Inject
-    @Named("app.article.update.factor")
+    @Prop("app.article.update.factor")
     @Getter
     private int articleUpdateFactor = 2 * 60;
     /**
      * 文章过期小时数
      */
-    @Inject
-    @Named("app.article.expired.hours")
+    @Prop("app.article.expired.hours")
     @Getter
     private int articleExpiredHours = 7 * 24;
 

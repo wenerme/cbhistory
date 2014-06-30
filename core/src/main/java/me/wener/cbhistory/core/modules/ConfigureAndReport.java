@@ -27,21 +27,19 @@ public class ConfigureAndReport
     @Prop("app.info.author.email")
     private String authorEmail;
 
-    @Inject
-    @Named("app.log.level")
+    @Prop("app.log.level")
     String logLevel;
 
     @PostConstruct
     private void report()
     {
-        log.warn("{} - {}", title, logo);
+        log.warn("{} - {} v {}", title, logo, appVersion);
         log.warn("Written by {} <{}>", authorName, authorEmail);
 
         try
         {
             Class.forName("ch.qos.logback.classic.Logger");
 
-            log.info("当前程序版本: {}", appVersion);
             log.info("设置日志记录等级为: {}", logLevel);
             Logger logger = (Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
             logger.setLevel(Level.toLevel(logLevel));
