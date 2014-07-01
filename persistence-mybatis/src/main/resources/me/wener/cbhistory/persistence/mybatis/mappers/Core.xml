@@ -22,8 +22,8 @@
 
      <!--需要 list 参数-->
     <sql id="findByIds">
-        select * from user
-        where <include refid="table-name"/> in
+        select * from <include refid="table-name"/>
+        where <include refid="table-id"/> in
         <foreach collection="list"
                  item="id"
                  separator=","

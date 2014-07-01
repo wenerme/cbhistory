@@ -26,20 +26,26 @@
     </resultMap>
 
     <select id="findAll" resultMap="Result">
-        select * from <include refid="table-name"/>
+        select * from
+        <include refid="table-name"/>
     </select>
 
     <select id="findById"
             parameterType="long"
             resultMap="Result"
             useCache="true">
-        select * from <include refid="table-name"/>
-        where <include refid="table-id"/> = #{id}
+        select * from
+        <include refid="table-name"/>
+        where
+        <include refid="table-id"/>
+        = #{id}
     </select>
 
     <select id="findByIds" parameterType="list" resultMap="Result" useCache="true">
-        select * from user
-        where <include refid="table-name"/> in
+        select * from <include refid="table-name"/>
+        where
+        <include refid="table-id"/>
+        in
         <foreach collection="list"
                  item="id"
                  separator=","
@@ -49,17 +55,22 @@
         </foreach>
     </select>
     <select id="count" resultType="long">
-        select count(<include refid="table-id"/>) from <include refid="table-name"/>
+        select count(<include refid="table-id"/>) from
+        <include refid="table-name"/>
     </select>
 
     <delete id="deleteById" parameterType="long">
-        delete from <include refid="table-name"/>
-        where <include refid="table-id"/>=#{id}
+        delete from
+        <include refid="table-name"/>
+        where<include refid="table-id"/>=#{id}
     </delete>
 
     <delete id="deleteByIds" parameterType="list">
-        delete from <include refid="table-name"/>
-        where <include refid="table-id"/> in
+        delete from
+        <include refid="table-name"/>
+        where
+        <include refid="table-id"/>
+        in
         <foreach collection="list"
                  item="id"
                  separator=","
@@ -71,7 +82,8 @@
 
     <!--需要具体类型参数的方法-->
     <delete id="delete" parameterType="Article">
-        delete from <include refid="table-name"/>
-        where <include refid="table-id"/>=#{<include refid="table-id"/>}
+        delete from
+        <include refid="table-name"/>
+        where<include refid="table-id"/>=#{<include refid="table-id"/>}
     </delete>
 </mapper>

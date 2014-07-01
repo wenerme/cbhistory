@@ -5,6 +5,7 @@ import javax.inject.Named;
 import javax.sql.DataSource;
 import me.wener.cbhistory.domain.entity.EntityPkg;
 import me.wener.cbhistory.repo.RepoPkg;
+import me.wener.cbhistory.utils.prop.Prop;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,8 +23,7 @@ public class SpringContextConfig
 {
     @Inject
     static DataSource dataSource;
-    @Inject
-    @Named("persistence.unit")
+    @Prop("persistence.unit")
     static String persistenceUnit;
 
     public DataSource getDataSource()

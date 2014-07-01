@@ -1,50 +1,59 @@
 
-ʵ�ַ�����ͳ������,��Ҫ���� spring data/persistence jpa/analysis
+实现分析和统计数据,需要依赖 spring data/persistence jpa/analysis
 
-ֵ��ע�����,��Щ���ݶ���Ҫ����,һСʱ������һ�����һ��
+值得注意的是,这些数据都需要缓存,一小时或者是一天更新一次
 
-* һ������Щʱ�����Ծ
+* 一天中那些时候最活跃
 	most_active_time
-	* �� Сʱ ����
-* һ������Щʱ�����Ծ
+	* 以 小时 分组
+* 一周中那些时候最活跃
 	most_active_day
-	* �� day of week ����
-* ��Щ�������Ծ
-	most_active_time
-	* ���������ܺ�
-* ��ʷ���Ծ�ļ���
+	* 以 day of week 分组
+* 哪些地区最活跃
+	most_active_area
+	* 地区评论总和
+* 历史最活跃的几天
 	most_active_in_history
-* ƽ��ÿ����������
+* 平均每天评论数量
 	avarage_comment_pre_day
-* ƽ��ÿ��ÿ���ط�����������
+* 平均每天每个地方的评论数量
 	avarage_comment_pre_day_pre_area
-* ���Ծ������Դ
-	* ��|��|��
+* 最活跃的文章源
+	* 周|月|总
 	most_active_source
-	* �� source ����
+	* 以 source 分组
 
-* ���ܻ�ӭ������
+* 最受欢迎的评论
 	most_popular_comment
-	* ��/��/��
-* ��ܻ�ӭ������
+	* 日/周/月
+* 最不受欢迎的评论
 	worst_popular_comment
-	* ��/��/��
+	* 日/周/月
 	
-* ��ʽ: ��� [��|��] �� xxxx
-	* ����ʵ������ͳһ�Ľӿ�
-	
-�ӿڲ���
+* 格式: 最近 [周|月] 最 xxxx
+	* 考虑实现这样统一的接口
+
+数据统计导出方案
+--------------
+
+* 每个月导出一次
+* 导出到指定目录
+* 导出主要是导出每天的, 其他的时间单位可以用这个来推出
+* 关于小时这样的单位, 可以暂时不考虑
+
+
+接口策略
 ----------
 1. stat/most/comment|article|source/[week|month|day]
-	������ʵ��
+	不方便实现
 2. stat/most_active_area/[day|week|month]:period
-	ʵ��������
+	实现起来简单
 
-* �ɲ���ʽ�ķ�������
-* ���ݸ�ʽ ?
-	����������ݸ�ʽ������ͬ,�����������ݸ�ʽ֮��Ĳ��
+* 可插入式的分析内容
+* 数据格式 ?
+	大多数的数据格式都不相同,尽量减少数据格式之间的差距
 
-���ṹ
+包结构
 ------	
 analysis
 	term
@@ -56,15 +65,15 @@ analysis
 	AnalysisServer
 		getAnalysis(QueryInfo)
 
-�ִ���
+分词器
 
 https://code.google.com/p/ik-analyzer/
 https://code.google.com/p/paoding/
 
-ik ������ 2012
-paoding ������ 2008
+ik 最后更新 2012
+paoding 最后更新 2008
 
-�ռ��ٶ��ȴ�ҳ
+收集百度热词页
 -----------
 $.makeArray($('.keyword .list-title').map(function(){return $(this).text()})).join('\n')+'\n'
 

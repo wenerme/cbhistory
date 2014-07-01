@@ -36,8 +36,8 @@
     </select>
 
     <select id="findByIds" parameterType="list" resultMap="Result" useCache="true">
-        select * from user
-        where <include refid="table-name"/> in
+        select * from <include refid="table-name"/>
+        where <include refid="table-id"/> in
         <foreach collection="list"
                  item="id"
                  separator=","
