@@ -78,6 +78,46 @@ paoding 最后更新 2008
 $.makeArray($('.keyword .list-title').map(function(){return $(this).text()})).join('\n')+'\n'
 
 
+数据可视化方案
+==============
+主要是 d3js 和 google visualization, 选择 d3js 更好, 因为google 在国内大多访问不了
+除此之外 这些也是值得考虑的
+https://github.com/trifacta/vega
+
+但是选择 d3js 我又比较懒, 选一些基于 d3js 实现的库
+
+2675 star
+http://nvd3.org/
+
+616 star
+http://dimplejs.org/
+
+1043 star
+http://c3js.org/
+
+那就先尝试 nvd3 咯~ :-)
+
+大概熟悉需要什么样的数据格式后, 在做数据导出
+
+由于数据量特别大, 很多是只能选择前 10 来进行统计
+
+统计分类: 总, 月, 周?
+这样的时间分类也确定了需要更新数据的频度, 暂时选择月
+
+文章源前十
+
+
+一些统计 SQL
+============
+select count(*), date(date) as pub_date
+from cbhistory_article 
+where source = "安兔兔" 
+group by pub_date;
+
+select count(*) date(date) as pub_date from table group by pub-date;
+
+
+
 
 
 
