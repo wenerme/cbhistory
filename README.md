@@ -1,15 +1,14 @@
 > ![cbHistory-西贝历史评论插件](https://raw.githubusercontent.com/wenerme/cbhistory-extension/master/images/title.png)
 >
-> cbHistory-西贝历史评论
+> cbHistory-西贝历史评论统计
 >
-> 精彩不容错过. :smile:
->
-> 给 cnbeta 上无法显示评论的文章,提供一个评论服务器.可使用 [chrome 插件][cbhistory-extension],无缝衔接.
+> 精彩不容错过 :smile:
 
 相关项目
 --------
 * [cbhistory 服务端][cbhistory-server]
 * [cbhistory chrome 插件][cbhistory-extension]
+* [cnbeta 统计信息](http://wenerme.github.io/cbhistory/)
 
  [cbhistory-server]:https://github.com/wenerme/cbhistory
  [cbhistory-extension]:https://github.com/wenerme/cbhistory-extension

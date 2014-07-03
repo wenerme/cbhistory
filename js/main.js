@@ -49,7 +49,9 @@ function initPie(data)
 	nv.addGraph(function ()
 	{
 		var chart = nv.models.pieChart()
-			.showLegend(false)
+//			.showLegend(false)
+			.width(500)
+			.height(500)
 			.x(function (d) { return d.label })
 			.y(function (d) { return d.value })
 			.showLabels(true);
@@ -64,7 +66,40 @@ function initPie(data)
 }
 $(function ()
 {
-	$.getJSON('data/total-top-source-count.json', function (d) {initPie(d);})
+//	$.getJSON('data/total-top-source-count.json', function (d) {initPie(d);})
+	$('[data-chart-data]').each(function()
+	{
+		var $this = $(this);
+		var url = $this.data('chart-data');
+		console.log("Load chart data ", url);
+		var setting = {};
+		setting.width = $this.data("chart-width");
+		setting.height = $this.data("chart-height");
+		$.getJSON(url, function (data)
+		{
+			$this.css(setting);
+			nv.addGraph(function ()
+			{
+				var chart = nv.models.pieChart()
+					.width(setting.width)
+					.height(setting.height)
+					.x(function (d) { return d.label })
+					.y(function (d) { return d.value })
+					.labelThreshold(.02)
+					.labelType("percent")
+					.showLabels(true);
+
+				d3.select($this.find("svg")[0])
+					.datum(data)
+					.transition().duration(1200)
+					.call(chart);
+
+				window.chart = chart;
+
+				return chart;
+			});
+		})
+	});
 });
 /**************************************
  * Simple test data generator

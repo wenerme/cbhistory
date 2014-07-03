@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>cnbeta history comments statistics</title>
+	<meta name="author" content="wener">
+
+
+	<meta name="description" content="cnbeta history comments statistics CnBeta 历史评论数据统计">
+
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+
+
+	<link rel="canonical" href="http://wener.me/">
+	<!--favicon stuff-->
+	<link rel="shortcut icon" href="favicon/favicon.ico">
+	<link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-touch-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-touch-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-touch-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-touch-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-touch-icon-152x152.png">
+	<meta name="apple-mobile-web-app-title" content="CBHistory">
+	<link rel="icon" type="image/png" href="favicon/favicon-196x196.png" sizes="196x196">
+	<link rel="icon" type="image/png" href="favicon/favicon-160x160.png" sizes="160x160">
+	<link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96">
+	<link rel="icon" type="image/png" href="favicon/favicon-16x16.png" sizes="16x16">
+	<link rel="icon" type="image/png" href="favicon/favicon-32x32.png" sizes="32x32">
+	<meta name="msapplication-TileColor" content="#2d89ef">
+	<meta name="msapplication-TileImage" content="favicon/mstile-144x144.png">
+	<meta name="msapplication-config" content="favicon/browserconfig.xml">
+	<meta name="application-name" content="CBHistory">
+
+	<!--css stuff-->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"/>
+	<link href="assets/css/nv.d3.css" rel="stylesheet">
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<script src="assets/js/jquery.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+	<script src="assets/js/d3.v3.js"></script>
+	<script src="assets/js/nv.d3.js"></script>
+
+	<script src="assets/js/underscore.js"></script>
+	<script src="assets/js/moment.js"></script>
+	<script src="assets/js/emojify.js"></script>
+	<script>
+		$(function ()
+		{
+			emojify.setConfig({
+
+				emojify_tag_type: 'div,.emojify',           // Only run emojify.js on this element
+				only_crawl_id: null,            // Use to restrict where emojify.js applies
+				img_dir: 'images/emoji',  // Directory for emoji images
+				ignored_tags: {                // Ignore the following tags
+					'SCRIPT': 1,
+					'TEXTAREA': 1,
+					'A': 1,
+					'PRE': 1,
+					'CODE': 1
+				}
+			});
+			emojify.run();
+		});
+	</script>
+	<script src="js/main.js"></script>
+
+	<style>
+		html, body
+		{
+			height: 100%;
+		}
+
+		#chart svg
+		{
+			height: 100%;
+		}
+
+		body
+		{
+			min-height: 2000px;
+			padding-top: 70px;
+		}
+
+		.emoji
+		{
+			width: 1.2em;
+			height: 1.2em;
+			display: inline-block;
+			margin-bottom: 0.1em;
+		}
+
+		#navbar .active a
+		{
+			color: red;
+		}
+	</style>
+</head>
+<body>
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">CBHistory</a>
+		</div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="index.html"> <span class="fa fa-home"></span> 主页</a></li>
+				<li><a href="#about"><i class="fa fa-user"></i>关于</a></li>
+				<li><a href="#about">统计</a></li>
+				<li><a href="#contact">Contact</a></li>
+				<li><a href="https://github.com/wenerme/cbhistory-extension/">Chrome 插件</a></li>
+
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li class="divider"></li>
+						<li class="dropdown-header">Nav header</li>
+						<li><a href="#">Separated link</a></li>
+						<li><a href="#">One more separated link</a></li>
+					</ul>
+				</li>
+			</ul>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="https://github.com/wenerme/cbhistory/"><i class="fa fa-github"></i>GitHub</a></li>
+				<li><a href="https://github.com/wenerme/cbhistory/fork"><i class="fa fa-code-fork"></i>Fork</a></li>
+				<li><a href="https://github.com/wenerme/cbhistory/zipball/master"><i class="fa fa-cloud-download"></i>下载源代码</a>
+				</li>
+			</ul>
+		</div>
+		<!--/.nav-collapse -->
+	</div>
+</div>
+
+<div class="container">
+
+
+	<div>
+		<div class="col-md-9" role="main">
+			<div id="content" data-spy="scroll" data-target="#navbar">
+				<section id="overview">
+					<div id="overview-cbhistory">
+						<h2>CBHistory</h2>
+
+						<p>
+							CBHistory 是由多个不同功能的模块组成的, 其中包括了核心的评论收集模块, 服务提供模块, 分析统计模块等.
+							并且提供了多种服务解决方案, 最简单的是 jws 实现.
+						</p>
+					</div>
+				</section>
+				<section id="cbhistory-parent">
+					<h2>CBHistory</h2>
+
+				</section>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div id="navbar" class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix">
+				<ul class="nav bs-docs-sidenav">
+					<li class="">
+						<a href="#overview">简述</a>
+						<ul class="nav">
+							<li><a href="#overview-cbhistory">CBHistory</a></li>
+							<li><a href="#glyphicons-how-to-use">How to use</a></li>
+							<li><a href="#glyphicons-examples">Examples</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#dropdowns">Dropdowns</a>
+						<ul class="nav">
+							<li><a href="#dropdowns-example">Example</a></li>
+							<li><a href="#dropdowns-alignment">Alignment options</a></li>
+							<li><a href="#dropdowns-headers">Headers</a></li>
+							<li><a href="#dropdowns-disabled">Disabled menu items</a></li>
+						</ul>
+					</li>
+
+					<li><a href="#responsive-embed">Responsive embed</a></li>
+					<li><a href="#wells">Wells</a></li>
+
+
+				</ul>
+
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /container -->
+
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-30404720-1']);
+	_gaq.push(['_trackPageview']);
+
+	(function ()
+	{
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</body>
+</html>
