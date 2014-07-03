@@ -50,7 +50,7 @@ function initPie(data)
 	{
 		var chart = nv.models.pieChart()
 //			.showLegend(false)
-			.width(500)
+			.width(900)
 			.height(500)
 			.x(function (d) { return d.label })
 			.y(function (d) { return d.value })
@@ -66,7 +66,49 @@ function initPie(data)
 }
 $(function ()
 {
-//	$.getJSON('data/total-top-source-count.json', function (d) {initPie(d);})
+	$('.chart-item').each(function()
+	{
+		loadChart(this);
+	});
+
+	$(document).on('change', '.chart-item select', function()
+	{
+		var $this = $(this);
+		loadChart($this.closest('.chart-item'));
+	});
+
+	function loadChart(chartItem)
+	{
+		var $this = $(chartItem);
+		var url = $this.data('data-url');
+		url = url.replace("?", $this.find(".date-range :selected").val());
+		console.log("Load chart data ", url);
+		$.getJSON(url, function (data)
+		{
+			nv.addGraph(function ()
+			{
+				var chart = nv.models.pieChart()
+					.x(function (d) { return d.label })
+					.y(function (d) { return d.value })
+					.labelThreshold(.02)
+					.labelType("percent")
+					.showLabels(true);
+
+				d3.select($this.find("svg")[0])
+					.datum(data)
+					.transition().duration(1200)
+					.call(chart);
+
+				nv.utils.windowResize(chart.update);
+
+				window.chart = chart;
+
+				return chart;
+			});
+		})
+	}
+
+	if(false)
 	$('[data-chart-data]').each(function()
 	{
 		var $this = $(this);

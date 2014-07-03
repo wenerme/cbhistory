@@ -65,7 +65,7 @@
 		{
 			emojify.setConfig({
 
-				emojify_tag_type: 'div,.emojify',           // Only run emojify.js on this element
+				emojify_tag_type: 'div,.emojime',           // Only run emojify.js on this element
 				only_crawl_id: null,            // Use to restrict where emojify.js applies
 				img_dir: 'images/emoji',  // Directory for emoji images
 				ignored_tags: {                // Ignore the following tags
@@ -90,9 +90,14 @@
 		.chart-item
 		{
 			width: auto;
-			float: left;
-		}
 
+			/*float: left;*/
+		}
+		.chart-item .chart
+		{
+			width: auto;
+			max-height: 500px;
+		}
 		.chart svg
 		{
 			height: auto;
@@ -155,11 +160,11 @@
 				<li><a href="https://github.com/wenerme/cbhistory/"><i class="fa fa-github"></i> CBHistory</a></li>
 				<li><a href="https://github.com/wenerme/cbhistory/fork"><i class="fa fa-code-fork"></i> Fork</a></li>
 				<!--<li><i class="fa fa-cloud-download"></i> 下载源码-->
-					<!--<div class="btn-group">-->
-						<!--<a class="btn btn-small btn-primary" href="https://github.com/wenerme/cbhistoryzipball/master">ZIP</a>-->
-						<!--<a class="btn btn-small btn-primary"-->
-						   <!--href="https://github.com/wenerme/cbhistory/tarball/master">TAR.GZ</a>-->
-					<!--</div>-->
+				<!--<div class="btn-group">-->
+				<!--<a class="btn btn-small btn-primary" href="https://github.com/wenerme/cbhistoryzipball/master">ZIP</a>-->
+				<!--<a class="btn btn-small btn-primary"-->
+				<!--href="https://github.com/wenerme/cbhistory/tarball/master">TAR.GZ</a>-->
+				<!--</div>-->
 
 				<!--</li>-->
 				<li class="dropdown">
@@ -194,13 +199,27 @@
 	</div>
 
 	<div>
-		<div class="chart-item">
+		<div id="source-count" class="chart-item" data-data-url="data/source-count-?.json">
 			<h2 class="text-center">总发布者前十</h2>
-			<div class="chart"
-			     data-chart-data="data/total-top-source-count.json"
-			     data-chart-width="500"
-			     data-chart-height="500"
-			     id="chart">
+
+			<div class="form-horizontal chart-option">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">选择数据范围</label>
+					<div class="col-sm-4">
+						<select class="form-control date-range">
+							<option value="total" selected>总计</option>
+							<option>2014-01</option>
+							<option>2014-02</option>
+							<option>2014-03</option>
+							<option>2014-04</option>
+							<option>2014-05</option>
+							<option>2014-06</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="chart">
 				<svg></svg>
 			</div>
 		</div>
