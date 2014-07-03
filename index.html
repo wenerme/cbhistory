@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>cnbeta history comments statistics</title>
+	<meta name="author" content="wener">
+
+
+	<meta name="description" content="cnbeta history comments statistics CnBeta 历史评论数据统计">
+
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+
+
+	<link rel="canonical" href="http://wener.me/">
+	<!--favicon stuff-->
+	<link rel="shortcut icon" href="favicon/favicon.ico">
+	<link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-touch-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-touch-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-touch-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-touch-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-touch-icon-152x152.png">
+	<meta name="apple-mobile-web-app-title" content="CBHistory">
+	<link rel="icon" type="image/png" href="favicon/favicon-196x196.png" sizes="196x196">
+	<link rel="icon" type="image/png" href="favicon/favicon-160x160.png" sizes="160x160">
+	<link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96">
+	<link rel="icon" type="image/png" href="favicon/favicon-16x16.png" sizes="16x16">
+	<link rel="icon" type="image/png" href="favicon/favicon-32x32.png" sizes="32x32">
+	<meta name="msapplication-TileColor" content="#2d89ef">
+	<meta name="msapplication-TileImage" content="favicon/mstile-144x144.png">
+	<meta name="msapplication-config" content="favicon/browserconfig.xml">
+	<meta name="application-name" content="CBHistory">
+
+	<!--css stuff-->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<link href="assets/css/nv.d3.css" rel="stylesheet">
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<script src="assets/js/jquery.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+	<script src="assets/js/d3.v3.js"></script>
+	<script src="assets/js/nv.d3.js"></script>
+
+	<script src="assets/js/underscore.js"></script>
+	<script src="assets/js/moment.js"></script>
+
+	<script src="js/main.js"></script>
+
+	<style>
+		html,body{height: 100%;}
+		#chart svg
+		{
+			height: 100%;
+		}
+
+	</style>
+</head>
+<body>
+
+
+<div id="chart">
+	<svg></svg>
+</div>
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-30404720-1']);
+	_gaq.push(['_trackPageview']);
+
+	(function ()
+	{
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</body>
+</html>

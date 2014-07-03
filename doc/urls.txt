@@ -1,0 +1,5 @@
+如果不是本地测试环境, 则可以用这些在线的资源
+https://raw.githubusercontent.com/novus/nvd3/master/nv.d3.js
+https://raw.githubusercontent.com/novus/nvd3/master/src/nv.d3.css
+http://d3js.org/d3.v3.js
+http://underscorejs.org/underscore-min.js
