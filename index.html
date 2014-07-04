@@ -57,6 +57,9 @@
 	<script src="assets/js/d3.v3.js"></script>
 	<script src="assets/js/nv.d3.js"></script>
 
+	<script src="assets/js/ractive.js"></script>
+	<script src="assets/js/page.js"></script>
+
 	<script src="assets/js/underscore.js"></script>
 	<script src="assets/js/moment.js"></script>
 	<script src="assets/js/emojify.js"></script>
@@ -79,7 +82,6 @@
 			emojify.run();
 		});
 	</script>
-	<script src="js/main.js"></script>
 
 	<style>
 		html, body
@@ -93,11 +95,13 @@
 
 			/*float: left;*/
 		}
+
 		.chart-item .chart
 		{
 			width: auto;
 			max-height: 500px;
 		}
+
 		.chart svg
 		{
 			height: auto;
@@ -118,6 +122,29 @@
 			margin-bottom: 0.1em;
 		}
 	</style>
+	<script id="chart-item-tpl" type="text/ractive">
+		<div id="{{code}}" class="chart-item">
+			<h2 class="text-center">{{title}}</h2>
+
+			<div class="form-horizontal chart-option">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">选择数据范围</label>
+
+					<div class="col-sm-4">
+						<select value="{{selectedCategory}}" class="form-control date-range">
+							{{#category:key}}
+							<option value="{{key}}">{{this}}</option>
+							{{/category}}
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="chart">
+				<svg></svg>
+			</div>
+		</div>
+	</script>
 </head>
 <body>
 
@@ -198,35 +225,69 @@
 		</p>
 	</div>
 
-	<div>
-		<div id="source-count" class="chart-item" data-data-url="data/source-count-?.json">
-			<h2 class="text-center">总发布者前十</h2>
+	<div id="chart-item-container">
 
-			<div class="form-horizontal chart-option">
-				<div class="form-group">
-					<label class="col-sm-2 control-label">选择数据范围</label>
-					<div class="col-sm-4">
-						<select class="form-control date-range">
-							<option value="total" selected>总计</option>
-							<option>2014-01</option>
-							<option>2014-02</option>
-							<option>2014-03</option>
-							<option>2014-04</option>
-							<option>2014-05</option>
-							<option>2014-06</option>
-						</select>
-					</div>
-				</div>
-			</div>
+		<!--<div id="source-count" class="chart-item" data-data-url="data/source-count-?.json">-->
+			<!--<h2 class="text-center">发布者前十</h2>-->
 
-			<div class="chart">
-				<svg></svg>
-			</div>
-		</div>
+			<!--<div class="form-horizontal chart-option">-->
+				<!--<div class="form-group">-->
+					<!--<label class="col-sm-2 control-label">选择数据范围</label>-->
+
+					<!--<div class="col-sm-4">-->
+						<!--<select class="form-control date-range">-->
+							<!--<option value="total" selected>总计</option>-->
+							<!--<option>2014-06</option>-->
+							<!--<option>2014-05</option>-->
+							<!--<option>2014-04</option>-->
+							<!--<option>2014-03</option>-->
+							<!--<option>2014-02</option>-->
+							<!--<option>2014-01</option>-->
+						<!--</select>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+
+			<!--<div class="chart">-->
+				<!--<svg></svg>-->
+			<!--</div>-->
+		<!--</div>-->
+
+		<!--&lt;!&ndash;class="chart-item" data-data-url="data/source-count-?.json"&ndash;&gt;-->
+		<!--<div id="area-count" class="chart-item" data-data-url="data/area-count-?.json">-->
+			<!--<h2 class="text-center">喷子集中地区</h2>-->
+
+			<!--<div class="form-horizontal chart-option">-->
+				<!--<div class="form-group">-->
+					<!--<label class="col-sm-2 control-label">选择数据范围</label>-->
+
+					<!--<div class="col-sm-4">-->
+						<!--<select class="form-control date-range">-->
+							<!--<option value="total" selected>总计</option>-->
+							<!--<option value="total-province">一级区域</option>-->
+							<!--<option value="total-sh">上海</option>-->
+							<!--<option value="total-bj">北京</option>-->
+							<!--<option value="total-gd">广东</option>-->
+							<!--<option>2014-06</option>-->
+							<!--<option>2014-05</option>-->
+							<!--<option>2014-04</option>-->
+						<!--</select>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+
+			<!--<div class="chart">-->
+				<!--<svg></svg>-->
+			<!--</div>-->
+		<!--</div>-->
+
+
+
 	</div>
 </div>
 <!-- /container -->
 
+<script src="js/main.js"></script>
 <script src="js/statistics.js"></script>
 
 <script type="text/javascript">

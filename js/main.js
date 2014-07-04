@@ -77,10 +77,18 @@ $(function ()
 		loadChart($this.closest('.chart-item'));
 	});
 
+	function initChart(code)
+	{
+
+	}
+
 	function loadChart(chartItem)
 	{
 		var $this = $(chartItem);
 		var url = $this.data('data-url');
+		if(!url)
+			return;
+
 		url = url.replace("?", $this.find(".date-range :selected").val());
 		console.log("Load chart data ", url);
 		$.getJSON(url, function (data)
