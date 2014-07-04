@@ -28,6 +28,9 @@ public interface ArticleRepo
     long countBySourceAndDateBetween(String source, LocalDateTime start, LocalDateTime end);
     long countByDateBetween(LocalDateTime start, LocalDateTime end);
 
+    @Query("select e.source, count(*) from ArticleEntity e group by e.source")
+    List<Object[]> sourceCount();
+
     @Query("SELECT  min(a.date) from ArticleEntity a")
     LocalDateTime firstArticleDate();
 }

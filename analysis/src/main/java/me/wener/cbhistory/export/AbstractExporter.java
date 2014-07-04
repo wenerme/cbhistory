@@ -25,7 +25,7 @@ public abstract class AbstractExporter implements Exporter
     private int limit = 15;
 
     @Getter
-    private final Map<String, String> categories = Maps.newHashMap();
+    private final Map<String, String> categories = Maps.newLinkedHashMap();
     private Map<String, Object> info = null;
 
     @Getter

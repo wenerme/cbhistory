@@ -31,12 +31,17 @@ public class TestExport
         App.getInjector();
     }
 
-    @Before
-    public void before()
+    @Test
+    public void testMgr()
     {
+        AutowireCapableBeanFactory autowireCapableBeanFactory = ctx.getAutowireCapableBeanFactory();
+        ExportMgr mgr = autowireCapableBeanFactory.createBean(ExportMgr.class);
+        mgr.setBasePath("C:\\tmp");
 
+        mgr.addExporter(SourceCountExporter.class);
+        mgr.addExporter(AreaCountExporter.class);
+        mgr.doExport(commentRepo.firstCommentDate(), LocalDateTime.now());
     }
-
     @Test
     public void test()
     {

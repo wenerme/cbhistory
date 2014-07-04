@@ -34,4 +34,7 @@ public interface ArticleRepoCustom
     double collectionRate();
 
     LinkedHashMap<Date, Long> countBySourceGroupByDateOrderByDateDesc(String source);
+
+    long countOfSource();
+
 }

@@ -48,6 +48,7 @@ public class TestWithSpring
     {
         App.getInjector();
     }
+
     @Test
     @Ignore
     public void test()
@@ -116,19 +117,29 @@ public class TestWithSpring
         System.out.println(areas);
         assert areas != null;
     }
+
     @Test
     public void testAllAreasCount()
     {
         List<Object[]> areaCount = commentRepo.areaCount();
-        System.out.println("Length "+ areaCount.size());
+        System.out.println("Length " + areaCount.size());
         assert areaCount.size() > 0;
     }
+
     @Test
     public void testAllAreasCountWithDate()
     {
         LocalDateTime start = commentRepo.firstCommentDate();
         List<Object[]> areaCount = commentRepo.areaCount(start, start.plusDays(5));
-        System.out.println("Length "+ areaCount.size());
+        System.out.println("Length " + areaCount.size());
         assert areaCount.size() > 0;
+    }
+
+    @Test
+    public void testFindOne()
+    {
+        CommentEntity commentEntity = commentRepo.firstComment();
+        System.out.println(commentEntity);
+        assert commentEntity != null;
     }
 }

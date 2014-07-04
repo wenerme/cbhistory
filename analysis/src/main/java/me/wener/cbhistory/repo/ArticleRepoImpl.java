@@ -86,4 +86,12 @@ public class ArticleRepoImpl extends BasicCustom implements ArticleRepoCustom
                                      .list(date, $.count());
         return toLinkedMap(list, date, $.count());
     }
+
+    @Override
+    public long countOfSource()
+    {
+        // TODO 考虑使用一条语句完成
+        return getArticleRepo().sourceCount().size();
+    }
+
 }

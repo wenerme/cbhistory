@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @ComponentScan(basePackageClasses = EntityPkg.class, includeFilters = @ComponentScan.Filter(Named.class))
-@EnableTransactionManagement
+@EnableTransactionManagement(proxyTargetClass = true)
 @EnableJpaRepositories(basePackageClasses = RepoPkg.class, includeFilters = @ComponentScan.Filter(Named.class))
 public class SpringContextConfig
 {

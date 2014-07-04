@@ -28,8 +28,10 @@ public interface CommentRepo
             "where e.hostName is not null group by e.hostName")
     List<String> allAreas();
 
-    @Query("select  min(a.date) from CommentEntity a")
+    @Query("select min(a.date) from CommentEntity a")
     LocalDateTime firstCommentDate();
+    @Query("select min(a.tid) from CommentEntity a")
+    long firstCommentId();
 
     @Query("select e.hostName, count(e.id) as _num from CommentEntity e group by e.hostName order by _num desc ")
     List<Object[]> areaCount();
