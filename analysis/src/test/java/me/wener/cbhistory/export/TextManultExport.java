@@ -1,4 +1,4 @@
-package me.wener.cbhistory.repo.test;
+package me.wener.cbhistory.export;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
@@ -8,27 +8,21 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.repo.ArticleRepo;
 import me.wener.cbhistory.repo.CommentRepo;
+import me.wener.cbhistory.export.LabelValue;
 import me.wener.cbhistory.spring.SpringContextConfig;
 import me.wener.cbhistory.utils.Same;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 import org.joda.time.YearMonth;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -41,7 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = SpringContextConfig.class)
 //@Ignore
-public class TextReportExport
+public class TextManultExport
 {
     @Inject
     ApplicationContext ctx;
@@ -175,12 +169,4 @@ public class TextReportExport
         return result;
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class LabelValue
-    {
-        private String label;
-        private double value;
-    }
 }

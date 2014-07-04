@@ -167,14 +167,19 @@ e.g.
 以地区统计
 按省统计, 因为有些地区是带有市的
 	
-area-count
-area-count-provence
-
+area-count-
+	total
+	provence
+	%yyyy-%dd
 
 Exporter
 	getCode()
 	getName()
+	doExport(startTime, endTime)
 	Map<String, String> getCategories()
 	export(String category, String description, Object date)
 	getBasePath()
 	Map<String, Object> getInfo()
+
+谷歌地图
+https://maps.google.co.uk/maps?q=LATITUDE_HERE,LONGITUDE_HERE&z=11

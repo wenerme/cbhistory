@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.mysema.query.jpa.impl.JPAQuery;
+import java.util.List;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -106,5 +107,28 @@ public class TestWithSpring
         LocalDateTime date = articleRepo.firstArticleDate();
         assert date != null;
         System.out.println(date);
+    }
+
+    @Test
+    public void testAllAreas()
+    {
+        List<String> areas = commentRepo.allAreas();
+        System.out.println(areas);
+        assert areas != null;
+    }
+    @Test
+    public void testAllAreasCount()
+    {
+        List<Object[]> areaCount = commentRepo.areaCount();
+        System.out.println("Length "+ areaCount.size());
+        assert areaCount.size() > 0;
+    }
+    @Test
+    public void testAllAreasCountWithDate()
+    {
+        LocalDateTime start = commentRepo.firstCommentDate();
+        List<Object[]> areaCount = commentRepo.areaCount(start, start.plusDays(5));
+        System.out.println("Length "+ areaCount.size());
+        assert areaCount.size() > 0;
     }
 }
