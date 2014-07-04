@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -25,6 +26,10 @@ import me.wener.cbhistory.repo.ArticleRepo;
 import me.wener.cbhistory.repo.CommentRepo;
 import me.wener.cbhistory.spring.SpringContextConfig;
 import me.wener.cbhistory.utils.Same;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
+import org.joda.time.YearMonth;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
@@ -124,6 +129,52 @@ public class TextReportExport
 
         Files.write(Same.getGson().toJson(result), new File("C:\\total-top-source-count.json"), Charsets.UTF_8);
     }
+
+    @Test
+    public void sourceCount() throws IOException
+    {
+        {
+            final long count = articleRepo.count();
+            LinkedHashMap<String, Long> sourceDesc = articleRepo.countPreSourceDesc();
+
+            Files.write(Same.getGson().toJson(asSourceCount(sourceDesc, count)),
+                    new File("C:\\source-count-total.json"), Charsets.UTF_8);
+        }
+        // 统计每个月
+        {
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM");
+            YearMonth start = new YearMonth(articleRepo.firstArticleDate());
+            YearMonth end = YearMonth.now();
+            for (; !start.equals(end); start = start.plusMonths(1))
+            {
+                LocalDateTime startTime = new LocalDateTime(start.getYear(), start.getMonthOfYear(), 1, 0, 0);
+                LocalDateTime endTime = startTime.plusMonths(1);
+                long count = articleRepo.countByDateBetween(startTime, endTime);
+
+                Object data = asSourceCount(articleRepo.countPreSourceDesc(startTime, endTime), count);
+                Files.write(Same.getGson().toJson(data),
+                        new File("C:\\source-count-"+formatter.print(start)+".json"), Charsets.UTF_8);
+            }
+        }
+    }
+
+    public Object asSourceCount(LinkedHashMap<String, Long> sourceDesc, long count)
+    {
+        List<LabelValue> result = Lists.newArrayList();
+        int i = 0;
+        int sum = 0;
+        for (final Map.Entry<String, Long> entry : sourceDesc.entrySet())
+        {
+            if (i++ == 10)
+                break;
+            sum += entry.getValue();
+            result.add(new LabelValue(entry.getKey(), entry.getValue()));
+        }
+
+        result.add(new LabelValue("其他", count - sum));
+        return result;
+    }
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

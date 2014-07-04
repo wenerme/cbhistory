@@ -120,6 +120,61 @@ select count(*) date(date) as pub_date from table group by pub-date;
 
 
 
+如何呈现数据
+===========
+
+有两种策略
+1. 将大多数数据完全导出, 然后到前端的时候再由前端处理
+	* 相对来说灵活性更高
+	* 导出方便
+	* 前端处理相对比较麻烦
+	* 由于可能一次性的数据量比较大, 会导致一些网络流量和运算速度的问题
+	* 数据提供方式
+		- 提供一个  DataRepo 类作为数据仓库
+		- 从数据仓库获取数据的时候对数据进行预处理
+2. 导出为前端可以直接使用的数据
+	* 要根据处理的数据不同来做导出的数据结构
+	* 导出很多文件
+	* 前端没压力
+	* 如果多增加一个分类什么的, 就得在后端添加一个导出格式
+	* 数据提供方式
+		- 提供大量的数据文件
+			- source-count-total, source-count-2014-5, source-count-2014-6
+			- 此外还需要一些额外信息的文件 source-count-info
+			- 提供不一样的查看方式 source-date-count 数据源以日期分组的总计
+		- 以 数据类名+[日期后缀|total|info] 的形式来提供大量的数据
+	
+OK~ 好吧~ 这是一个艰难的抉择呢~ 第二个方法明显要死板但是简单的多呢~
+
+e.g.
+发布者统计
+饼图
+{
+	[label: 发布者名, value: 数量]
+}
+
+统计每天发布的文章数量
+
+一天中评论者活跃的时间
+	文章发布者
+一周中评论者活跃的时间
+	文章发布者
+	
+以发布者统计
+	统计前十
+	每月的前十
+
+以地区统计
+按省统计, 因为有些地区是带有市的
+	
+area-count
+area-count-provence
 
 
-
+Exporter
+	getCode()
+	getName()
+	Map<String, String> getCategories()
+	export(String category, String description, Object date)
+	getBasePath()
+	Map<String, Object> getInfo()

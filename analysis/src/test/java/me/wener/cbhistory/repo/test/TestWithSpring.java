@@ -99,4 +99,12 @@ public class TestWithSpring
         assert size > 0;
         assert size == count;
     }
+
+    @Test
+    public void testFirstArticleDate()
+    {
+        LocalDateTime date = articleRepo.firstArticleDate();
+        assert date != null;
+        System.out.println(date);
+    }
 }

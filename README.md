@@ -166,6 +166,7 @@ persistence-mybatis
 --------
 * [cbhistory 服务端][cbhistory-server]
 * [cbhistory chrome 插件][cbhistory-extension]
+* [cnbeta 统计信息](http://wenerme.github.io/cbhistory/)
 
  [cbhistory-server]:https://github.com/wenerme/cbhistory
  [cbhistory-extension]:https://github.com/wenerme/cbhistory-extension
