@@ -58,8 +58,22 @@ var ChartItem = Ractive.extend(
 
 $(function ()
 {
-	loadChart("source-count");
-	loadChart("area-count");
+//	loadChart("source-count");
+//	loadChart("area-count");
+
+	Datum.loadData("data","info", function(data)
+	{
+		var ractive = new Ractive({
+			el: "#system-info",
+			template: "#system-info-tpl",
+			data: data
+		});
+
+		$.each(data.codes, function()
+		{
+			loadChart(this);
+		});
+	});
 
 	function loadChart(code)
 	{

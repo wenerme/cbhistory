@@ -39,9 +39,12 @@
 	<meta name="application-name" content="CBHistory">
 
 	<!--css stuff-->
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">-->
+	<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"/>
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/bootstrap-theme.min.css" rel="stylesheet">
+	<!--<link href="assets/css/font-awesome.min.css" rel="stylesheet">-->
 	<link href="assets/css/nv.d3.css" rel="stylesheet">
 
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -52,7 +55,8 @@
 	<![endif]-->
 
 	<script src="assets/js/jquery.js"></script>
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+	<script src="assets/js/bootstrap.min.js"></script>
 
 	<script src="assets/js/d3.v3.js"></script>
 	<script src="assets/js/nv.d3.js"></script>
@@ -122,13 +126,32 @@
 			margin-bottom: 0.1em;
 		}
 	</style>
+	<script id="system-info-tpl" type="text/ractive">
+		<h2>系统信息</h2>
+		<div>
+
+		<div class="form-horizontal" role="form">
+			{{#info:key}}
+			<div class="form-group col-sm-6">
+				<label class="col-sm-4 control-label">{{key}}</label>
+				<div class="col-sm-8">
+
+					<p class="form-control-static">{{.}}</p>
+				</div>
+			</div>
+			{{/info}}
+		</div>
+
+		</div>
+	</script>
+
 	<script id="chart-item-tpl" type="text/ractive">
 		<div id="{{code}}" class="chart-item">
 			<h2 class="text-center">{{title}}</h2>
-
+			{{#category}}
 			<div class="form-horizontal chart-option">
 				<div class="form-group">
-					<label class="col-sm-2 control-label">选择数据范围</label>
+					<label class="col-sm-2 control-label">选择数据分类</label>
 
 					<div class="col-sm-4">
 						<select value="{{selectedCategory}}" class="form-control date-range">
@@ -139,11 +162,13 @@
 					</div>
 				</div>
 			</div>
+			{{/category}}
 
 			<div class="chart">
 				<svg></svg>
 			</div>
 		</div>
+
 	</script>
 </head>
 <body>
@@ -166,36 +191,15 @@
 				<li><a href="#about"><i class="fa fa-user"></i>关于</a></li>
 				<li><a href="#about">统计</a></li>
 				<li><a href="https://github.com/wenerme/cbhistory-extension/">Chrome 插件</a></li>
-
-				<!--
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
-					<ul class="dropdown-menu" role="menu">
-						<li><a href="#">Action</a></li>
-						<li><a href="#">Another action</a></li>
-						<li><a href="#">Something else here</a></li>
-						<li class="divider"></li>
-						<li class="dropdown-header">Nav header</li>
-						<li><a href="#">Separated link</a></li>
-						<li><a href="#">One more separated link</a></li>
-					</ul>
-				</li>
-				-->
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="https://github.com/wenerme/cbhistory/"><i class="fa fa-github"></i> CBHistory</a></li>
 				<li><a href="https://github.com/wenerme/cbhistory/fork"><i class="fa fa-code-fork"></i> Fork</a></li>
-				<!--<li><i class="fa fa-cloud-download"></i> 下载源码-->
-				<!--<div class="btn-group">-->
-				<!--<a class="btn btn-small btn-primary" href="https://github.com/wenerme/cbhistoryzipball/master">ZIP</a>-->
-				<!--<a class="btn btn-small btn-primary"-->
-				<!--href="https://github.com/wenerme/cbhistory/tarball/master">TAR.GZ</a>-->
-				<!--</div>-->
 
-				<!--</li>-->
 				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cloud-download"></i>下载源码
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<i class="fa fa-cloud-download"></i>下载源码
 						<span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="https://github.com/wenerme/cbhistoryzipball/master">ZIP</a></li>
@@ -225,63 +229,11 @@
 		</p>
 	</div>
 
+	<div id="system-info" class="clearfix">
+
+	</div>
+
 	<div id="chart-item-container">
-
-		<!--<div id="source-count" class="chart-item" data-data-url="data/source-count-?.json">-->
-			<!--<h2 class="text-center">发布者前十</h2>-->
-
-			<!--<div class="form-horizontal chart-option">-->
-				<!--<div class="form-group">-->
-					<!--<label class="col-sm-2 control-label">选择数据范围</label>-->
-
-					<!--<div class="col-sm-4">-->
-						<!--<select class="form-control date-range">-->
-							<!--<option value="total" selected>总计</option>-->
-							<!--<option>2014-06</option>-->
-							<!--<option>2014-05</option>-->
-							<!--<option>2014-04</option>-->
-							<!--<option>2014-03</option>-->
-							<!--<option>2014-02</option>-->
-							<!--<option>2014-01</option>-->
-						<!--</select>-->
-					<!--</div>-->
-				<!--</div>-->
-			<!--</div>-->
-
-			<!--<div class="chart">-->
-				<!--<svg></svg>-->
-			<!--</div>-->
-		<!--</div>-->
-
-		<!--&lt;!&ndash;class="chart-item" data-data-url="data/source-count-?.json"&ndash;&gt;-->
-		<!--<div id="area-count" class="chart-item" data-data-url="data/area-count-?.json">-->
-			<!--<h2 class="text-center">喷子集中地区</h2>-->
-
-			<!--<div class="form-horizontal chart-option">-->
-				<!--<div class="form-group">-->
-					<!--<label class="col-sm-2 control-label">选择数据范围</label>-->
-
-					<!--<div class="col-sm-4">-->
-						<!--<select class="form-control date-range">-->
-							<!--<option value="total" selected>总计</option>-->
-							<!--<option value="total-province">一级区域</option>-->
-							<!--<option value="total-sh">上海</option>-->
-							<!--<option value="total-bj">北京</option>-->
-							<!--<option value="total-gd">广东</option>-->
-							<!--<option>2014-06</option>-->
-							<!--<option>2014-05</option>-->
-							<!--<option>2014-04</option>-->
-						<!--</select>-->
-					<!--</div>-->
-				<!--</div>-->
-			<!--</div>-->
-
-			<!--<div class="chart">-->
-				<!--<svg></svg>-->
-			<!--</div>-->
-		<!--</div>-->
-
-
 
 	</div>
 </div>
