@@ -1,3 +1,4 @@
+
 // 代表数据, 不用 data, 为了避免不必要的冲突
 var Datum = {};
 Datum.getDataUrl = function (code, category)
@@ -11,13 +12,51 @@ Datum.loadData = function (code, category, cb)
 	$.getJSON(url, cb)
 };
 
+(function (global)
+{
+	var charts = {};
+	var defaultChart = null;
+
+	function getChart(code, category, options)
+	{
+		var cb = charts[getKey(code, category)] || defaultChart;
+		if (!cb)
+		{
+			console.error("无法处理表 " + code + " - " + category);
+			return null;
+		}
+		return cb(options);
+	}
+
+	function getKey(code, category)
+	{return code + "$" + category;}
+
+	function registerChart(code, category, cb)
+	{
+		charts[getKey(code, category)] = cb;
+	}
+
+	function registerDefaultChart(cb)
+	{
+		defaultChart = cb;
+	}
+
+	var Charts = {};
+	Charts.getChart = getChart;
+	Charts.registerDefaultChart = registerDefaultChart;
+	Charts.registerChart = registerChart;
+	global.Charts = Charts;
+})(window);
+
 var ChartItem = Ractive.extend(
 	{
 		template: "#chart-item-tpl",
 		init: function (options)
 		{
 			//this._super(options);
-			this.observe("selectedCategory", function (newValue, oldValue, keypath)
+
+
+			this.observe("showCategory", function (newValue, oldValue, keypath)
 			{
 				this.updateChart();
 			});
@@ -28,20 +67,16 @@ var ChartItem = Ractive.extend(
 		{
 			var self = this;
 
-			Datum.loadData(this.data.code, this.data.selectedCategory, function (data)
+			Datum.loadData(this.data.code, this.data.showCategory, function (data)
 			{
 				nv.addGraph(function ()
 				{
-					var chart = nv.models.pieChart()
-						.x(function (d) { return d.label })
-						.y(function (d) { return d.value })
-						.labelThreshold(.02)
-						.labelType("percent")
-						.showLabels(true);
+					var chart = Charts.getChart(self.data.code, self.data.showCategory);
 
 					d3.select(self.find("svg"))
 						.datum(data)
-						.transition().duration(1200)
+						.transition()
+						.duration(1200)
 						.call(chart);
 
 					nv.utils.windowResize(chart.update);
@@ -51,8 +86,8 @@ var ChartItem = Ractive.extend(
 					return chart;
 				});
 			});
-		}
-
+		},
+		data: { }
 	});
 
 
@@ -61,15 +96,40 @@ $(function ()
 //	loadChart("source-count");
 //	loadChart("area-count");
 
-	Datum.loadData("data","info", function(data)
+	Charts.registerDefaultChart(function ()
 	{
+		var chart = nv.models.pieChart()
+			.x(function (d) { return d.label })
+			.y(function (d) { return d.value })
+			.labelThreshold(.02)
+			.labelType("percent")
+			.showLabels(true);
+		return chart;
+	});
+
+	Datum.loadData("data", "info", function (data)
+	{
+		data.formatValue = function (val)
+		{
+			console.log("format ", val);
+			// 尝试格式化日期
+			if (!/^\d+$/.test(val))
+			{
+				var m = moment(val);
+				if (!m.isValid())
+					return val;
+				return m.format('llll')+" ("+ m.fromNow()+")";
+			}
+			return val;
+		};
+
 		var ractive = new Ractive({
 			el: "#system-info",
 			template: "#system-info-tpl",
 			data: data
 		});
 
-		$.each(data.codes, function()
+		$.each(data.codes, function ()
 		{
 			loadChart(this);
 		});
@@ -79,9 +139,7 @@ $(function ()
 	{
 		Datum.loadData(code, "info", function (data)
 		{
-			var ractive = new ChartItem({
-				data: data
-			});
+			var ractive = new ChartItem({data: data});
 			ractive.insert("#chart-item-container");
 			window.ractive = ractive;
 		});
