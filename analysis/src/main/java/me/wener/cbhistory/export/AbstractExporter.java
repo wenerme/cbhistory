@@ -71,25 +71,11 @@ public abstract class AbstractExporter implements Exporter
         return info;
     }
 
-    /**
-     * 辅助的转换函数
-     */
-    @SuppressWarnings("unchecked")
-    protected <K, V> LinkedHashMap<K, V> asLinkedHashMap(List<Object[]> list)
-    {
-        LinkedHashMap<K, V> map = Maps.newLinkedHashMap();
-        for (Object[] objects : list)
-        {
-            map.put((K) objects[0], (V) objects[1]);
-        }
-        return map;
-    }
-
 
     /**
      * 导出所有, 并且不输出其他类
      */
-    public Object asPieCount(Map<String, Long> sourceDesc)
+    public Object asPieCount(Map<?, Long> sourceDesc)
     {
         return asPieCount(sourceDesc, -1, -1);
     }
@@ -97,22 +83,22 @@ public abstract class AbstractExporter implements Exporter
     /**
      * 导出所有
      */
-    public Object asPieCount(Map<String, Long> sourceDesc, long count)
+    public Object asPieCount(Map<?, Long> sourceDesc, long count)
     {
         return asPieCount(sourceDesc, count, -1);
     }
 
-    public Object asPieCount(Map<String, Long> sourceDesc, long count, int top)
+    public Object asPieCount(Map<?, Long> sourceDesc, long count, int top)
     {
         List<LabelValue> result = Lists.newArrayList();
         int i = 0;
         int sum = 0;
-        for (final Map.Entry<String, Long> entry : sourceDesc.entrySet())
+        for (final Map.Entry<?, Long> entry : sourceDesc.entrySet())
         {
             if (i++ == top)
                 break;
             sum += entry.getValue();
-            result.add(new LabelValue(entry.getKey(), entry.getValue()));
+            result.add(new LabelValue(String.valueOf(entry.getKey()), entry.getValue()));
         }
 
         if (count - sum > 0)
@@ -120,4 +106,5 @@ public abstract class AbstractExporter implements Exporter
 
         return result;
     }
+
 }

@@ -30,7 +30,7 @@ public class TestArticleRepo
 
         ArticleRepo articleRepo = context.getBean(ArticleRepo.class);
 
-        System.out.println(articleRepo.sumOfDiscussCount());
+        System.out.println(articleRepo.countOfAllDiscuss());
     }
 
     private static void reportMemory()

@@ -40,6 +40,7 @@ public class TestExport
 
         mgr.addExporter(SourceCountExporter.class);
         mgr.addExporter(AreaCountExporter.class);
+        mgr.addExporter(CommenterActiveTimeExporter.class);
         mgr.doExport(commentRepo.firstCommentDate(), LocalDateTime.now());
     }
     @Test
@@ -55,7 +56,15 @@ public class TestExport
     {
         AutowireCapableBeanFactory autowireCapableBeanFactory = ctx.getAutowireCapableBeanFactory();
         AreaCountExporter exporter = autowireCapableBeanFactory.createBean(AreaCountExporter.class);
-        exporter.setBasePath("C:\\");
+        exporter.setBasePath("C:\\tmp");
+        exporter.doExport(commentRepo.firstCommentDate(), LocalDateTime.now());
+    }
+    @Test
+    public void testHourCount()
+    {
+        AutowireCapableBeanFactory autowireCapableBeanFactory = ctx.getAutowireCapableBeanFactory();
+        CommenterActiveTimeExporter exporter = autowireCapableBeanFactory.createBean(CommenterActiveTimeExporter.class);
+        exporter.setBasePath("C:\\tmp");
         exporter.doExport(commentRepo.firstCommentDate(), LocalDateTime.now());
     }
 }

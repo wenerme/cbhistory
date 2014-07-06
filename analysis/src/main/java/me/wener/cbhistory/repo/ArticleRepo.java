@@ -19,10 +19,10 @@ public interface ArticleRepo
     Collection<ArticleEntity> findAllBySource(String source);
 
     @Query("SELECT sum(a.discussCount) from ArticleEntity a")
-    long sumOfDiscussCount();
+    long countOfAllDiscuss();
 
     @Query("select a.source from ArticleEntity a group by a.source")
-    List<String> findAllSource();
+    List<String> allSource();
 
     long countBySource(String source);
     long countBySourceAndDateBetween(String source, LocalDateTime start, LocalDateTime end);

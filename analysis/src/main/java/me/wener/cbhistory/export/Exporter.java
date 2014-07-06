@@ -13,7 +13,7 @@ public interface Exporter
 
     void doExport(LocalDateTime startExportTime, LocalDateTime endExportTime);
     Map<String, String> getCategories();
-    void export(String category,@Nullable String description, Object date);
+    void export(String category,@Nullable String description, Object data);
     String getBasePath();
     Map<String, Object> getInfo();
 }

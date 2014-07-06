@@ -74,12 +74,14 @@ public class ExportMgr extends AbstractExporter implements ApplicationContextAwa
         }
         DataOverview overview = new DataOverview();
         overview.setAuthor("wener");
-        overview.setAuthorEmail("wenermail(at)gmail.com");
+        overview.setAuthorEmail("wenermail(AT)gmail.com");
 
         overview.setArticleCount(articleRepo.count());
         overview.setSourceCount(articleRepo.countOfSource());
         overview.setCommentCount(commentRepo.count());
         overview.setAreaCount(commentRepo.countOfArea());
+        overview.setAllCommentCount(articleRepo.countOfAllDiscuss());
+        overview.setCommentGatherRatio((double)overview.getCommentCount()/overview.getAllCommentCount());
 
         overview.setFirstArticleDate(articleRepo.firstArticleDate().toDate());
         overview.setFirstCommentDate(commentRepo.firstCommentDate().toDate());

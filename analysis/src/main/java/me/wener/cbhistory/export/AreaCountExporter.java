@@ -7,9 +7,11 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import me.wener.cbhistory.repo.ArticleRepo;
 import me.wener.cbhistory.repo.CommentRepo;
+import me.wener.cbhistory.repo.Repos;
 import org.joda.time.LocalDateTime;
 import org.joda.time.YearMonth;
 import org.joda.time.format.DateTimeFormat;
@@ -107,13 +109,35 @@ public class AreaCountExporter extends AbstractExporter
      */
     public LinkedHashMap<String, Long> filterByPrefix(LinkedHashMap<String, Long> data, String prefix)
     {
+        return filterByPrefix(data, prefix, null);
+    }
+    public LinkedHashMap<String, Long> filterByContain(LinkedHashMap<String, Long> data, String needle)
+    {
         LinkedHashMap<String, Long> map = Maps.newLinkedHashMap();
 
         for (Map.Entry<String, Long> entry : data.entrySet())
         {
-            if (entry.getKey() != null && entry.getKey().startsWith(prefix))
+            String key = entry.getKey();
+            if (key != null && key.contains(needle))
             {
-                map.put(entry.getKey(), entry.getValue());
+                map.put(key, entry.getValue());
+            }
+        }
+        return map;
+    }
+    public LinkedHashMap<String, Long> filterByPrefix(LinkedHashMap<String, Long> data, String prefix,@Nullable String strip)
+    {
+        LinkedHashMap<String, Long> map = Maps.newLinkedHashMap();
+
+        for (Map.Entry<String, Long> entry : data.entrySet())
+        {
+            String key = entry.getKey();
+            if (key != null && key.startsWith(prefix))
+            {
+                if (strip != null && key.startsWith(strip) && key.length() != strip.length())
+                    key = key.replaceFirst(strip, "");
+
+                map.put(key, entry.getValue());
             }
         }
         return map;
@@ -124,7 +148,7 @@ public class AreaCountExporter extends AbstractExporter
     {
         {
 
-            LinkedHashMap<String, Long> data = asLinkedHashMap(commentRepo.areaCount());
+            LinkedHashMap<String, Long> data = Repos.asLinkedHashMap(commentRepo.areaCount());
             long count = commentRepo.countByHostNameNotNull();
             export("total", "总计", asPieCount(data, count, getLimit()));
 
@@ -132,9 +156,12 @@ public class AreaCountExporter extends AbstractExporter
             export("total-province", "一级区域", asPieCount(reduceToTopArea(data), count, getLimit()));
 
             // 热门地区
-            export("total-sh", "上海", asPieCount(filterByPrefix(data,"上海")));
-            export("total-bj", "北京", asPieCount(filterByPrefix(data,"北京")));
-            export("total-gd", "广东", asPieCount(filterByPrefix(data,"广东")));
+            export("total-sh", "上海", asPieCount(filterByPrefix(data,"上海", "上海市")));
+            export("total-bj", "北京", asPieCount(filterByPrefix(data,"北京", "北京市")));
+            export("total-gd", "广东", asPieCount(filterByPrefix(data,"广东", "广东省")));
+
+            // 大学
+            export("total-collage", "大学", asPieCount(filterByContain(data, "大学")));
         }
 
         {
@@ -148,7 +175,7 @@ public class AreaCountExporter extends AbstractExporter
                 LocalDateTime endTime = startTime.plusMonths(1);
                 long count = commentRepo.countByHostNameIsNotNullAndDateBetween(startTime, endTime);
 
-                LinkedHashMap<String, Long> srcData = asLinkedHashMap(commentRepo.areaCount(startTime, endTime));
+                LinkedHashMap<String, Long> srcData = Repos.asLinkedHashMap(commentRepo.areaCount(startTime, endTime));
                 String category = formatter.print(start);
                 export(category, category + "-前十五", asPieCount(reduceToTopArea(srcData), count, getLimit()));
             }

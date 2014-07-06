@@ -19,7 +19,6 @@ import javax.persistence.PersistenceUnit;
 import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.repo.ArticleRepo;
 import me.wener.cbhistory.repo.CommentRepo;
-import me.wener.cbhistory.export.LabelValue;
 import me.wener.cbhistory.spring.SpringContextConfig;
 import me.wener.cbhistory.utils.Same;
 import org.joda.time.LocalDateTime;
@@ -83,7 +82,7 @@ public class TextManultExport
         SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
 
         Map<String, Map<String, Long>> countDate = Maps.newHashMap();
-        List<String> allSource = articleRepo.findAllSource();
+        List<String> allSource = articleRepo.allSource();
         for (String source : allSource)
         {
             Map<Date, Long> dateCount = articleRepo.countBySourceGroupByDateOrderByDateDesc(source);

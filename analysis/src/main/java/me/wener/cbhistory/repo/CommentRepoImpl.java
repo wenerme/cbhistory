@@ -1,5 +1,6 @@
 package me.wener.cbhistory.repo;
 
+import java.util.Map;
 import javax.inject.Named;
 import me.wener.cbhistory.domain.entity.CommentEntity;
 import me.wener.cbhistory.domain.entity.QCommentEntity;

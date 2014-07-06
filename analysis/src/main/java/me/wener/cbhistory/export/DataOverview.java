@@ -11,10 +11,15 @@ public class DataOverview
     private long articleCount;
     @SerializedName("评论总数")
     private long commentCount;
+    @SerializedName("应有评论总数")
+    private long allCommentCount;
+    @SerializedName("评论收集比率")
+    private double commentGatherRatio;
     @SerializedName("区域总数")
     private long areaCount;
     @SerializedName("发布者总数")
     private long sourceCount;
+
 
     @SerializedName("最早评论日期")
     private Date firstCommentDate;

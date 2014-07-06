@@ -66,13 +66,8 @@ public class ArticleRepoImpl extends BasicCustom implements ArticleRepoCustom
     @Override
     public double collectionRate()
     {
-        return getCommentRepo().count() / (double) getArticleRepo().sumOfDiscussCount();
+        return getCommentRepo().count() / (double) getArticleRepo().countOfAllDiscuss();
     }
-
-//    public List<String> findAllSources()
-//    {
-//
-//    }
 
     @Override
     public LinkedHashMap<Date, Long> countBySourceGroupByDateOrderByDateDesc(String source)
@@ -91,7 +86,7 @@ public class ArticleRepoImpl extends BasicCustom implements ArticleRepoCustom
     public long countOfSource()
     {
         // TODO 考虑使用一条语句完成
-        return getArticleRepo().sourceCount().size();
+        return getArticleRepo().allSource().size();
     }
 
 }

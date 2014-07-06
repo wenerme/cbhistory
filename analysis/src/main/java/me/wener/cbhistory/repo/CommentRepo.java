@@ -15,13 +15,18 @@ public interface CommentRepo
         extends BasicRepo<CommentEntity, Long>, CommentRepoCustom
 {
     Collection<CommentEntity> findAllByDateIsNull();
+
     Collection<CommentEntity> findAllByDateIsNotNull();
 
 
     long countByDateIsNull();
+
     long countByDateIsNotNull();
+
     long countByHostNameNotNull();
+
     long countByDateBetween(LocalDateTime start, LocalDateTime end);
+
     long countByHostNameIsNotNullAndDateBetween(LocalDateTime start, LocalDateTime end);
 
     @Query("select e.hostName from CommentEntity e " +
@@ -30,15 +35,31 @@ public interface CommentRepo
 
     @Query("select min(a.date) from CommentEntity a")
     LocalDateTime firstCommentDate();
+
     @Query("select min(a.tid) from CommentEntity a")
     long firstCommentId();
 
-    @Query("select e.hostName, count(e.id) as _num from CommentEntity e group by e.hostName order by _num desc ")
+    @Query("select e.hostName, count(e.id) as _num from CommentEntity e " +
+            "group by e.hostName order by _num desc ")
     List<Object[]> areaCount();
+
+    /**
+     * 以小时分组, 返回每小时的统计数量
+     * TODO 这里 group by 应该用 _hour, 但是使用 _hour 会出错
+     * @return Map&lt;Integer, Long&gt;
+     */
+    @Query("select hour(e.date) as _hour, count(*) as _num from CommentEntity e " +
+            "group by hour(e.date) order by _hour desc")
+    List<Object[]> hourCount();
+
+    @Query("select hour(e.date) as _hour, count(*) as _num from CommentEntity e " +
+            "where e.date >:start and e.date<:end " +
+            "group by hour(e.date) order by _hour desc")
+    List<Object[]> hourCount(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
     @Query("select e.hostName, count(e.id) as _num " +
             "from CommentEntity e " +
             "where e.date > :start and e.date < :end " +
             "group by e.hostName order by _num desc ")
-    List<Object[]> areaCount(@Param("start")LocalDateTime start, @Param("end")LocalDateTime end);
+    List<Object[]> areaCount(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }
