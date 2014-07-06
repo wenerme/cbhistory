@@ -1,16 +1,38 @@
+(function (global)
+{
+	// 代表数据, 不用 data, 为了避免不必要的冲突
+	var loading = false;
+	var $loading = $("#loading-alert").hide();
+	var Datum = {};
+	global.Datum = Datum;
 
-// 代表数据, 不用 data, 为了避免不必要的冲突
-var Datum = {};
-Datum.getDataUrl = function (code, category)
-{
-	return "data/" + code + "-" + category + ".json";
-};
-Datum.loadData = function (code, category, cb)
-{
-	var url = Datum.getDataUrl(code, category);
-	console.log("Load data ", url);
-	$.getJSON(url, cb)
-};
+	Datum.getDataUrl = function (code, category)
+	{
+		return "data/" + code + "-" + category + ".json";
+	};
+	function doLoading(isLoading)
+	{
+		loading = isLoading;
+		window.setTimeout(function()
+		{
+			if(loading)
+				$loading.slideDown();
+			else
+				$loading.slideUp();
+		}, 200);
+	}
+	Datum.loadData = function (code, category, cb)
+	{
+		var url = Datum.getDataUrl(code, category);
+		console.log("Load data ", url);
+		doLoading(true);
+		$.getJSON(url, function ()
+		{
+			doLoading(false);
+			cb.apply(this, arguments);
+		});
+	};
+})(window);
 
 (function (global)
 {
@@ -93,8 +115,6 @@ var ChartItem = Ractive.extend(
 
 $(function ()
 {
-//	loadChart("source-count");
-//	loadChart("area-count");
 
 	Charts.registerDefaultChart(function ()
 	{
