@@ -28,12 +28,15 @@
 	{
 		var url = Datum.getDataUrl(code, category);
 		console.log("Load data ", url);
-		doLoading(true);
+		cb && doLoading(true);
+		// 有可能使用 promise 的方式调用
+		return cb?
 		$.getJSON(url, function ()
 		{
 			doLoading(false);
 			cb.apply(this, arguments);
-		});
+		}):
+		$.getJSON(url);
 	};
 })(window);
 
@@ -43,11 +46,12 @@
 (function (global)
 {
 	var charts = {};
+	var doneHandler = {};
 	var defaultChart = null;
 
 	function getChart(code, category, options)
 	{
-		var cb = charts[getKey(code, category)] || defaultChart;
+		var cb = charts[getKey(code, category)] || charts[getKey(code,"*")] || charts[getKey("*","*")] || defaultChart;
 		if (!cb)
 		{
 			console.error("无法处理表 " + code + " - " + category);
@@ -68,11 +72,22 @@
 	{
 		defaultChart = cb;
 	}
+	function done(code, category, cb)
+	{
+		if(! cb)
+		{
+			cb = doneHandler[getKey(code, category)] || doneHandler[getKey(code,"*")] || doneHandler[getKey("*","*")];
+			return cb && cb(code, category);
+		}else{
+			doneHandler[getKey(code, category)] = cb;
+		}
+	}
 
 	var Charts = {};
 	Charts.getChart = getChart;
 	Charts.registerDefaultChart = registerDefaultChart;
 	Charts.registerChart = registerChart;
+	Charts.done = done;
 	global.Charts = Charts;
 })(window);
 
@@ -113,6 +128,8 @@ var ChartItem = Ractive.extend(
 
 					return chart;
 				});
+				// 完成一个数据表的加载
+				Charts.done(self.data.code, self.data.showCategory);
 			});
 		},
 		data: { }
@@ -131,6 +148,15 @@ $(function ()
 			.labelType("percent")
 			.showLabels(true);
 		return chart;
+	});
+
+	var loadLine = {"publisher-active-time":true,"commenter-active-time":true};
+	Charts.done("*","*", function(code)
+	{
+		if(!loadLine[code])
+			return;
+		loadLineChart(code);
+		loadLine[code] = false;
 	});
 
 	// 初始化
@@ -172,4 +198,70 @@ $(function ()
 			window.ractive = ractive;
 		});
 	}
+
+
 });
+// 将一系列的饼图数据转换为折线图
+function loadLineChart(code)
+{
+	var $section = $('#'+code);
+	var $options = $section.find('option[value*=total]');
+	var names = [];
+
+	return $.when.apply($, $options.map(function(v,k)
+	{
+		var $this = $(this);
+		names.push($this.val());
+		names[$this.val()] = $this.text();
+
+		return Datum.loadData(code, $this.val());
+	})).then(function()
+	{
+		window.allData = arguments;
+		var args = arguments;
+		var data = [];
+		$.each(names, function(i,v)
+		{
+			data.push({key:names[v], values: args[i][0]})
+		});
+		return data;
+	}).then(function(data)
+	{
+		//if(false)
+		nv.addGraph(function() {
+			var chart = nv.models.lineChart()
+					.margin({left: 100})  //Adjust chart margins to give the x-axis some breathing room.
+					.useInteractiveGuideline(true)  //We want nice looking tooltips and a guideline!
+					.transitionDuration(350)  //how fast do you want the lines to transition?
+					.showLegend(true)       //Show the legend, allowing users to turn on/off line series.
+					.showYAxis(true)        //Show the y-axis
+					.showXAxis(true)        //Show the x-axis
+					.x(function(d){return +d.label})
+					.y(function(d){return d.value})
+				;
+
+			chart.xAxis
+				.axisLabel('时')
+				.tickFormat(d3.format('d'))
+			;
+
+			chart.yAxis
+				.axisLabel('数量')
+				.tickFormat(d3.format('d'))
+			;
+
+//			d3.select('#chart svg')
+			d3.select($('<div class="chart"><svg/></div>').appendTo($section).find('svg')[0])
+				.datum(data)
+				.transition().duration(500)
+				.call(chart)
+			;
+
+			nv.utils.windowResize(chart.update);
+
+			return chart;
+		});
+
+		return data;
+	});
+}
