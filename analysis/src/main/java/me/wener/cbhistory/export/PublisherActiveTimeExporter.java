@@ -10,7 +10,7 @@ import org.joda.time.YearMonth;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class CommenterActiveTimeExporter extends AbstractExporter
+public class PublisherActiveTimeExporter extends AbstractExporter
 {
     @Inject
     protected ArticleRepo articleRepo;
@@ -20,24 +20,29 @@ public class CommenterActiveTimeExporter extends AbstractExporter
     @Override
     public String getCode()
     {
-        return "commenter-active-time";
+        return "publisher-active-time";
     }
 
     @Override
     public String getTitle()
     {
-        return "喷子活跃时间段";
+        return "发布者活跃时间段";
     }
 
     @Override
     public void doExport(LocalDateTime startExportTime, LocalDateTime endExportTime)
     {
         {
-            LinkedHashMap<Integer, Long> data = Repos.asLinkedHashMap(commentRepo.hourCount());
+            LinkedHashMap<Integer, Long> data = Repos.asLinkedHashMap(articleRepo.hourCount());
             export("total", "总计", asPieCount(data));
-            export("total-bj", "北京地区", asPieCount(Repos.<Integer, Long>asLinkedHashMap(commentRepo.hourCountByAreaLike("北京%"))));
-            export("total-sh", "上海地区", asPieCount(Repos.<Integer, Long>asLinkedHashMap(commentRepo.hourCountByAreaLike("上海%"))));
-            export("total-gd", "广东地区", asPieCount(Repos.<Integer, Long>asLinkedHashMap(commentRepo.hourCountByAreaLike("广东%"))));
+            export("total-cb", "cnBeta.COM", asPieCount(Repos.<Integer, Long>asLinkedHashMap(articleRepo
+                    .hourCountBySource("cnBeta.COM"))));
+            export("total-txkj", "腾讯科技", asPieCount(Repos.<Integer, Long>asLinkedHashMap(articleRepo
+                    .hourCountBySource("腾讯科技"))));
+            export("total-txsm", "腾讯数码", asPieCount(Repos.<Integer, Long>asLinkedHashMap(articleRepo
+                    .hourCountBySource("腾讯数码"))));
+            export("total-qdzj", "驱动之家", asPieCount(Repos.<Integer, Long>asLinkedHashMap(articleRepo
+                    .hourCountBySource("驱动之家"))));
         }
         {
             // 导出每个月
@@ -49,7 +54,7 @@ public class CommenterActiveTimeExporter extends AbstractExporter
                 LocalDateTime startTime = new LocalDateTime(start.getYear(), start.getMonthOfYear(), 1, 0, 0);
                 LocalDateTime endTime = startTime.plusMonths(1);
 
-                LinkedHashMap<Integer, Long> data = Repos.asLinkedHashMap(commentRepo.hourCount(startTime, endTime));
+                LinkedHashMap<Integer, Long> data = Repos.asLinkedHashMap(articleRepo.hourCount(startTime, endTime));
 
                 String category = formatter.print(start);
                 export(category, null, asPieCount(data));

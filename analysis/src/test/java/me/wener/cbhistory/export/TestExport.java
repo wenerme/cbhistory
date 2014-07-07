@@ -41,6 +41,7 @@ public class TestExport
         mgr.addExporter(SourceCountExporter.class);
         mgr.addExporter(AreaCountExporter.class);
         mgr.addExporter(CommenterActiveTimeExporter.class);
+        mgr.addExporter(PublisherActiveTimeExporter.class);
         mgr.doExport(commentRepo.firstCommentDate(), LocalDateTime.now());
     }
     @Test

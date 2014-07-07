@@ -166,6 +166,10 @@ e.g.
 
 以地区统计
 按省统计, 因为有些地区是带有市的
+
+前十个地区每天评论数量~?
+评论者在一天中的活跃时间
+文章发布者在一天中的活跃时间
 	
 area-count-
 	total
@@ -183,3 +187,4 @@ Exporter
 
 谷歌地图
 https://maps.google.co.uk/maps?q=LATITUDE_HERE,LONGITUDE_HERE&z=11
+

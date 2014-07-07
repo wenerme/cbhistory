@@ -51,6 +51,10 @@ public interface CommentRepo
     @Query("select hour(e.date) as _hour, count(*) as _num from CommentEntity e " +
             "group by hour(e.date) order by _hour desc")
     List<Object[]> hourCount();
+    @Query("select hour(e.date) as _hour, count(*) as _num from CommentEntity e " +
+            "where e.hostName like :area " +
+            "group by hour(e.date) order by _hour desc")
+    List<Object[]> hourCountByAreaLike(@Param("area") String area);
 
     @Query("select hour(e.date) as _hour, count(*) as _num from CommentEntity e " +
             "where e.date >:start and e.date<:end " +
