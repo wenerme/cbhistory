@@ -161,21 +161,21 @@ $(function ()
 
 	// 初始化
 	//if(false)
+	function tryFormat(val)
+	{
+		// 尝试格式化日期
+		if (!/^\d+$/.test(val))
+		{
+			var m = moment(val);
+			if (!m.isValid())
+				return val;
+			return m.format('llll')+" ("+ m.fromNow()+")";
+		}
+		return val;
+	}
 	Datum.loadData("data", "info", function (data)
 	{
-		data.formatValue = function (val)
-		{
-			console.log("format ", val);
-			// 尝试格式化日期
-			if (!/^\d+$/.test(val))
-			{
-				var m = moment(val);
-				if (!m.isValid())
-					return val;
-				return m.format('llll')+" ("+ m.fromNow()+")";
-			}
-			return val;
-		};
+		data.formatValue = tryFormat;
 
 		var ractive = new Ractive({
 			el: "#system-info",

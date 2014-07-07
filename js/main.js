@@ -155,3 +155,34 @@ $(function ()
 		//.find('[data-theme=simplex]').click()
 	;
 });
+
+$(function()
+{
+	// page js 暂不支持 hashbang 所以暂时不做这些页面
+	if(false)
+	{
+		page("/stat",function()
+		{
+			console.log("统计页面");
+		});
+		page("#/about",function()
+		{
+			console.log("关于页面");
+		});
+
+		page("/",function()
+		{
+			console.log("主页面");
+		});
+		page("#/hot",function()
+		{
+			console.log("热门评论页面");
+		});
+		page("*",function()
+		{
+			console.log("404", arguments);
+		});
+		page.base(location.pathname.substr(0,location.pathname.length-1));
+		page();
+	}
+});
