@@ -131,6 +131,12 @@
 			right: 20px;
 			bottom: 20px;
 		}
+		#theme-selector
+		{
+			position: fixed;
+			right: 20px;
+			top: 60px;
+		}
 	</style>
 	<script id="system-info-tpl" type="text/ractive">
 		<h2>系统信息 <small><button class="btn btn-xs btn-primary" data-toggle-target="#system-info>div">隐藏</button></small></h2>
@@ -248,11 +254,11 @@
 	<div id="theme-selector">
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-				<i class="fa fa-cloud-download"></i>选择主题
+				<i class="fa fa-cloud-download"></i>下载源码
 				<span class="caret"></span></a>
 			<ul class="dropdown-menu" role="menu">
-				<li>Default</li>
-				<li>Better</li>
+				<li><a href="https://github.com/wenerme/cbhistoryzipball/master">ZIP</a></li>
+				<li><a href="https://github.com/wenerme/cbhistory/tarball/master">TAR.GZ</a></li>
 			</ul>
 		</li>
 	</div>
