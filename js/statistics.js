@@ -1,6 +1,9 @@
+/**
+ * Datum 数据操作工具类
+ */
 (function (global)
 {
-	// 代表数据, 不用 data, 为了避免不必要的冲突
+	// datum 代表数据, 不用 data, 为了避免不必要的冲突
 	var loading = false;
 	var $loading = $("#loading-alert").hide();
 	var Datum = {};
@@ -34,6 +37,9 @@
 	};
 })(window);
 
+/**
+ * Charts 用于获取chart
+ */
 (function (global)
 {
 	var charts = {};
@@ -127,6 +133,8 @@ $(function ()
 		return chart;
 	});
 
+	// 初始化
+	//if(false)
 	Datum.loadData("data", "info", function (data)
 	{
 		data.formatValue = function (val)

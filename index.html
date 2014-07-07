@@ -42,8 +42,6 @@
 	<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">-->
 	<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"/>
-	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-	<link href="assets/css/bootstrap-theme.min.css" rel="stylesheet">
 	<!--<link href="assets/css/font-awesome.min.css" rel="stylesheet">-->
 	<link href="assets/css/nv.d3.css" rel="stylesheet">
 
@@ -55,8 +53,10 @@
 	<![endif]-->
 
 	<script src="assets/js/jquery.js"></script>
+	<!--Bootstrap-->
 	<!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
-	<script src="assets/js/bootstrap.min.js"></script>
+	<link id="bootstrap-css" href="assets/bootstrap/css/bootstrap-simplex.css" rel="stylesheet">
+	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
 
 	<script src="assets/js/d3.v3.js"></script>
 	<script src="assets/js/nv.d3.js"></script>
@@ -118,6 +118,16 @@
 			padding-top: 70px;
 		}
 
+		.logo-img
+		{
+			background-image: url("favicon/favicon-16x16.png");
+			background-size: contain;
+			display: inline-block;
+			width: 16px;
+			height: 16px;
+			vertical-align: bottom;
+		}
+		/* 表情的样式 */
 		.emoji
 		{
 			width: 1.2em;
@@ -131,11 +141,17 @@
 			right: 20px;
 			bottom: 20px;
 		}
-		#theme-selector
-		{
+		#switcher-container {
 			position: fixed;
-			right: 20px;
 			top: 60px;
+			right: 5px;
+			z-index: 100;
+		}
+		@media (max-width: 980px) {
+			#switcher-container {
+				position: absolute;
+				top: 55px;
+			}
 		}
 	</style>
 	<script id="system-info-tpl" type="text/ractive">
@@ -191,7 +207,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#">CBHistory</a>
+			<a class="navbar-brand" href="#"><div class="logo-img"></div>CBHistory</a>
 		</div>
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
@@ -204,6 +220,7 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="https://github.com/wenerme/cbhistory/"><i class="fa fa-github"></i> CBHistory</a></li>
+				<li><a href="https://github.com/wenerme/"><i class="fa fa-github-alt"></i> @wenerme</a></li>
 				<li><a href="https://github.com/wenerme/cbhistory/fork"><i class="fa fa-code-fork"></i> Fork</a></li>
 
 				<li class="dropdown">
@@ -239,29 +256,58 @@
 	</div>
 
 	<!--主要内容-->
-	<div id="system-info" class="clearfix">
+	<div id="page-container">
+		<div id="system-info" class="clearfix">
 
+		</div>
+
+		<div id="chart-item-container">
+
+		</div>
 	</div>
 
-	<div id="chart-item-container">
-
-	</div>
-
-
+	<!--加载提示-->
 	<div id="loading-alert" class="alert alert-info" role="alert">
 		正在加载, 请稍候.
 	</div>
-	<div id="theme-selector">
-		<li class="dropdown">
-			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-				<i class="fa fa-cloud-download"></i>下载源码
-				<span class="caret"></span></a>
-			<ul class="dropdown-menu" role="menu">
-				<li><a href="https://github.com/wenerme/cbhistoryzipball/master">ZIP</a></li>
-				<li><a href="https://github.com/wenerme/cbhistory/tarball/master">TAR.GZ</a></li>
-			</ul>
-		</li>
+
+	<!-- 主题切换 -->
+	<div id="switcher-container">
+		<div id="switcher-bootstrap">
+			<div class="btn-group">
+				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+					Theme: <span id="bootstrap-current">Normal</span>
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu pull-right">
+					<li><a href="javascript:void(0);" data-theme="normal">Normal</a></li>
+					<li class="divider"></li>
+					<li><a href="javascript:void(0);" data-theme="amelia">Amelia</a></li>
+					<li><a href="javascript:void(0);" data-theme="cerulean">Cerulean</a></li>
+					<li><a href="javascript:void(0);" data-theme="cosmo">Cosmo</a></li>
+					<li><a href="javascript:void(0);" data-theme="cupid">Cupid</a></li>
+					<li><a href="javascript:void(0);" data-theme="cyborg">Cyborg</a></li>
+					<li><a href="javascript:void(0);" data-theme="darkly">Darkly</a></li>
+					<li><a href="javascript:void(0);" data-theme="flatly">Flatly</a></li>
+					<li><a href="javascript:void(0);" data-theme="journal">Journal</a></li>
+					<li><a href="javascript:void(0);" data-theme="lumen">Lumen</a></li>
+					<li><a href="javascript:void(0);" data-theme="pinkiepie">Pinkie Pie</a></li>
+					<li><a href="javascript:void(0);" data-theme="readable">Readable</a></li>
+					<li><a href="javascript:void(0);" data-theme="simplex">Simplex</a></li>
+					<li><a href="javascript:void(0);" data-theme="shamrock">Shamrock</a></li>
+					<li><a href="javascript:void(0);" data-theme="slate">Slate</a></li>
+					<li><a href="javascript:void(0);" data-theme="spacelab">Spacelab</a></li>
+					<li><a href="javascript:void(0);" data-theme="superhero">Superhero</a></li>
+					<li><a href="javascript:void(0);" data-theme="united">United</a></li>
+					<li><a href="javascript:void(0);" data-theme="yeti">Yeti</a></li>
+					<li class="divider"></li>
+					<li><a href="http://bootswatch.com/" target="_blank">Certain Themes by Bootswatch</a></li>
+				</ul>
+			</div>
+		</div>
 	</div>
+	<!-- /主题切换 -->
+
 </div>
 <!-- /container -->
 
