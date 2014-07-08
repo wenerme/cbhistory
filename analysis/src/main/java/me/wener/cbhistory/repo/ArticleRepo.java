@@ -43,14 +43,29 @@ public interface ArticleRepo
     List<Object[]> hourCount();
 
     @Query("select hour(e.date) as _hour, count(*) as _num from ArticleEntity e " +
+            "where e.date is not null " +
+            "group by hour(e.date) order by _hour desc")
+    List<Object[]> hourCountNotNull();
+
+    @Query("select hour(e.date) as _hour, count(*) as _num from ArticleEntity e " +
             "where e.source = :source " +
             "group by hour(e.date) order by _hour desc")
     List<Object[]> hourCountBySource(@Param("source") String source);
+
+    @Query("select hour(e.date) as _hour, count(*) as _num from ArticleEntity e " +
+            "where e.source = :source and e.date is not null " +
+            "group by hour(e.date) order by _hour desc")
+    List<Object[]> hourCountBySourceNotNull(@Param("source") String source);
 
 
     @Query("select hour(e.date) as _hour, count(*) as _num from ArticleEntity e " +
             "where e.date >:start and e.date<:end " +
             "group by hour(e.date) order by _hour desc")
     List<Object[]> hourCount(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    @Query("select hour(e.date) as _hour, count(*) as _num from ArticleEntity e " +
+            "where e.date is not null and e.date >:start and e.date<:end " +
+            "group by hour(e.date) order by _hour desc")
+    List<Object[]> hourCountNotNull(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
 }

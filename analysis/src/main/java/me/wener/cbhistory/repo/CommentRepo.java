@@ -46,11 +46,13 @@ public interface CommentRepo
     /**
      * 以小时分组, 返回每小时的统计数量
      * TODO 这里 group by 应该用 _hour, 但是使用 _hour 会出错
+     *
      * @return Map&lt;Integer, Long&gt;
      */
     @Query("select hour(e.date) as _hour, count(*) as _num from CommentEntity e " +
             "group by hour(e.date) order by _hour desc")
     List<Object[]> hourCount();
+
     @Query("select hour(e.date) as _hour, count(*) as _num from CommentEntity e " +
             "where e.hostName like :area " +
             "group by hour(e.date) order by _hour desc")
@@ -60,6 +62,20 @@ public interface CommentRepo
             "where e.date >:start and e.date<:end " +
             "group by hour(e.date) order by _hour desc")
     List<Object[]> hourCount(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    @Query("select hour(e.date) as _hour, count(*) as _num from CommentEntity e where e.date is not NULL " +
+            "group by hour(e.date) order by _hour desc")
+    List<Object[]> hourCountNotNull();
+
+    @Query("select hour(e.date) as _hour, count(*) as _num from CommentEntity e " +
+            "where e.hostName like :area and e.date is not NULL " +
+            "group by hour(e.date) order by _hour desc")
+    List<Object[]> hourCountNotNullByAreaLike(@Param("area") String area);
+
+    @Query("select hour(e.date) as _hour, count(*) as _num from CommentEntity e " +
+            "where e.date is not NULL and e.date >:start and e.date<:end " +
+            "group by hour(e.date) order by _hour desc")
+    List<Object[]> hourCountNotNull(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
     @Query("select e.hostName, count(e.id) as _num " +
             "from CommentEntity e " +

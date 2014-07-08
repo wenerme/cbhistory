@@ -33,16 +33,16 @@ public class PublisherActiveTimeExporter extends AbstractExporter
     public void doExport(LocalDateTime startExportTime, LocalDateTime endExportTime)
     {
         {
-            LinkedHashMap<Integer, Long> data = Repos.asLinkedHashMap(articleRepo.hourCount());
+            LinkedHashMap<Integer, Long> data = Repos.asLinkedHashMap(articleRepo.hourCountNotNull());
             export("total", "总计", asPieCount(data));
             export("total-cb", "cnBeta.COM", asPieCount(Repos.<Integer, Long>asLinkedHashMap(articleRepo
-                    .hourCountBySource("cnBeta.COM"))));
+                    .hourCountBySourceNotNull("cnBeta.COM"))));
             export("total-txkj", "腾讯科技", asPieCount(Repos.<Integer, Long>asLinkedHashMap(articleRepo
-                    .hourCountBySource("腾讯科技"))));
+                    .hourCountBySourceNotNull("腾讯科技"))));
             export("total-txsm", "腾讯数码", asPieCount(Repos.<Integer, Long>asLinkedHashMap(articleRepo
-                    .hourCountBySource("腾讯数码"))));
+                    .hourCountBySourceNotNull("腾讯数码"))));
             export("total-qdzj", "驱动之家", asPieCount(Repos.<Integer, Long>asLinkedHashMap(articleRepo
-                    .hourCountBySource("驱动之家"))));
+                    .hourCountBySourceNotNull("驱动之家"))));
         }
         {
             // 导出每个月
@@ -54,7 +54,7 @@ public class PublisherActiveTimeExporter extends AbstractExporter
                 LocalDateTime startTime = new LocalDateTime(start.getYear(), start.getMonthOfYear(), 1, 0, 0);
                 LocalDateTime endTime = startTime.plusMonths(1);
 
-                LinkedHashMap<Integer, Long> data = Repos.asLinkedHashMap(articleRepo.hourCount(startTime, endTime));
+                LinkedHashMap<Integer, Long> data = Repos.asLinkedHashMap(articleRepo.hourCountNotNull(startTime, endTime));
 
                 String category = formatter.print(start);
                 export(category, null, asPieCount(data));

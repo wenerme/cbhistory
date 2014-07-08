@@ -33,11 +33,11 @@ public class CommenterActiveTimeExporter extends AbstractExporter
     public void doExport(LocalDateTime startExportTime, LocalDateTime endExportTime)
     {
         {
-            LinkedHashMap<Integer, Long> data = Repos.asLinkedHashMap(commentRepo.hourCount());
+            LinkedHashMap<Integer, Long> data = Repos.asLinkedHashMap(commentRepo.hourCountNotNull());
             export("total", "总计", asPieCount(data));
-            export("total-bj", "北京地区", asPieCount(Repos.<Integer, Long>asLinkedHashMap(commentRepo.hourCountByAreaLike("北京%"))));
-            export("total-sh", "上海地区", asPieCount(Repos.<Integer, Long>asLinkedHashMap(commentRepo.hourCountByAreaLike("上海%"))));
-            export("total-gd", "广东地区", asPieCount(Repos.<Integer, Long>asLinkedHashMap(commentRepo.hourCountByAreaLike("广东%"))));
+            export("total-bj", "北京地区", asPieCount(Repos.<Integer, Long>asLinkedHashMap(commentRepo.hourCountNotNullByAreaLike("北京%"))));
+            export("total-sh", "上海地区", asPieCount(Repos.<Integer, Long>asLinkedHashMap(commentRepo.hourCountNotNullByAreaLike("上海%"))));
+            export("total-gd", "广东地区", asPieCount(Repos.<Integer, Long>asLinkedHashMap(commentRepo.hourCountNotNullByAreaLike("广东%"))));
         }
         {
             // 导出每个月
@@ -49,7 +49,7 @@ public class CommenterActiveTimeExporter extends AbstractExporter
                 LocalDateTime startTime = new LocalDateTime(start.getYear(), start.getMonthOfYear(), 1, 0, 0);
                 LocalDateTime endTime = startTime.plusMonths(1);
 
-                LinkedHashMap<Integer, Long> data = Repos.asLinkedHashMap(commentRepo.hourCount(startTime, endTime));
+                LinkedHashMap<Integer, Long> data = Repos.asLinkedHashMap(commentRepo.hourCountNotNull(startTime, endTime));
 
                 String category = formatter.print(start);
                 export(category, null, asPieCount(data));
