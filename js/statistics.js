@@ -163,9 +163,16 @@ $(function ()
 	//if(false)
 	function tryFormat(val)
 	{
-		// 尝试格式化日期
-		if (!/^\d+$/.test(val))
+		// 格式化分数
+		if(/^\d+\.\d+$/.test(val))
 		{
+			// 转换为百分比
+			if(val < 1)
+				return (val * 100 + "").substr(0,5)+ "%";
+		}
+
+		if (!/^\d+$/.test(val))
+		{// 尝试格式化日期
 			var m = moment(val);
 			if (!m.isValid())
 				return val;
