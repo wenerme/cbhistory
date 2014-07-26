@@ -210,6 +210,7 @@ function loadLineChart(code)
 
 	return $.when.apply($, $options.map(function(v,k)
 	{
+		// 加载所有数据
 		var $this = $(this);
 		names.push($this.val());
 		names[$this.val()] = $this.text();
@@ -217,13 +218,15 @@ function loadLineChart(code)
 		return Datum.loadData(code, $this.val());
 	})).then(function()
 	{
+		// 从新格式化数据, 排序数据
 		window.allData = arguments;
 		var args = arguments;
 		var data = [];
 		$.each(names, function(i,v)
 		{
-			data.push({key:names[v], values: args[i][0]})
+			data.push({key:names[v], values: args[i][0].sort(function(a,b){return a.label - b.label})});
 		});
+		//debugger
 		return data;
 	}).then(function(data)
 	{
