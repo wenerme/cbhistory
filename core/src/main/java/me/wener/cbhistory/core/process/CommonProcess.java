@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.*;
 
 import com.google.gson.Gson;
 import javax.inject.Inject;
-import javax.inject.Named;
 import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
 import lombok.Getter;
@@ -24,6 +23,14 @@ import org.joda.time.Minutes;
 public abstract class CommonProcess
 {
 
+    /**
+     * Gson 是比较常用,不需要太多的实例,gson 是线程安全的.
+     */
+    protected static Gson gson = Same.getGson();
+    @Inject
+    protected ArticleService articleSvc;
+    @Inject
+    protected CommentService commentSvc;
     /**
      * 文章更新间隔
      * <pre>
@@ -52,15 +59,37 @@ public abstract class CommonProcess
     @Getter
     private int articleExpiredHours = 7 * 24;
 
-    @Inject
-    protected ArticleService articleSvc;
-    @Inject
-    protected CommentService commentSvc;
-
     /**
-     * Gson 是比较常用,不需要太多的实例,gson 是线程安全的.
+     * 确保能获取到响应,默认将会尝试三次
      */
-    protected static Gson gson = Same.getGson();
+    public static HttpResponse insureResponse(HttpRequest request)
+    {
+        return insureResponse(request, 3);
+    }
+
+    public static HttpResponse insureResponse(HttpRequest request, int retryTimes)
+    {
+        HttpResponse response = null;
+        int totalTimes = retryTimes;
+        do
+        {
+            try
+            {
+                response = request.send();
+            } catch (jodd.http.HttpException ex)
+            {
+                log.warn("第 {} 次 获取响应失败: {}", totalTimes - retryTimes + 1, ex.getMessage());
+            }
+        } while (response == null && retryTimes-- > 0);
+
+        if (response != null && response.statusCode() != 200)
+        {
+            log.error("获取 URL 返回状态码异常 status: {} 请求的url为: {},参数: {}"
+                    , response.statusCode(), request.url(), request.query());
+        }
+
+        return response;
+    }
 
     /**
      * 判断该文章是否需要更新
@@ -106,37 +135,5 @@ public abstract class CommonProcess
     public LocalDateTime getCommentExpiredDate(Article article)
     {
         return new LocalDateTime(article.getDate()).plusHours(articleExpiredHours);
-    }
-
-    /**
-     * 确保能获取到响应,默认将会尝试三次
-     */
-    public static HttpResponse insureResponse(HttpRequest request)
-    {
-        return insureResponse(request, 3);
-    }
-
-    public static HttpResponse insureResponse(HttpRequest request, int retryTimes)
-    {
-        HttpResponse response = null;
-        int totalTimes = retryTimes;
-        do
-        {
-            try
-            {
-                response = request.send();
-            } catch (jodd.http.HttpException ex)
-            {
-                log.warn("第 {} 次 获取响应失败: {}", totalTimes-retryTimes+1, ex.getMessage());
-            }
-        } while (response == null && retryTimes-- > 0);
-
-        if(response != null && response.statusCode() != 200)
-        {
-            log.error("获取 URL 返回状态码异常 status: {} 请求的url为: {},参数: {}"
-                    , response.statusCode(), request.url(), request.query());
-        }
-
-        return response;
     }
 }

@@ -8,6 +8,7 @@ public abstract class AbstractPluginModule extends AbstractModule implements IPl
 {
     @Getter
     private static EventBus eventBus = AbstractPlugin.getEventBus();
+
     @Override
     public void init()
     {

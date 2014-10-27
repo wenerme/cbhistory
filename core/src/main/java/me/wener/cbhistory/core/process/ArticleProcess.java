@@ -72,7 +72,7 @@ public class ArticleProcess extends CommonProcess
             try
             {
                 ids.add(Long.parseLong(id));
-            }catch (Exception ex){log.error("解析ID出现异常", ex);}
+            } catch (Exception ex) {log.error("解析ID出现异常", ex);}
         }
 
         log.info("在内容中共发现 {} 个id", ids.size());
@@ -101,7 +101,7 @@ public class ArticleProcess extends CommonProcess
                 if (isArticleNeedUpdate(article))
                 {
                     log.debug("发现的文章已经存在,需要更新. {}", article);
-                    tryUpdate ++;
+                    tryUpdate++;
                     Events.post(new TryUpdateCommentEvent(article));
                 } else
                     log.debug("发现的文章已经存在,尚且不需要更新. {}", article);
@@ -113,7 +113,7 @@ public class ArticleProcess extends CommonProcess
         }
 
         log.info("{} 共计 {} 个id, 发现 {} 个新的id, {} 个进行评论更新, {} 个无任何操作"
-                ,e.getDescription(), total, tryFound, tryUpdate, total-(tryFound+tryUpdate));
+                , e.getDescription(), total, tryFound, tryUpdate, total - (tryFound + tryUpdate));
     }
 
     @Subscribe

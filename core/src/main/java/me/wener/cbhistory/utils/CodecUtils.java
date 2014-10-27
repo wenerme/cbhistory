@@ -20,13 +20,14 @@ public class CodecUtils
 
     public static Map<String, String> jsonToMap(String json)
     {
-        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Type type = new TypeToken<Map<String, String>>() {}.getType();
         return gson.fromJson(json, type);
     }
 
     public static <T> T jsonMergeTo(String json, T instance)
     {
-        Gson gs = new GsonBuilder().registerTypeAdapter(instance.getClass(), new InstanceCreatorWithInstance<>(instance)).create();
+        Gson gs = new GsonBuilder()
+                .registerTypeAdapter(instance.getClass(), new InstanceCreatorWithInstance<>(instance)).create();
         gs.fromJson(json, instance.getClass());
         return instance;
     }
@@ -38,10 +39,11 @@ public class CodecUtils
             wrap = false;
         return jsonToDate(json, wrap);
     }
+
     public static Date jsonToDate(String json, boolean wrapQuote)
     {
         if (wrapQuote)
-            json = "\""+json+"\"";
+            json = "\"" + json + "\"";
         return gson.fromJson(json, Date.class);
     }
 
@@ -53,12 +55,14 @@ public class CodecUtils
 
     public static String decodeBase64(String base64, Charset charset)
     {
-        return new String(DatatypeConverter.parseBase64Binary(base64),charset);
+        return new String(DatatypeConverter.parseBase64Binary(base64), charset);
     }
+
     public static String encodeBase64(String text)
     {
         return encodeBase64(text, Charsets.UTF_8);
     }
+
     public static String encodeBase64(String text, Charset charset)
     {
         return DatatypeConverter.printBase64Binary(text.getBytes(charset));
@@ -110,12 +114,12 @@ public class CodecUtils
         try
         {
             result = URLEncoder.encode(s, "UTF-8")
-                    .replaceAll("\\+", "%20")
-                    .replaceAll("\\%21", "!")
-                    .replaceAll("\\%27", "'")
-                    .replaceAll("\\%28", "(")
-                    .replaceAll("\\%29", ")")
-                    .replaceAll("\\%7E", "~");
+                               .replaceAll("\\+", "%20")
+                               .replaceAll("\\%21", "!")
+                               .replaceAll("\\%27", "'")
+                               .replaceAll("\\%28", "(")
+                               .replaceAll("\\%29", ")")
+                               .replaceAll("\\%7E", "~");
         }
 
         // This exception should never occur.

@@ -7,7 +7,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@Target({ FIELD })
+@Target({FIELD})
 @Retention(RUNTIME)
 @Documented
 public @interface Prop
@@ -25,6 +25,7 @@ public @interface Prop
 //    Class<?> type() default String.class;
 
     boolean fullKey() default false;
+
     boolean withSubValue() default false;
 
     /**

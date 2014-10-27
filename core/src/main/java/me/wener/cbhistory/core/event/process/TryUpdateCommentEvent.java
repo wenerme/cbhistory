@@ -13,7 +13,8 @@ public class TryUpdateCommentEvent extends AbstractEvent
 {
     @Getter
     private Article article;
-    @Setter @Getter
+    @Setter
+    @Getter
     private int page = 1;
 
     public TryUpdateCommentEvent(Article article)

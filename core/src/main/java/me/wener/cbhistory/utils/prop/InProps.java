@@ -145,6 +145,7 @@ public class InProps
     {
         return asList(key, type, false);
     }
+
     @SuppressWarnings("unchecked")
     public <T> List<T> asList(String key, Class<T> type, boolean withSubValue)
     {
@@ -166,6 +167,7 @@ public class InProps
     {
         return asMap(key, type, false, false);
     }
+
     @SuppressWarnings("unchecked")
     public <T> Map<String, T> asMap(String key, Class<T> type, boolean fullKey, boolean withSubValue)
     {

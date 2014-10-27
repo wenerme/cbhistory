@@ -17,13 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import jodd.bean.BeanCopy;
-import me.wener.cbhistory.domain.entity.Article;
-import me.wener.cbhistory.domain.entity.Comment;
 import me.wener.cbhistory.domain.CommentInfo;
 import me.wener.cbhistory.domain.HotCommentInfo;
 import me.wener.cbhistory.domain.OpInfo;
 import me.wener.cbhistory.domain.RawComment;
 import me.wener.cbhistory.domain.RawData;
+import me.wener.cbhistory.domain.entity.Article;
+import me.wener.cbhistory.domain.entity.Comment;
 import me.wener.cbhistory.utils.CodecUtils;
 import me.wener.cbhistory.utils.ExcludeNotExposedField;
 
@@ -33,6 +33,26 @@ public class CBHistory
      * 附加在 JSON 数据中的前缀
      */
     private static final String JSON_PREFIX = "cnbeta";
+    private static Gson gson = new GsonBuilder()
+            .addDeserializationExclusionStrategy(ExcludeNotExposedField.deserialize())
+            .addSerializationExclusionStrategy(ExcludeNotExposedField.serialize())
+            .setDateFormat("yyyy-MM-dd HH:mm:ss")
+            .create();
+    private static Function<Comment, String> funcGetCommentTid = new Function<Comment, String>()
+    {
+        @Override
+        public String apply(Comment input)
+        {
+            return input.getTid().toString();
+        }
+    };
+    private static Ordering<Comment> orderCommentByPros = new Ordering<Comment>()
+    {
+        public int compare(Comment left, Comment right)
+        {
+            return Ints.compare(left.getPros(), right.getPros());
+        }
+    };
 
     // region calcOp
     public static String calcOp(OpInfo info)
@@ -44,11 +64,13 @@ public class CBHistory
     {
         return calcOp(page, detail.getSid(), detail.getSn(), 0);
     }
+
     @Deprecated
     public static String calcOp(Article detail)
     {
         return calcOp(1, detail.getSid(), detail.getSn(), 0);
     }
+    // endregion
 
     public static String calcOp(String page, String sid, String sn, int n)
     {
@@ -83,7 +105,6 @@ public class CBHistory
 
         return CodecUtils.encodeURIComponent(op);
     }
-    // endregion
 
     public static OpInfo parseOp(String op) throws IllegalArgumentException
     {
@@ -99,13 +120,6 @@ public class CBHistory
 
         return info;
     }
-
-
-    private static Gson gson = new GsonBuilder()
-            .addDeserializationExclusionStrategy(ExcludeNotExposedField.deserialize())
-            .addSerializationExclusionStrategy(ExcludeNotExposedField.serialize())
-            .setDateFormat("yyyy-MM-dd HH:mm:ss")
-            .create();
 
     public static RawData getRawDataFrom(RawComment rawComment)
     {
@@ -123,22 +137,6 @@ public class CBHistory
         return getRawDataFrom(getRawCommentFrom(article, comments));
     }
 
-    private static Function<Comment, String> funcGetCommentTid = new Function<Comment, String>()
-    {
-        @Override
-        public String apply(Comment input)
-        {
-            return input.getTid().toString();
-        }
-    };
-    private static Ordering<Comment> orderCommentByPros = new Ordering<Comment>()
-    {
-        public int compare(Comment left, Comment right)
-        {
-            return Ints.compare(left.getPros(), right.getPros());
-        }
-    };
-
     public static RawComment getRawCommentFrom(Article article, Collection<Comment> cmt)
     {
         RawComment rawComment = new RawComment();
@@ -149,7 +147,8 @@ public class CBHistory
 
         // 生成热门列表
         Set<HotCommentInfo> hotList = Sets.newHashSet();
-        for (int i = 0; i < 10 && i < comments.size(); i++) {
+        for (int i = 0; i < 10 && i < comments.size(); i++)
+        {
             Comment comment = comments.get(i);
             HotCommentInfo hotCommentInfo = new HotCommentInfo();
 
@@ -162,14 +161,16 @@ public class CBHistory
 
         // 生成回复评论列表
         Map<String, List<CommentInfo>> commentReply = Maps.newHashMap();
-        for (Comment comment : comments) {
+        for (Comment comment : comments)
+        {
             if (comment.getPid() == null)
                 continue;
             List<CommentInfo> list = Lists.newArrayList();
             commentReply.put(comment.getTid().toString(), list);
 
             Comment current = comment;
-            do {
+            do
+            {
                 current = commentMap.get(current.getPid().toString());
                 if (current == null)
                     break;

@@ -1,6 +1,6 @@
 package me.wener.cbhistory.core.process;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.DeadEvent;
@@ -31,7 +31,7 @@ public class AuxiliaryProcess
         if (log.isDebugEnabled())
         {
             if (e instanceof StartEvent)
-                log.debug("开始事件 {}" , e);
+                log.debug("开始事件 {}", e);
             else if (e instanceof FinishEvent)
                 log.debug("结束事件 {}", e);
 
@@ -69,7 +69,8 @@ public class AuxiliaryProcess
             SubscriberExceptionContext ctx = e.getContext();
             if (ctx != null)
             {
-                msg += String.format(format, ctx.getEvent(), ctx.getSubscriber(), ctx.getSubscriberMethod(), ctx.getEventBus());
+                msg += String.format(format, ctx.getEvent(), ctx.getSubscriber(), ctx.getSubscriberMethod(), ctx
+                        .getEventBus());
             } else
                 msg += "无上下文信息.\n";
 

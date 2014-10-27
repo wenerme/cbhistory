@@ -3,7 +3,6 @@ package me.wener.cbhistory.domain.entity;
 import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import java.util.Date;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import me.wener.cbhistory.persistence.ormlite.service.CommentServiceImpl;

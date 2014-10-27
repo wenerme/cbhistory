@@ -66,6 +66,6 @@ public class JodaDateType extends BaseDateType
             return ((DateTime) src).toDate();
         if (src instanceof LocalDateTime)
             return ((LocalDateTime) src).toDate();
-        return  src;
+        return src;
     }
 }

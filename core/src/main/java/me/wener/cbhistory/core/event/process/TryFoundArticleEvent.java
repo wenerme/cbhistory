@@ -14,6 +14,7 @@ public class TryFoundArticleEvent extends AbstractEvent
     {
         this.articleId = id;
     }
+
     public TryFoundArticleEvent(Long id)
     {
         this.articleId = id.toString();

@@ -21,7 +21,8 @@ public class LocalDateTimeTypeConvert
                                      JsonDeserializationContext context)
             throws JsonParseException
     {
-        return Strings.isNullOrEmpty(json.getAsString()) ? null: Same.getDateTimeFormatter().parseLocalDateTime(json.getAsString()) ;
+        return Strings.isNullOrEmpty(json.getAsString()) ? null : Same.getDateTimeFormatter()
+                                                                      .parseLocalDateTime(json.getAsString());
     }
 
     @Override

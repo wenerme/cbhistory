@@ -7,10 +7,11 @@ import lombok.Getter;
 
 public class ExcludeNotExposedField implements ExclusionStrategy
 {
-    @Getter
-    private boolean forSerialize;
     private static ExcludeNotExposedField serialize;
     private static ExcludeNotExposedField deserialize;
+    @Getter
+    private boolean forSerialize;
+
     /**
      * @param whenSerialization 如果为true,则使用 expose 的 serialize 参数,否则为 deserialize
      */
@@ -25,6 +26,7 @@ public class ExcludeNotExposedField implements ExclusionStrategy
             serialize = new ExcludeNotExposedField(true);
         return serialize;
     }
+
     public static ExcludeNotExposedField deserialize()
     {
         if (deserialize == null)

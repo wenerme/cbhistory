@@ -23,7 +23,8 @@ public final class DateTimeTypeConvert
             throws JsonParseException
     {
 
-        return Strings.isNullOrEmpty(json.getAsString()) ? null : Same.getDateTimeFormatter().parseDateTime(json.getAsString());
+        return Strings.isNullOrEmpty(json.getAsString()) ? null : Same.getDateTimeFormatter()
+                                                                      .parseDateTime(json.getAsString());
     }
 
     @Override

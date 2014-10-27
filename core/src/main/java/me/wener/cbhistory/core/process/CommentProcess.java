@@ -13,10 +13,10 @@ import me.wener.cbhistory.core.Events;
 import me.wener.cbhistory.core.event.process.TryFoundArticleEvent;
 import me.wener.cbhistory.core.event.process.TryUpdateCommentEvent;
 import me.wener.cbhistory.core.event.process.UpdateCommentEvent;
-import me.wener.cbhistory.domain.entity.Article;
-import me.wener.cbhistory.domain.entity.Comment;
 import me.wener.cbhistory.domain.RawComment;
 import me.wener.cbhistory.domain.RawData;
+import me.wener.cbhistory.domain.entity.Article;
+import me.wener.cbhistory.domain.entity.Comment;
 import me.wener.cbhistory.utils.CodecUtils;
 import org.joda.time.LocalDateTime;
 
@@ -56,14 +56,14 @@ public class CommentProcess extends CommonProcess
             log.error("获取评论失败,无法获取响应,请求的url为: {},参数op: {} 文章: {}"
                     , url, op, article);
             return;
-        }else if(response.statusCode() != 200)
+        } else if (response.statusCode() != 200)
         {
             log.error("获取 URL 返回状态码异常 status: {} 请求的url为: {},参数op: {} 文章: {}"
                     , response.statusCode(), url, op, article);
             return;
-        }else if (Strings.isNullOrEmpty(response.bodyText()))
+        } else if (Strings.isNullOrEmpty(response.bodyText()))
         {
-            log.warn("请求返回空字符串 请求的url为: {}, op:{} SID:{}",url, op, article.getSid());
+            log.warn("请求返回空字符串 请求的url为: {}, op:{} SID:{}", url, op, article.getSid());
             return;
         }
 

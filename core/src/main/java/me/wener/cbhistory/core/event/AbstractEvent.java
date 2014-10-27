@@ -9,7 +9,7 @@ public abstract class AbstractEvent implements Event
             return clazz.newInstance();
         } catch (Exception e)
         {
-            throw new RuntimeException("实例化事件类失败",e);
+            throw new RuntimeException("实例化事件类失败", e);
         }
     }
 }

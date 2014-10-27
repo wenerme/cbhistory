@@ -9,10 +9,18 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PlugInfo
 {
-    /** 是否加载, 默认为 true  */
+    /**
+     * 是否加载, 默认为 true
+     */
     boolean load() default true;
-    /** 作者信息 */
+
+    /**
+     * 作者信息
+     */
     String author() default "unknown";
-    /** 插件名 */
+
+    /**
+     * 插件名
+     */
     String name() default "unknown";
 }

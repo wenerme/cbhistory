@@ -1,8 +1,6 @@
 package me.wener.cbhistory.core.modules;
 
 import com.google.inject.AbstractModule;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.utils.prop.Prop;

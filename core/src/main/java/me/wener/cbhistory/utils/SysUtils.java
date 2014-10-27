@@ -1,11 +1,8 @@
 package me.wener.cbhistory.utils;
 
 import com.google.common.base.Charsets;
-import com.google.common.io.ByteSource;
-import com.google.common.io.ByteStreams;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Closeables;
-import com.google.gson.internal.Streams;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,7 +11,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import lombok.extern.slf4j.Slf4j;
-import me.wener.cbhistory.core.App;
 
 @Slf4j
 @SuppressWarnings("unused")
@@ -29,6 +25,7 @@ public class SysUtils
     {
         return tryGetResourceAsString(path, Charsets.UTF_8);
     }
+
     public static String tryGetResourceAsString(String path, Charset charset)
     {
         String string = null;
@@ -48,6 +45,7 @@ public class SysUtils
         }
         return string;
     }
+
     public static InputStream tryGetResource(String path)
     {
         InputStream is = SysUtils.class.getClassLoader().getResourceAsStream(path);
@@ -102,10 +100,10 @@ public class SysUtils
                 .append(reportMemory(runtime.totalMemory()))
                 .append('\n')
                 .append("Used memory: ")
-                .append(reportMemory(runtime.totalMemory()-runtime.freeMemory()))
+                .append(reportMemory(runtime.totalMemory() - runtime.freeMemory()))
                 .append('\n')
                 .append("Memory usage: ")
-                .append((1-runtime.freeMemory()/(double)runtime.totalMemory()) * 100)
+                .append((1 - runtime.freeMemory() / (double) runtime.totalMemory()) * 100)
                 .append(" %")
                 .append('\n')
         ;
@@ -116,6 +114,6 @@ public class SysUtils
     private static String reportMemory(double val)
     {
         val /= 1024;
-        return String.format(" %.4f KB | %.4f MB | %.4f GB", val, val/1024, val/1024/1024);
+        return String.format(" %.4f KB | %.4f MB | %.4f GB", val, val / 1024, val / 1024 / 1024);
     }
 }

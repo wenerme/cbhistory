@@ -1,12 +1,12 @@
 package me.wener.cbhistory.service;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 
- /**
+/**
  * 和 Spring data 的 CrudRepository 相同
-  *
-  * 将 delete(T) 移除了,因为和 Dao 冲突
+ * <p/>
+ * 将 delete(T) 移除了,因为和 Dao 冲突
+ *
  * @param <T>
  * @param <ID>
  */
@@ -76,6 +76,7 @@ public interface CrudService<T, ID extends Serializable>
 
     /**
      * Deletes the given entities.
+     *
      * @throws IllegalArgumentException in case the given {@link Iterable} is (@literal null}.
      */
     void delete(Iterable<? extends T> entities);

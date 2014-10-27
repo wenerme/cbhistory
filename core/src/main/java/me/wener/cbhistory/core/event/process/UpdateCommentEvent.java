@@ -5,8 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import me.wener.cbhistory.core.event.AbstractEvent;
-import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.domain.RawData;
+import me.wener.cbhistory.domain.entity.Article;
 
 @ToString
 @Accessors(chain = true)

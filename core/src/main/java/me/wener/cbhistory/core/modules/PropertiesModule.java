@@ -1,10 +1,7 @@
 package me.wener.cbhistory.core.modules;
 
-import com.google.common.io.Closeables;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -110,7 +107,7 @@ public class PropertiesModule extends AbstractModule
                 prop.load(new StringReader(data));
             } catch (IOException e)
             {
-                log.warn("加载 "+path+" 属性文件时发生异常", e);
+                log.warn("加载 " + path + " 属性文件时发生异常", e);
             }
             withProperties(prop);
         }

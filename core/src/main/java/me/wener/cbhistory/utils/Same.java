@@ -22,6 +22,7 @@ import org.joda.time.format.ISODateTimeFormat;
 public class Same
 {
     private final static Same self = new Same();
+
     private Same() {}
 
     public static DateTimeFormatter getDateTimeFormatter()

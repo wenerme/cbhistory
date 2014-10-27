@@ -5,7 +5,6 @@ import java.util.Date;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import me.wener.cbhistory.domain.entity.CBHistoryTable;
 import me.wener.cbhistory.domain.entity.Identifiable;
 
 @Data

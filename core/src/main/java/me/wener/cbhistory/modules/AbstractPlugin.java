@@ -7,6 +7,7 @@ public abstract class AbstractPlugin implements IPlugin
 {
     @Getter
     private static EventBus eventBus = new EventBus(IPlugin.class.toString());
+
     @Override
     public void init()
     {

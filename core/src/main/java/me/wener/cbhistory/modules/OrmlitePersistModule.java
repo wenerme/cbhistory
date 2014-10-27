@@ -2,7 +2,6 @@ package me.wener.cbhistory.modules;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.name.Named;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.field.DataPersisterManager;
@@ -13,12 +12,11 @@ import javax.sql.DataSource;
 import lombok.SneakyThrows;
 import me.wener.cbhistory.core.pluggable.PlugInfo;
 import me.wener.cbhistory.persistence.ormlite.JodaDateType;
-import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.persistence.ormlite.service.ArticleServiceImpl;
+import me.wener.cbhistory.persistence.ormlite.service.CommentServiceImpl;
 import me.wener.cbhistory.service.ArticleService;
 import me.wener.cbhistory.service.CommentService;
 import me.wener.cbhistory.service.RawDataService;
-import me.wener.cbhistory.persistence.ormlite.service.CommentServiceImpl;
 import me.wener.cbhistory.service.impl.RawDataServiceCacheImpl;
 import me.wener.cbhistory.utils.prop.Prop;
 
@@ -30,6 +28,7 @@ public class OrmlitePersistModule extends AbstractPluginModule
     String jdbcUrl;
     @Inject
     DataSource dataSource;
+
     @Override
     protected void configure()
     {
@@ -68,6 +67,11 @@ public class OrmlitePersistModule extends AbstractPluginModule
             this.providerClass = providerClass;
         }
 
+        public static <D extends Dao<T, ?>, T> Provider<D> provide(Class<T> clazz)
+        {
+            return new DaoProvider<>(clazz);
+        }
+
         @Override
         @SneakyThrows
         public D get()
@@ -79,11 +83,6 @@ public class OrmlitePersistModule extends AbstractPluginModule
             {
                 throw new RuntimeException(e);
             }
-        }
-
-        public static <D extends Dao<T, ?>, T> Provider<D> provide(Class<T> clazz)
-        {
-            return new DaoProvider<>(clazz);
         }
     }
 }

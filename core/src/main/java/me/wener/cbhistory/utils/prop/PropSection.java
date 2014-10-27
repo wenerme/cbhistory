@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * 使在该类中使用 {@link Prop} 时有一个默认的 Section
  */
-@Target({ TYPE })
+@Target({TYPE})
 @Retention(RUNTIME)
 @Documented
 public @interface PropSection

@@ -22,9 +22,6 @@ import me.wener.cbhistory.utils.guice.PluginLoader;
 @Slf4j
 public class PluginLoadModule extends AbstractPluginModule
 {
-    @Inject
-    private Injector injector;
-    private static Collection<Class<? extends IPlugin>> pluginClass = Lists.newCopyOnWriteArrayList();
     private static final PlugInfo defaultInfo = new PlugInfo()
     {
         @Override
@@ -51,6 +48,9 @@ public class PluginLoadModule extends AbstractPluginModule
             return PlugInfo.class;
         }
     };
+    private static Collection<Class<? extends IPlugin>> pluginClass = Lists.newCopyOnWriteArrayList();
+    @Inject
+    private Injector injector;
 
     /**
      * 静态添加插件
@@ -59,10 +59,12 @@ public class PluginLoadModule extends AbstractPluginModule
     {
         pluginClass.add(clazz);
     }
+
     public static void with(Iterable<Class<? extends IPlugin>> clazz)
     {
         Iterables.addAll(pluginClass, clazz);
     }
+
     @Override
     protected void configure()
     {
