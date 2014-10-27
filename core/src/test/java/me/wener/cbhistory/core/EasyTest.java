@@ -1,5 +1,6 @@
 package me.wener.cbhistory.core;
 
+import me.wener.cbhistory.utils.SysUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -14,6 +15,6 @@ public class EasyTest
     @Test
     public void report()
     {
-        App.reportSystemInfo();
+        SysUtils.reportSystemInfo();
     }
 }

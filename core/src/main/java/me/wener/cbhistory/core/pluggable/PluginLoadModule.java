@@ -9,7 +9,6 @@ import com.google.inject.Module;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +17,7 @@ import me.wener.cbhistory.core.pluggable.event.BeforeLoadPluginEvent;
 import me.wener.cbhistory.core.pluggable.event.CancelPluginLoadingEvent;
 import me.wener.cbhistory.modules.AbstractPluginModule;
 import me.wener.cbhistory.modules.IPlugin;
+import me.wener.cbhistory.utils.guice.PluginLoader;
 
 @Slf4j
 public class PluginLoadModule extends AbstractPluginModule

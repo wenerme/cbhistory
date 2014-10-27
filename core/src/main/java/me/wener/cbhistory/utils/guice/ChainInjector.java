@@ -1,4 +1,4 @@
-package me.wener.cbhistory.core.modules;
+package me.wener.cbhistory.utils.guice;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;

@@ -14,8 +14,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import lombok.extern.slf4j.Slf4j;
+import me.wener.cbhistory.core.App;
 
 @Slf4j
+@SuppressWarnings("unused")
 public class SysUtils
 {
     public static String getCurrentDirectory()
@@ -74,5 +76,46 @@ public class SysUtils
             }
         }
         return is;
+    }
+
+    public static void reportSystemInfo()
+    {
+        Runtime runtime = Runtime.getRuntime();
+        StringBuilder builder = new StringBuilder();
+        long maxMemory = runtime.maxMemory();
+
+        builder.append("====== ReportSystemInfo ======\n")
+                /* Total number of processors or cores available to the JVM */
+                .append("Available processors (cores): ")
+                .append(runtime.availableProcessors())
+                .append('\n')
+                /* This will return Long.MAX_VALUE if there is no preset limit */
+                .append("Maximum memory: ")
+                .append(maxMemory == Long.MAX_VALUE ? "no limit" : reportMemory(maxMemory))
+                .append('\n')
+                /* Total amount of free memory available to the JVM */
+                .append("Free memory: ")
+                .append(reportMemory(runtime.freeMemory()))
+                .append('\n')
+                /* Total memory currently available to the JVM */
+                .append("Total memory available to JVM: ")
+                .append(reportMemory(runtime.totalMemory()))
+                .append('\n')
+                .append("Used memory: ")
+                .append(reportMemory(runtime.totalMemory()-runtime.freeMemory()))
+                .append('\n')
+                .append("Memory usage: ")
+                .append((1-runtime.freeMemory()/(double)runtime.totalMemory()) * 100)
+                .append(" %")
+                .append('\n')
+        ;
+
+        log.info(builder.toString());
+    }
+
+    private static String reportMemory(double val)
+    {
+        val /= 1024;
+        return String.format(" %.4f KB | %.4f MB | %.4f GB", val, val/1024, val/1024/1024);
     }
 }

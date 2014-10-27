@@ -1,10 +1,9 @@
-package me.wener.cbhistory.core.pluggable;
+package me.wener.cbhistory.utils.guice;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.Reflection;
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Set;
