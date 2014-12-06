@@ -1,21 +1,21 @@
-#! /bin/bash
+#! /bin/env bash
 
-# �ýű���Ҫ����ͨ�� ssh ����Զ�����ݿ�ͬ��
-# ʹ�õ��� ����-ѹ��-�ϴ�-��ѹ-���� �Ĺ���,������ֱ������Զ�����ݿ�ͬ��
-# ��Ϊֱ��ʹ��Զ�����ݿ�ͬ����ǳ���, ���ҵ��±�����ס���ܲ���.
+# 该脚本主要用于通过 ssh 进行远程数据库同步
+# 使用的是 导出-压缩-上传-解压-导入 的过程,而不是直接连接远程数据库同步
+# 因为直接使用远程数据库同步会非常慢, 而且导致表被锁住不能操作.
 
-# mysqldump �ֲ�ҳ��
+# mysqldump 手册页面
 # http://dev.mysql.com/doc/refman/5.7/en/mysqldump.html
-# --no-data ֻ�����ṹ
+# --no-data 只导出结构
 
-# ����
+# 导入
 # mysql -uroot -p --default-character-set=utf8 database
 # mysql> SOURCE utf8.dump
-# ��
+# 或
 # mysql -e"utf8.dmp"
 
 # gzip -cf cbh.mysql
-# ʹ�õ� 7z ��ѹ��, Ϊ�˽�ʡ�����ͼӿ��ٶ� :-)
+# 使用的 7z 来压缩, 为了节省宽带和加快速度 :-)
 # 
 SSH_INFO=wener@wen
 
