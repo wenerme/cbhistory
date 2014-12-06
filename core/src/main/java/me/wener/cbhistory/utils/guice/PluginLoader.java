@@ -35,9 +35,7 @@ public class PluginLoader<T>
 
     public static <PT> PluginLoader<? extends PT> of(Class<PT> pluginType, String packageName)
     {
-        PluginLoader<PT> service = new PluginLoader<>(pluginType, packageName);
-
-        return service;
+        return new PluginLoader<>(pluginType, packageName);
     }
 
     @SuppressWarnings("unchecked")

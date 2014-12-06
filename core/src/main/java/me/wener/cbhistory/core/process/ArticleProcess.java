@@ -1,21 +1,16 @@
 package me.wener.cbhistory.core.process;
 
-import com.google.common.base.CharMatcher;
 import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.inject.Named;
 import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
-import jodd.jerry.Jerry;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.Events;
 import me.wener.cbhistory.core.event.process.DiscoverArticleEvent;
@@ -26,8 +21,8 @@ import me.wener.cbhistory.core.event.process.TryFoundAllArticleEvent;
 import me.wener.cbhistory.core.event.process.TryFoundArticleEvent;
 import me.wener.cbhistory.core.event.process.TryUpdateCommentEvent;
 import me.wener.cbhistory.domain.entity.Article;
+import me.wener.cbhistory.parser.v1.CnBetaV1Parser;
 import me.wener.cbhistory.utils.CodecUtils;
-import org.joda.time.LocalDateTime;
 
 /**
  * 对文章的相关处理
@@ -36,10 +31,7 @@ import org.joda.time.LocalDateTime;
 @Slf4j
 public class ArticleProcess extends CommonProcess
 {
-    // 匹配出Gv信息,放在 data 分组
-    private static final Pattern regGV = Pattern.compile("^GV\\.DETAIL[^\\{]+(?<data>\\{[^\\}]+})", Pattern.MULTILINE);
-    private static final Pattern regMatchId = Pattern.compile("articles/(?<id>\\d+)");
-
+    CnBetaV1Parser parser;
     @Subscribe
     @AllowConcurrentEvents
     public void downloadDiscoverContent(TryDiscoverArticleByUrlEvent e)
@@ -64,16 +56,7 @@ public class ArticleProcess extends CommonProcess
 
         final String content = e.getContent();
 
-        Set<Long> ids = Sets.newHashSet();
-        Matcher matcher = regMatchId.matcher(content);
-        while (matcher.find())
-        {
-            String id = matcher.group("id");
-            try
-            {
-                ids.add(Long.parseLong(id));
-            } catch (Exception ex) {log.error("解析ID出现异常", ex);}
-        }
+        Set<Long> ids = parser.idsInContent(content);
 
         log.info("在内容中共发现 {} 个id", ids.size());
         Events.post(new TryFoundAllArticleEvent().setDescription("在内容中发现").setIds(ids));
@@ -170,8 +153,7 @@ public class ArticleProcess extends CommonProcess
         }
 
         // 下载文章页
-        String url = "http://www.cnbeta.com/articles/%s.htm";
-        url = String.format(url, e.getArticleId());
+        String url = parser.getUrl(e.getArticleId());
 
         HttpResponse response = insureResponse(HttpRequest.get(url), 3);
         if (response == null)
@@ -199,12 +181,11 @@ public class ArticleProcess extends CommonProcess
     public void parseArticle(FoundArticleEvent e)
     {
         final String content = e.getContent();
-        final Jerry doc = Jerry.jerry(content);
 
         Article article = articleSvc.findOne(e.getId());
 
         // 解析出文章的详细信息
-        Matcher matcher = regGV.matcher(content);
+        Matcher matcher = CnBetaV1Parser.regGV.matcher(content);
         if (matcher.find())
         {
             String data = matcher.group("data");
@@ -212,7 +193,6 @@ public class ArticleProcess extends CommonProcess
             if (article == null)
             {
                 article = gson.fromJson(data, Article.class);
-                if (log.isInfoEnabled())
                     log.info("发现新文章: SID: {} SN: {}", article.getSid(), article.getSn());
             } else
                 CodecUtils.jsonMergeTo(data, article);
@@ -221,20 +201,8 @@ public class ArticleProcess extends CommonProcess
             log.error("无法匹配出 GvDetail 的内容. sid: {}", e.getId());
             return;
         }
+        parser.parseToArticle(content, article);
 
-        // 解析 HTML
-        article.setTitle(doc.$("#news_title").text().trim());
-        String intro = CharMatcher.anyOf("\r\n").removeFrom(doc.$(".introduction p").text());
-        article.setIntroduction(intro);
-
-        {
-            Jerry bar = doc.$(".title_bar");
-            String tmp = bar.$(".where").text().trim();
-            tmp = tmp.substring(tmp.indexOf("：") + 1);// 替换前缀
-            article.setSource(tmp);
-            Date date = CodecUtils.jsonToDate(bar.$(".date").text());
-            article.setDate(new LocalDateTime(date));
-        }
 
         // 先将当前状态保存
         article = articleSvc.save(article);
