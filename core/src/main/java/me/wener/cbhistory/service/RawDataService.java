@@ -1,6 +1,6 @@
 package me.wener.cbhistory.service;
 
-import me.wener.cbhistory.domain.RawData;
+import me.wener.cbhistory.parser.RawData;
 
 public interface RawDataService
 {

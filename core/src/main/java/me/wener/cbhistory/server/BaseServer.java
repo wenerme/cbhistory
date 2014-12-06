@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import me.wener.cbhistory.core.CBHistory;
 import me.wener.cbhistory.domain.OpInfo;
-import me.wener.cbhistory.domain.RawData;
+import me.wener.cbhistory.parser.RawData;
 import me.wener.cbhistory.domain.StatusResponse;
 import me.wener.cbhistory.service.RawDataService;
 

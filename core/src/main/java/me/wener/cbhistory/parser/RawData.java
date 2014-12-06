@@ -1,4 +1,4 @@
-package me.wener.cbhistory.domain;
+package me.wener.cbhistory.parser;
 
 import com.google.gson.annotations.Expose;
 import java.util.Date;

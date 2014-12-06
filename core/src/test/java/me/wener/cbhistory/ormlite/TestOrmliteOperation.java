@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 import me.wener.cbhistory.core.App;
 import me.wener.cbhistory.core.CBHistory;
 import me.wener.cbhistory.domain.RawComment;
-import me.wener.cbhistory.domain.RawData;
+import me.wener.cbhistory.parser.RawData;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.domain.entity.Comment;
 import me.wener.cbhistory.service.ArticleService;

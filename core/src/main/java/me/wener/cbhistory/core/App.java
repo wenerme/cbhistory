@@ -64,6 +64,7 @@ public class App
                             .none()
                             .withOptionalResource("default.props", "app.props"))
                     .and(Jsr250Module.class, CloseableModule.class)
+                    .then(CBHistoryModule.class)
                     .then(PersistModule.class)
                     .then(PluginLoadModule.class)
                     .getInjector();

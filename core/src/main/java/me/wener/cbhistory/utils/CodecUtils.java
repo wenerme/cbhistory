@@ -4,6 +4,7 @@ package me.wener.cbhistory.utils;
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -24,7 +25,14 @@ public class CodecUtils
         return gson.fromJson(json, type);
     }
 
-    public static <T> T jsonMergeTo(String json, T instance)
+    public static <T> T mergeTo(String json, T instance)
+    {
+        Gson gs = new GsonBuilder()
+                .registerTypeAdapter(instance.getClass(), new InstanceCreatorWithInstance<>(instance)).create();
+        gs.fromJson(json, instance.getClass());
+        return instance;
+    }
+    public static <T> T mergeTo(JsonElement json, T instance)
     {
         Gson gs = new GsonBuilder()
                 .registerTypeAdapter(instance.getClass(), new InstanceCreatorWithInstance<>(instance)).create();
@@ -32,7 +40,7 @@ public class CodecUtils
         return instance;
     }
 
-    public static Date jsonToDate(String json)
+    public static Date toDate(String json)
     {
         boolean wrap = true;
         if (json.startsWith("\""))

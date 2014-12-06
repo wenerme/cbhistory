@@ -7,7 +7,7 @@ import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
+import javax.inject.Inject;
 import javax.inject.Named;
 import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
@@ -21,8 +21,8 @@ import me.wener.cbhistory.core.event.process.TryFoundAllArticleEvent;
 import me.wener.cbhistory.core.event.process.TryFoundArticleEvent;
 import me.wener.cbhistory.core.event.process.TryUpdateCommentEvent;
 import me.wener.cbhistory.domain.entity.Article;
+import me.wener.cbhistory.parser.CnBetaParser;
 import me.wener.cbhistory.parser.v1.CnBetaV1Parser;
-import me.wener.cbhistory.utils.CodecUtils;
 
 /**
  * 对文章的相关处理
@@ -31,7 +31,8 @@ import me.wener.cbhistory.utils.CodecUtils;
 @Slf4j
 public class ArticleProcess extends CommonProcess
 {
-    CnBetaV1Parser parser;
+    @Inject
+    CnBetaParser parser;
     @Subscribe
     @AllowConcurrentEvents
     public void downloadDiscoverContent(TryDiscoverArticleByUrlEvent e)
@@ -56,7 +57,7 @@ public class ArticleProcess extends CommonProcess
 
         final String content = e.getContent();
 
-        Set<Long> ids = parser.idsInContent(content);
+        Set<Long> ids = parser.findArticleIds(content);
 
         log.info("在内容中共发现 {} 个id", ids.size());
         Events.post(new TryFoundAllArticleEvent().setDescription("在内容中发现").setIds(ids));
@@ -153,7 +154,7 @@ public class ArticleProcess extends CommonProcess
         }
 
         // 下载文章页
-        String url = parser.getUrl(e.getArticleId());
+        String url = parser.urlOfId(e.getArticleId());
 
         HttpResponse response = insureResponse(HttpRequest.get(url), 3);
         if (response == null)
@@ -184,28 +185,11 @@ public class ArticleProcess extends CommonProcess
 
         Article article = articleSvc.findOne(e.getId());
 
-        // 解析出文章的详细信息
-        Matcher matcher = CnBetaV1Parser.regGV.matcher(content);
-        if (matcher.find())
+        if (article == null)
         {
-            String data = matcher.group("data");
-            // 判断是否为新的文章
-            if (article == null)
-            {
-                article = gson.fromJson(data, Article.class);
-                    log.info("发现新文章: SID: {} SN: {}", article.getSid(), article.getSn());
-            } else
-                CodecUtils.jsonMergeTo(data, article);
-        } else
-        {
-            log.error("无法匹配出 GvDetail 的内容. sid: {}", e.getId());
-            return;
+            article = parser.asArticle(content);
+            article = articleSvc.save(article);
         }
-        parser.parseToArticle(content, article);
-
-
-        // 先将当前状态保存
-        article = articleSvc.save(article);
 
         // 更新评论
         Events.post(new TryUpdateCommentEvent(article));

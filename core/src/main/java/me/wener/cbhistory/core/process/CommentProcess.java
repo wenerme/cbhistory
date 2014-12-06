@@ -3,29 +3,29 @@ package me.wener.cbhistory.core.process;
 import com.google.common.base.Strings;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
+import com.google.inject.Inject;
 import java.util.Collection;
 import javax.inject.Named;
 import jodd.http.HttpRequest;
 import jodd.http.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
-import me.wener.cbhistory.core.CBHistory;
 import me.wener.cbhistory.core.Events;
 import me.wener.cbhistory.core.event.process.TryFoundArticleEvent;
 import me.wener.cbhistory.core.event.process.TryUpdateCommentEvent;
 import me.wener.cbhistory.core.event.process.UpdateCommentEvent;
-import me.wener.cbhistory.domain.RawComment;
-import me.wener.cbhistory.domain.RawData;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.domain.entity.Comment;
-import me.wener.cbhistory.utils.CodecUtils;
+import me.wener.cbhistory.parser.CnBetaParser;
+import me.wener.cbhistory.parser.Response;
 import org.joda.time.LocalDateTime;
 
 @Named
 @Slf4j
 public class CommentProcess extends CommonProcess
 {
-
-    public static final int COMMENTS_PRE_PAGE = 99;
+    public static final int COMMENTS_PRE_PAGE = 80;
+    @Inject
+    CnBetaParser parser;
 
     @Subscribe
     @AllowConcurrentEvents
@@ -42,7 +42,7 @@ public class CommentProcess extends CommonProcess
             return;
         }
 
-        String op = CBHistory.calcOp(article, e.getPage());
+        String op = parser.opCode(article, e.getPage());
         String url = "http://www.cnbeta.com/cmt";
         HttpRequest request = HttpRequest.post(url);
         request
@@ -56,67 +56,42 @@ public class CommentProcess extends CommonProcess
             log.error("获取评论失败,无法获取响应,请求的url为: {},参数op: {} 文章: {}"
                     , url, op, article);
             return;
-        } else if (response.statusCode() != 200)
+        }
+
+        if (response.statusCode() != 200)
         {
             log.error("获取 URL 返回状态码异常 status: {} 请求的url为: {},参数op: {} 文章: {}"
                     , response.statusCode(), url, op, article);
             return;
-        } else if (Strings.isNullOrEmpty(response.bodyText()))
+        }
+
+        String body = response.bodyText();
+        if (Strings.isNullOrEmpty(body))
         {
             log.warn("请求返回空字符串 请求的url为: {}, op:{} SID:{}", url, op, article.getSid());
             return;
         }
 
-        RawData raw = gson.fromJson(response.bodyText(), RawData.class);
-        if (raw == null)
+        Response status = parser.asResponse(body);
+        if (!status.isSuccess())
         {
-            log.error("转换的 rawData 为 null SID: {}", article.getSid());
-            return;
-        }
-        if (!raw.getStatus().equals("success"))
-        {
-            log.error("获取到的评论内容状态异常 :{}, SID: {}. 可能请求太频繁", raw, article.getSid());
+            log.error("获取到的评论内容状态异常 :{}, SID: {}. 可能请求太频繁", status, article.getSid());
             return;
         }
 
-        Events.post(new UpdateCommentEvent(article, raw).setPage(e.getPage()));
+        Events.post(new UpdateCommentEvent(article, status).setPage(e.getPage()));
     }
 
     @Subscribe
     @AllowConcurrentEvents
     public void parseComment(UpdateCommentEvent e)
     {
+        Response content = e.getContent();
         Article article = e.getArticle();
 
         log.debug("更新评论: {}", e);
 
-        String result = CodecUtils.decodeBase64(e.getRawContent().getResult());
-        result = result.replaceFirst("^cnbeta", "");// 去除前缀
-        RawComment rawComment;
-        Collection<Comment> comments;
-
-        // 解析
-        rawComment = gson.fromJson(result, RawComment.class);
-        // 更新文章附加的其他信息
-        CodecUtils.jsonMergeTo(result, article);
-
-        comments = rawComment.getCommentList().values();
-
-        for (Comment comment : comments)
-        {
-            // 将 pid 为 0 的值置为空, 因为 id 为 0 的评论是不存在的
-            if (comment.getPid() != null && comment.getPid() == 0)
-                comment.setPid(null);
-            // 将匿名人士的名字设置为 null
-            if (comment.getName() != null && comment.getName().equals("匿名人士"))
-                comment.setName(null);
-            // 不存储 userId = 0
-            if (comment.getUserId() != null && comment.getUserId() == 0)
-                comment.setUserId(null);
-            // 有可能为空字符串
-            if (comment.getIcon() != null && comment.getIcon().equals(""))
-                comment.setIcon(null);
-        }
+        Collection<Comment> comments = parser.asComments(article, content);
 
 
         article.setLastUpdateDate(LocalDateTime.now());

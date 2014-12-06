@@ -21,9 +21,9 @@ import me.wener.cbhistory.domain.CommentInfo;
 import me.wener.cbhistory.domain.HotCommentInfo;
 import me.wener.cbhistory.domain.OpInfo;
 import me.wener.cbhistory.domain.RawComment;
-import me.wener.cbhistory.domain.RawData;
 import me.wener.cbhistory.domain.entity.Article;
 import me.wener.cbhistory.domain.entity.Comment;
+import me.wener.cbhistory.parser.RawData;
 import me.wener.cbhistory.utils.CodecUtils;
 import me.wener.cbhistory.utils.ExcludeNotExposedField;
 
@@ -85,6 +85,9 @@ public class CBHistory
     }
 
     public static String calcOp(Integer page, Long sid, String sn, int n)
+    {return calcOp(page, sid, sn, n, true);}
+
+    public static String calcOp(Integer page, Long sid, String sn, int n, boolean encode)
     {
         checkNotNull(page);
         checkNotNull(sid);
@@ -94,6 +97,9 @@ public class CBHistory
         final char[] b64Chars = b64.toCharArray();
         String op = "%s,%s,%s";
         op = String.format(op, page, sid, sn);
+        if (!encode)
+            return op;
+        
         op = CodecUtils.encodeBase64(op);
 
         {

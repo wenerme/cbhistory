@@ -10,7 +10,7 @@ import me.wener.cbhistory.core.event.process.TryFoundArticleEvent;
 import me.wener.cbhistory.core.event.process.TryUpdateCommentEvent;
 import me.wener.cbhistory.core.event.process.UpdateCommentEvent;
 import me.wener.cbhistory.domain.entity.Article;
-import me.wener.cbhistory.domain.RawData;
+import me.wener.cbhistory.parser.RawData;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -38,13 +38,13 @@ public class TestEvents
     @Test
     public void testParseComment() throws Exception
     {
-        Article detail = new Article();
-        detail.setSid(287931l);
-        detail.setSn("9524c");
-        RawData raw = new Gson().fromJson(Files.toString(new File("C:\\cmt.json"), Charsets.UTF_8), RawData.class);
-
-        Events.post(new UpdateCommentEvent(detail,raw));
-        Thread.sleep(50000);
+//        Article detail = new Article();
+//        detail.setSid(287931l);
+//        detail.setSn("9524c");
+//        RawData raw = new Gson().fromJson(Files.toString(new File("C:\\cmt.json"), Charsets.UTF_8), RawData.class);
+//
+//        Events.post(new UpdateCommentEvent(detail,raw));
+//        Thread.sleep(50000);
     }
 
     @Test
