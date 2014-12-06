@@ -4,12 +4,12 @@
 
     <parent>
 		<groupId>me.wener.cbhistory</groupId>
-		<artifactId>parent</artifactId>
-        <version>${cbhistory.version}</version>
-        <relativePath>../parent</relativePath>
+		<artifactId>cbhistory</artifactId>
+        <version>1.6.0</version>
+        <relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>core</artifactId>
+	<artifactId>cbh-core</artifactId>
 	<name>CBH 核心模块</name>
     <description>CBH 核心模块,主要实现批量收集,评论发现.</description>
 

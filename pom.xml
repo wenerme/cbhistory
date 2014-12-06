@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.wener.cbhistory</groupId>
-    <artifactId>parent</artifactId>
-    <version>${cbhistory.version}</version>
+    <artifactId>cbhistory</artifactId>
+    <version>1.6.0</version>
     <name>CBH 的公共配置</name>
     <description>cb评论记录服务器,提供评论查询的接口,可让cb直接使用这个服务器提供的评论</description>
 
@@ -21,13 +21,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>../core</module>
-        <module>../server-jws</module>
-        <module>../analysis</module>
-        <module>../server-madvoc</module>
-        <module>../server-madvoc-ace</module>
-        <module>../server-madvoc-jetty</module>
-        <module>../persistence-mybatis</module>
+        <module>cbh-core</module>
     </modules>
 
     <properties>
