@@ -50,6 +50,10 @@
 : 输出: 前端接口 JAX-RS WebSocket Servlet
 ```
 
+v 1.6.0
+--------
+* 修改 OP 为最新的计算方法
+
 v 0.6.0
 --------
 * 修正了部分 MyBatis bugs
