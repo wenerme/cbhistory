@@ -3,7 +3,7 @@ import "time"
 
 type Article struct {
 	// 文章ID
-	Sid      int `xorm:"pk" gorm:"primary_key"`
+	Sid    int `gorm:"primary_key"`
 	Sn       string
 	// 顶的数量
 	Dig      int
@@ -16,9 +16,9 @@ type Article struct {
 	// 参与人数
 	Join     int
 	// 该文章更新时间
-	Update   *time.Time `xorm:"null"`
+	Update *time.Time
 	// 文章发布日期
-	Date     *time.Time `xorm:"null"`
+	Date   *time.Time
 	// 阅读人数
 	Read     int
 	// 文章来源
@@ -30,11 +30,11 @@ type Article struct {
 
 type Comment struct {
 	// 评论ID
-	Tid      int `xorm:"pk" gorm:"primary_key"`
+	Tid int `gorm:"primary_key"`
 	// 父评论ID
-	Pid      int `xorm:"index"`
+	Pid int
 	// 文章ID
-	Sid      int `xorm:"index"`
+	Sid int
 	// 评论内容
 	Comment  string
 	// 反对数

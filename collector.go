@@ -1,6 +1,5 @@
 package cbhistory
 import (
-	"github.com/go-xorm/xorm"
 	"time"
 	"reflect"
 	"sync"
@@ -9,8 +8,14 @@ import (
 	"io/ioutil"
 )
 
+// 收集器的存储接口
+type CollectorStore interface {
+	Store(interface{}) error
+	FindById(id interface{}, out interface{}) (bool, error)
+	Init() error
+}
+
 type collector struct {
-	e              *xorm.Engine
 	// 发现的文章
 	Discovered     chan int
 	// 待存储文章
@@ -20,15 +25,16 @@ type collector struct {
 	// 等待收集的文章
 	PendingArticle chan Article
 	r              bool
+	s CollectorStore
 }
-func NewCollector(e *xorm.Engine) *collector {
+func NewCollector(s CollectorStore) *collector {
 	return &collector{
-		e,
 		make(chan int, 200),
 		make(chan Article, 100),
 		make(chan Comment, 200),
 		make(chan Article, 100),
 		false,
+		s,
 	};
 }
 
@@ -75,12 +81,12 @@ func (c *collector)collect() {
 	// 收集发现的文章
 	collecting := make(map[int]interface{})
 	rw := sync.RWMutex{}
-	e := c.e
 	for c.r {
 		select {
 		case id := <-c.Discovered:
 			a := Article{}
-			found, err := e.Id(id).Get(&a)
+			a.Sid = id
+			found, err := c.s.FindById(id, &a)
 			if err != nil {log.Warning("Get article faield %v:%v", a, err); continue}
 			if found {
 				// 判断是否需要更新
@@ -105,37 +111,16 @@ func (c *collector)collect() {
 	}
 }
 func (c *collector)store() {
-	e := c.e
-	ta := Article{}
-	tc := Comment{}
 	for c.r {
 		select {
 		case a := <-c.StoreArticle:
-			clear(&ta)
 			t := time.Now()
 			a.Update = &t
-			found, err := e.Id(a.Sid).Get(&ta)
-			if err != nil {log.Warning("Get comment faield %v:%v", a, err); continue}
-			if found {
-				_, err := e.Update(a)
-				if err != nil {log.Warning("Update article faield", err); continue}
-			}else {
-				_, err := e.Insert(a)
-				if err != nil {log.Warning("Insert article faield", err); continue}
-			}
+			err := c.s.Store(&a)
+			if err != nil {log.Warning("Store article faield %v:%v", a, err); }
 		case cmt := <-c.StoreComment:
-			clear(&tc)
-			found, err := c.e.Id(cmt.Sid).Get(&tc)
-			if err != nil {log.Warning("Get comment faield %v:%v", cmt, err); continue}
-			if found {
-				log.Debug("Insert Comment %v", cmt)
-				_, err := c.e.Update(cmt)
-				if err != nil {log.Warning("Update comment faield", err); continue}
-			}else {
-				log.Debug("Insert Comment %v", cmt)
-				_, err := c.e.Insert(cmt)
-				if err != nil {log.Warning("Insert comment faield", err); continue}
-			}
+			err := c.s.Store(&cmt)
+			if err != nil {log.Warning("Store comment faield %v:%v", cmt, err); }
 		case <-time.After(time.Second):
 		}
 	}
