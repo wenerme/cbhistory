@@ -62,8 +62,9 @@ func (t CmtDate)MarshalJSON() ([]byte, error) {
 	return []byte(`"`+time.Time(t).Format("2006-01-02 15:04:05")+`"`), nil
 }
 func (t *CmtDate)UnmarshalJSON(s []byte) error {
-	r, err := time.Parse("2006-01-02 15:04:05", strings.Trim(string(s), `"`))
-	*t = CmtDate(r)
+	r, err := time.ParseInLocation("2006-01-02 15:04:05", strings.Trim(string(s), `"`), time.Local)
+	//	r, err := time.Parse("2006-01-02 15:04:05", strings.Trim(string(s), `"`))
+	*t = CmtDate(r.Local())
 	return err
 }
 func (t CmtInt)Int() int {

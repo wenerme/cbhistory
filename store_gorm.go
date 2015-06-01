@@ -4,6 +4,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/jinzhu/gorm"
 	"fmt"
+	"time"
 )
 
 
@@ -45,7 +46,7 @@ func (this *GormCollectorStore)Store(v interface{}) error {
 				log.Debug("Insert article %+v", c)
 			}
 		}else {
-			if r := this.Model(c).Update(c); r.Error != nil {
+			if r := this.Save(c); r.Error != nil {
 				log.Warning("Update article faield %+v:%v", c, r.Error)
 			}else {
 				log.Debug("Update article %+v", c)
@@ -61,7 +62,7 @@ func (this *GormCollectorStore)Store(v interface{}) error {
 				log.Debug("Insert comment %+v", c)
 			}
 		}else {
-			if r := this.Model(c).Update(c); r.Error != nil {
+			if r := this.Save(c); r.Error != nil {
 				log.Warning("Update comment faield %+v:%v", c, r.Error)
 			}else {
 				log.Debug("Update comment %+v", c)
@@ -73,11 +74,19 @@ func (this *GormCollectorStore)Store(v interface{}) error {
 	}
 	return nil
 }
+func (this *GormCollectorStore)FindAllArticleDateBetween(a time.Time, b time.Time) ([]Article, error) {
+	items := make([]Article, 0)
+	return items, this.Where("date between ? and ?", a, b).Find(&items).Error
+}
+func (this *GormCollectorStore)FindAllArticleUpdateBetween(a time.Time, b time.Time) ([]Article, error) {
+	items := make([]Article, 0)
+	return items, this.Where(`"update" between ? and ?`, a, b).Find(&items).Error
+}
 func (this *GormCollectorStore)Init() {
 	a := &Article{}
 	c := &Comment{}
-	//	this.DropTableIfExists(a)
-	//	this.DropTableIfExists(c)
+	this.DropTableIfExists(a)
+	this.DropTableIfExists(c)
 	this.CreateTable(a)
 	this.CreateTable(c)
 	this.Model(c).AddIndex("comment_sid", "sid").AddIndex("comment_pid", "pid")

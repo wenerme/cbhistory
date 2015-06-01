@@ -33,9 +33,12 @@ type Article struct {
 	Outdated bool
 }
 
+func (a Article)TableName() string {
+	return "article"
+}
 func (a Article)String() string {
-	return fmt.Sprintf("Article{sid=%v, sn=%v, oudated=%v, update=%v, title=%v}",
-		a.Sid, a.Sn, a.Outdated, a.Update, a.Title)
+	return fmt.Sprintf("Article{sid=%v, sn=%v, oudated=%v, update=%v, date=%v, title=%v}",
+		a.Sid, a.Sn, a.Outdated, a.Update, a.Date, a.Title)
 }
 
 type Comment struct {
@@ -55,4 +58,8 @@ type Comment struct {
 	Hostname string
 	// 评论日期
 	Date     *time.Time
+}
+
+func (a Comment)TableName() string {
+	return "comment"
 }

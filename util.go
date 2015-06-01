@@ -14,5 +14,5 @@ func init() {
 	backend1 := logging.NewLogBackend(os.Stdout, "", 0)
 	backend1Formatter := logging.NewBackendFormatter(backend1, format)
 	logging.SetBackend(backend1Formatter)
-	logging.SetLevel(logging.INFO, "cbh")
+	//	logging.SetLevel(logging.INFO, "cbh")
 }

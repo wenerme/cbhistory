@@ -12,8 +12,9 @@ import (
 type CollectorStore interface {
 	Store(interface{}) error
 	FindById(id interface{}, out interface{}) (bool, error)
+	FindAllArticleDateBetween(a time.Time, b time.Time) ([]Article, error)
+	FindAllArticleUpdateBetween(a time.Time, b time.Time) ([]Article, error)
 	Init()
-	Clear()
 }
 
 type collector struct {
@@ -56,6 +57,11 @@ func clear(v interface{}) {
 	p.Set(reflect.Zero(p.Type()))
 }
 
+func (c *collector)Update(ids... int) {
+	for _, v := range ids {
+		c.discovered <- v
+	}
+}
 func (c *collector)DiscoverUrl(url string) {
 	go func() {
 		r, err := http.Get(url);
@@ -83,12 +89,12 @@ func (c *collector)schedule() {
 	//
 	//	}
 
-	jobs := make([]job, 0)
-	jobs = append(jobs, []job{
-		newJob("HomePage", 30 * time.Minute, 20 * time.Second, discoverUrl("http://www.cnbeta.com/")),
-		newJob("RankPage", 2 * time.Hour, 10 * time.Second, discoverUrl("http://www.cnbeta.com/rank/show.htm")),
-		newJob("TopPage", 2 * time.Hour, 30 * time.Second, discoverUrl("http://www.cnbeta.com/top10.htm")),
-		newJob("UpdateExpired", 30 * time.Minute, 40 * time.Second, func() {
+	jobs := make([]Job, 0)
+	jobs = append(jobs, []Job{
+		NewJob("HomePage", 30 * time.Minute, 20 * time.Second, discoverUrl("http://www.cnbeta.com/")),
+		NewJob("RankPage", 2 * time.Hour, 10 * time.Second, discoverUrl("http://www.cnbeta.com/rank/show.htm")),
+		NewJob("TopPage", 2 * time.Hour, 30 * time.Second, discoverUrl("http://www.cnbeta.com/top10.htm")),
+		NewJob("UpdateExpired", 30 * time.Minute, 40 * time.Second, func() {
 			log.Info("Update article between time")
 		}),
 	}...)
@@ -126,7 +132,7 @@ func (c *collector)collect() {
 					continue
 				}
 				var minimalUpdateInterval time.Duration = 30 * time.Minute
-				if a.Update != nil && a.Update.Add(minimalUpdateInterval).Before(time.Now()) {
+				if a.Update != nil && a.Update.Add(minimalUpdateInterval).After(time.Now()) {
 					// 判断是否需要更新
 					log.Info("Article last update is less than %s, will not update %v", minimalUpdateInterval.String(), a)
 					continue
@@ -143,7 +149,7 @@ func (c *collector)collect() {
 			if err != nil {log.Warning("Collec article faield %v:%v", a, err); continue}
 			if a.Comments > 0 && len(comments) == 0 {
 				a.Outdated = true
-				log.Info("Article %v is oudated", a)
+				log.Info("Article oudated %v", a)
 			}
 			c.storeArticle <- a
 			for _, v := range comments {
@@ -160,28 +166,56 @@ func (c *collector)store() {
 			t := time.Now()
 			a.Update = &t
 			err := c.s.Store(&a)
-			if err != nil {log.Warning("Store article faield %v:%v", a, err); }
+			if err != nil {
+				log.Warning("Store article faield %v:%v", a, err);
+			}else {
+				log.Debug("Store article %+v", a)
+			}
 		case cmt := <-c.storeComment:
 			err := c.s.Store(&cmt)
-			if err != nil {log.Warning("Store comment faield %v:%v", cmt, err); }
+			if err != nil {
+				log.Warning("Store comment faield %v:%v", cmt, err);
+			}else {
+				log.Debug("Store comment %+v", cmt)
+			}
 		case <-time.After(time.Second):
 		}
 	}
 }
 
-type job struct {
+type Job struct {
 	Name     string
 	At       time.Time
 	Interval time.Duration
 	Do       func()
 }
-func newJob(n string, i time.Duration, d time.Duration, v func()) job {
-	return job{n, time.Now().Add(d), i, v }
+// 如果 interval <= 0, 则该 Job 不会重复执行
+func NewJob(n string, i time.Duration, d time.Duration, v func()) Job {
+	return Job{n, time.Now().Add(d), i, v }
 }
 //func (j *job)NextTime() {
 //	j.At = time.Now().Add(j.Interval)
 //}
-type byTimeAsc []job
+type Scheduler struct {
+	jobs []Job
+}
+// 返回是否还有 Job 等待处理
+func (s *Scheduler) Schedule() (bool) {
+	jobs := s.jobs
+	now := time.Now()
+	for now.After(jobs[0].At) {
+		job := jobs[0]
+		log.Debug("Do job %v", job)
+		job.At = job.At.Add(job.Interval)
+		jobs = append(jobs[1:], job)
+		sort.Sort(byTimeAsc(jobs))
+		log.Debug("Next job %v", jobs[0])
+		job.Do()
+	}
+	s.jobs = jobs
+	return len(jobs) > 0
+}
+type byTimeAsc []Job
 func (a byTimeAsc) Len() int { return len(a) }
 func (a byTimeAsc) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a byTimeAsc) Less(i, j int) bool { return a[i].At.Before(a[j].At) }

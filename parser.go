@@ -85,7 +85,7 @@ func ParsePage(a *Article, c string) (err error) {
 		tmp := strings.TrimSpace(bar.Find(".where").Text())
 		a.Source = tmp[strings.Index(tmp, "：")+len("："):]
 
-		d, err := time.Parse("2006-01-02 15:04:05", bar.Find(".date").Text())
+		d, err := time.ParseInLocation("2006-01-02 15:04:05", bar.Find(".date").Text(), time.Local)
 		if (err != nil) { return err}
 		a.Date = &d
 	}

@@ -88,7 +88,7 @@ func FetchCmt(a *Article) (c *CmtResponse, err error) {
 	//	c = nil
 	for p := 1;; p ++ {
 		url := fmt.Sprintf("http://www.cnbeta.com/cmt?op=%v,%v,%v", p, a.Sid, a.Sn);
-		log.Info("Fetch Cmt %s", url)
+		log.Debug("Fetch Cmt %s", url)
 		r, err := http.NewRequest("GET", url, nil)
 		if err !=nil {return c, err}
 		r.Header.Add("X-Requested-With", "XMLHttpRequest")
