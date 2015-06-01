@@ -30,4 +30,4 @@ out/
 /app.properties
 
 ignored/
-test.db
+/*.db

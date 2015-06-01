@@ -1,9 +1,12 @@
 package cbhistory
-import "time"
+import (
+	"time"
+	"fmt"
+)
 
 type Article struct {
 	// 文章ID
-	Sid    int `gorm:"primary_key"`
+	Sid      int `gorm:"primary_key"`
 	Sn       string
 	// 顶的数量
 	Dig      int
@@ -16,9 +19,9 @@ type Article struct {
 	// 参与人数
 	Join     int
 	// 该文章更新时间
-	Update *time.Time
+	Update   *time.Time
 	// 文章发布日期
-	Date   *time.Time
+	Date     *time.Time
 	// 阅读人数
 	Read     int
 	// 文章来源
@@ -26,6 +29,13 @@ type Article struct {
 	// 文章标题
 	Title    string
 	Token    string
+	// 是否该文章已经过期
+	Outdated bool
+}
+
+func (a Article)String() string {
+	return fmt.Sprintf("Article{sid=%v, sn=%v, oudated=%v, update=%v, title=%v}",
+		a.Sid, a.Sn, a.Outdated, a.Update, a.Title)
 }
 
 type Comment struct {
@@ -43,7 +53,6 @@ type Comment struct {
 	Pros     int
 	// 发言者所在地区
 	Hostname string
-	Join     int
 	// 评论日期
 	Date     *time.Time
 }

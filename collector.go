@@ -3,29 +3,30 @@ import (
 	"time"
 	"reflect"
 	"sync"
-	"github.com/rakyll/coop"
 	"net/http"
 	"io/ioutil"
+	"sort"
 )
 
 // 收集器的存储接口
 type CollectorStore interface {
 	Store(interface{}) error
 	FindById(id interface{}, out interface{}) (bool, error)
-	Init() error
+	Init()
+	Clear()
 }
 
 type collector struct {
 	// 发现的文章
-	Discovered     chan int
+	discovered     chan int
 	// 待存储文章
-	StoreArticle   chan Article
+	storeArticle   chan Article
 	// 待存储评论
-	StoreComment   chan Comment
+	storeComment   chan Comment
 	// 等待收集的文章
-	PendingArticle chan Article
+	pendingArticle chan Article
 	r              bool
-	s CollectorStore
+	s              CollectorStore
 }
 func NewCollector(s CollectorStore) *collector {
 	return &collector{
@@ -45,7 +46,7 @@ func (c *collector)Start() error {
 	c.r = true
 	log.Info("Start collecting")
 	go c.store()
-	go c.discover()
+	go c.schedule()
 	go c.collect()
 	return nil
 }
@@ -62,20 +63,51 @@ func (c *collector)DiscoverUrl(url string) {
 		b, err := ioutil.ReadAll(r.Body)
 		if err != nil {log.Warning("Read all %v faield:%v", url, err); return}
 		ids := Discover(string(b))
-		log.Info("With %s discoved  (%v)%v", url, len(ids), ids)
+		log.Info("In %s discoved  (%v)%v", url, len(ids), ids)
 		for _, i := range ids {
-			c.Discovered <- i
+			c.discovered <- i
 		}
 	}()
 }
-func (c *collector)discover() {
+func (c *collector)schedule() {
 	// 定时扫描指定页面
 	// 定时查询快指定间隔时间中的文章
 
-	coop.Every(1*time.Hour, func() {
-		c.DiscoverUrl("http://www.cnbeta.com/")
-	})
+	discoverUrl := func(url string) func() {
+		return func() {
+			c.DiscoverUrl(url)
+		}
+	}
 
+	//	discoverBetween := func()func(){
+	//
+	//	}
+
+	jobs := make([]job, 0)
+	jobs = append(jobs, []job{
+		newJob("HomePage", 30 * time.Minute, 20 * time.Second, discoverUrl("http://www.cnbeta.com/")),
+		newJob("RankPage", 2 * time.Hour, 10 * time.Second, discoverUrl("http://www.cnbeta.com/rank/show.htm")),
+		newJob("TopPage", 2 * time.Hour, 30 * time.Second, discoverUrl("http://www.cnbeta.com/top10.htm")),
+		newJob("UpdateExpired", 30 * time.Minute, 40 * time.Second, func() {
+			log.Info("Update article between time")
+		}),
+	}...)
+	sort.Sort(byTimeAsc(jobs))
+	log.Info("Jobs %+v", jobs)
+	for c.r {
+		time.Sleep(2*time.Second)
+		log.Debug("Job tick")
+		now := time.Now()
+		for now.After(jobs[0].At) {
+			job := jobs[0]
+			log.Info("Do job %v", job)
+			job.At = job.At.Add(job.Interval)
+			jobs = append(jobs[1:], job)
+			sort.Sort(byTimeAsc(jobs))
+			log.Info("Next job %v", jobs[0])
+			job.Do()
+		}
+	}
 }
 func (c *collector)collect() {
 	// 收集发现的文章
@@ -83,28 +115,39 @@ func (c *collector)collect() {
 	rw := sync.RWMutex{}
 	for c.r {
 		select {
-		case id := <-c.Discovered:
+		case id := <-c.discovered:
 			a := Article{}
 			a.Sid = id
 			found, err := c.s.FindById(id, &a)
 			if err != nil {log.Warning("Get article faield %v:%v", a, err); continue}
 			if found {
-				// 判断是否需要更新
-				log.Info("Article no need update %+v", a)
-				continue
+				if a.Outdated {
+					log.Info("Article outdated, will not update %v", a)
+					continue
+				}
+				var minimalUpdateInterval time.Duration = 30 * time.Minute
+				if a.Update != nil && a.Update.Add(minimalUpdateInterval).Before(time.Now()) {
+					// 判断是否需要更新
+					log.Info("Article last update is less than %s, will not update %v", minimalUpdateInterval.String(), a)
+					continue
+				}
 			}
 			rw.Lock()
 			collecting[id] = nil
 			rw.Unlock()
 			log.Info("Pending update article %+v", a)
-			c.PendingArticle <- a
-		case a := <-c.PendingArticle:
+			c.pendingArticle <- a
+		case a := <-c.pendingArticle:
 			comments := make(map[int]Comment)
 			err := Collect(&a, comments)
 			if err != nil {log.Warning("Collec article faield %v:%v", a, err); continue}
-			c.StoreArticle <- a
+			if a.Comments > 0 && len(comments) == 0 {
+				a.Outdated = true
+				log.Info("Article %v is oudated", a)
+			}
+			c.storeArticle <- a
 			for _, v := range comments {
-				c.StoreComment <- v
+				c.storeComment <- v
 			}
 		case <-time.After(time.Second):
 		}
@@ -113,15 +156,32 @@ func (c *collector)collect() {
 func (c *collector)store() {
 	for c.r {
 		select {
-		case a := <-c.StoreArticle:
+		case a := <-c.storeArticle:
 			t := time.Now()
 			a.Update = &t
 			err := c.s.Store(&a)
 			if err != nil {log.Warning("Store article faield %v:%v", a, err); }
-		case cmt := <-c.StoreComment:
+		case cmt := <-c.storeComment:
 			err := c.s.Store(&cmt)
 			if err != nil {log.Warning("Store comment faield %v:%v", cmt, err); }
 		case <-time.After(time.Second):
 		}
 	}
 }
+
+type job struct {
+	Name     string
+	At       time.Time
+	Interval time.Duration
+	Do       func()
+}
+func newJob(n string, i time.Duration, d time.Duration, v func()) job {
+	return job{n, time.Now().Add(d), i, v }
+}
+//func (j *job)NextTime() {
+//	j.At = time.Now().Add(j.Interval)
+//}
+type byTimeAsc []job
+func (a byTimeAsc) Len() int { return len(a) }
+func (a byTimeAsc) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a byTimeAsc) Less(i, j int) bool { return a[i].At.Before(a[j].At) }

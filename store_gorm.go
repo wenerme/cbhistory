@@ -28,7 +28,6 @@ func (this *GormCollectorStore)FindById(id interface{}, v interface{}) (bool, er
 				return false, r.Error
 			}
 		}
-
 		default:
 		panic(fmt.Sprintf("Can not find %T with %v", v, id))
 	}
@@ -46,7 +45,7 @@ func (this *GormCollectorStore)Store(v interface{}) error {
 				log.Debug("Insert article %+v", c)
 			}
 		}else {
-			if r := this.Update(c); r.Error != nil {
+			if r := this.Model(c).Update(c); r.Error != nil {
 				log.Warning("Update article faield %+v:%v", c, r.Error)
 			}else {
 				log.Debug("Update article %+v", c)
@@ -62,7 +61,7 @@ func (this *GormCollectorStore)Store(v interface{}) error {
 				log.Debug("Insert comment %+v", c)
 			}
 		}else {
-			if r := this.Update(c); r.Error != nil {
+			if r := this.Model(c).Update(c); r.Error != nil {
 				log.Warning("Update comment faield %+v:%v", c, r.Error)
 			}else {
 				log.Debug("Update comment %+v", c)
@@ -74,14 +73,20 @@ func (this *GormCollectorStore)Store(v interface{}) error {
 	}
 	return nil
 }
-func (this *GormCollectorStore)Init() error {
+func (this *GormCollectorStore)Init() {
 	a := &Article{}
 	c := &Comment{}
-	this.DropTableIfExists(a)
-	this.DropTableIfExists(c)
+	//	this.DropTableIfExists(a)
+	//	this.DropTableIfExists(c)
 	this.CreateTable(a)
 	this.CreateTable(c)
 	this.Model(c).AddIndex("comment_sid", "sid").AddIndex("comment_pid", "pid")
 	log.Info("Init store, clear article and comment")
-	return nil
+}
+func (this *GormCollectorStore)Clear() {
+	a := &Article{}
+	c := &Comment{}
+
+	this.Delete(a)
+	this.Delete(c)
 }
