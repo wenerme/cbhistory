@@ -1,0 +1,558 @@
+{
+  "state": "success",
+  "message": "ok",
+  "result": {
+    "cmntdict": {
+      "11225181": [
+        {
+          "tid": "11224497",
+          "pid": "0",
+          "sid": "398235"
+        },
+        {
+          "tid": "11225057",
+          "pid": "11224497",
+          "sid": "398235"
+        }
+      ],
+      "11225057": [
+        {
+          "tid": "11224497",
+          "pid": "0",
+          "sid": "398235"
+        }
+      ],
+      "11225053": [
+        {
+          "tid": "11224497",
+          "pid": "0",
+          "sid": "398235"
+        },
+        {
+          "tid": "11224549",
+          "pid": "11224497",
+          "sid": "398235"
+        }
+      ],
+      "11224921": [
+        {
+          "tid": "11224497",
+          "pid": "0",
+          "sid": "398235"
+        }
+      ],
+      "11224697": [
+        {
+          "tid": "11224583",
+          "pid": "0",
+          "sid": "398235"
+        }
+      ],
+      "11224665": [
+        {
+          "tid": "11224497",
+          "pid": "0",
+          "sid": "398235"
+        },
+        {
+          "tid": "11224549",
+          "pid": "11224497",
+          "sid": "398235"
+        }
+      ],
+      "11224549": [
+        {
+          "tid": "11224497",
+          "pid": "0",
+          "sid": "398235"
+        }
+      ],
+      "11224543": [
+        {
+          "tid": "11224497",
+          "pid": "0",
+          "sid": "398235"
+        }
+      ],
+      "11224505": [
+        {
+          "tid": "11224497",
+          "pid": "0",
+          "sid": "398235"
+        }
+      ]
+    },
+    "hotlist": [
+      {
+        "tid": "11224495",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224543",
+        "pid": "11224497",
+        "sid": "398235",
+        "parent": "11224497",
+        "thread": "11224497"
+      },
+      {
+        "tid": "11224771",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224549",
+        "pid": "11224497",
+        "sid": "398235",
+        "parent": "11224497",
+        "thread": "11224497"
+      },
+      {
+        "tid": "11224697",
+        "pid": "11224583",
+        "sid": "398235",
+        "parent": "11224583",
+        "thread": "11224583"
+      },
+      {
+        "tid": "11224779",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224785",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224583",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      }
+    ],
+    "cmntlist": [
+      {
+        "tid": "11225181",
+        "pid": "11225057",
+        "sid": "398235",
+        "parent": "11225057",
+        "thread": "11224497"
+      },
+      {
+        "tid": "11225057",
+        "pid": "11224497",
+        "sid": "398235",
+        "parent": "11224497",
+        "thread": "11224497"
+      },
+      {
+        "tid": "11225053",
+        "pid": "11224549",
+        "sid": "398235",
+        "parent": "11224549",
+        "thread": "11224497"
+      },
+      {
+        "tid": "11225023",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224921",
+        "pid": "11224497",
+        "sid": "398235",
+        "parent": "11224497",
+        "thread": "11224497"
+      },
+      {
+        "tid": "11224905",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224895",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224871",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224853",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224785",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224779",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224771",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224697",
+        "pid": "11224583",
+        "sid": "398235",
+        "parent": "11224583",
+        "thread": "11224583"
+      },
+      {
+        "tid": "11224665",
+        "pid": "11224549",
+        "sid": "398235",
+        "parent": "11224549",
+        "thread": "11224497"
+      },
+      {
+        "tid": "11224583",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224549",
+        "pid": "11224497",
+        "sid": "398235",
+        "parent": "11224497",
+        "thread": "11224497"
+      },
+      {
+        "tid": "11224543",
+        "pid": "11224497",
+        "sid": "398235",
+        "parent": "11224497",
+        "thread": "11224497"
+      },
+      {
+        "tid": "11224505",
+        "pid": "11224497",
+        "sid": "398235",
+        "parent": "11224497",
+        "thread": "11224497"
+      },
+      {
+        "tid": "11224497",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      },
+      {
+        "tid": "11224495",
+        "pid": "0",
+        "sid": "398235",
+        "parent": "",
+        "thread": ""
+      }
+    ],
+    "cmntstore": {
+      "11225181": {
+        "tid": "11225181",
+        "pid": "11225057",
+        "sid": "398235",
+        "date": "2015-05-30 02:13:59",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u52a0\u62ff\u5927",
+        "comment": "\u7eaf\u6587\u660e\u7528\u8bed",
+        "score": 1,
+        "reason": "0",
+        "userid": "0",
+        "icon": ""
+      },
+      "11225057": {
+        "tid": "11225057",
+        "pid": "11224497",
+        "sid": "398235",
+        "date": "2015-05-30 00:27:18",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u5317\u7f8e\u5730\u533a",
+        "comment": "\u8f6f\u72d7\u518d\u4e00\u6b21\u88ab\u6247\u8138neka",
+        "score": 3,
+        "reason": 6,
+        "userid": "0",
+        "icon": ""
+      },
+      "11225053": {
+        "tid": "11225053",
+        "pid": "11224549",
+        "sid": "398235",
+        "date": "2015-05-30 00:24:55",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u8d35\u5dde\u7701\u8d35\u9633\u5e02",
+        "comment": "\u4e0d\u4f1a\u4e70\u65b0PC\u5c31\u7b49\u4e8epc\u5b8c\u86cb\u4e86?\u8fd9\u4ed6M\u7684\u8fde\u6587\u79d1\u751f\u90fd\u4e0d\u5982",
+        "score": 5,
+        "reason": 1,
+        "userid": "0",
+        "icon": ""
+      },
+      "11225023": {
+        "tid": "11225023",
+        "pid": "0",
+        "sid": "398235",
+        "date": "2015-05-30 00:11:50",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u6d77\u5357\u7701",
+        "comment": "\u5c31\u7b97\u4e0d\u662f\u514d\u8d39\u5347\u7ea7\u5230win10\u90a3\u4e5f\u4e0d\u4f1a\u523a\u6fc0\u591a\u5c11\u3002\u56e0\u4e3awin7\u771f\u7684\u5f88\u597d\u7528\uff0c\u5f88\u591f\u7528\u3002",
+        "score": 3,
+        "reason": 2,
+        "userid": "0",
+        "icon": ""
+      },
+      "11224921": {
+        "tid": "11224921",
+        "pid": "11224497",
+        "sid": "398235",
+        "date": "2015-05-29 23:37:10",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u5e7f\u4e1c\u7701\u6df1\u5733\u5e02",
+        "comment": "PC\u59cb\u7ec8\u662f\u8fdb\u5165\u79d1\u6280\u4e16\u754c\u7684\u6572\u95e8\u7816\uff0c\u95e8\u5916\u7684\u4eba\u5176\u5b9e\u662f\u5f88\u60f3\u8fdb\u6765\u7684\uff0c\u53ea\u662f\u8fd9\u51e0\u5e74\u8fc5\u731b\u53d1\u5c55\u7684\u624b\u673a\u900f\u652f\u4e86IT\u6d88\u8d39\u3002",
+        "score": 3,
+        "reason": "0",
+        "userid": "0",
+        "icon": ""
+      },
+      "11224905": {
+        "tid": "11224905",
+        "pid": "0",
+        "sid": "398235",
+        "date": "2015-05-29 23:33:49",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u6c5f\u82cf\u7701\u82cf\u5dde\u5e02",
+        "comment": "\u7136\u800c\u65e0\u8bbaWindows\u600e\u4e48\u5347\u7ea7\uff0c\u6211\u4e5f\u53ea\u80fd\u7528PC",
+        "score": 2,
+        "reason": 2,
+        "userid": "0",
+        "icon": ""
+      },
+      "11224895": {
+        "tid": "11224895",
+        "pid": "0",
+        "sid": "398235",
+        "date": "2015-05-29 23:29:13",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u4e2d\u56fd",
+        "comment": "\u5176\u5b9e\u662f\u786c\u4ef6\u5bfc\u81f4\u5e02\u573a\u75b2\u5f31\uff0c\u786c\u4ef6\u53d1\u5c55\u592a\u5febCPU\u548c\u663e\u5361\u7b49\u6bcf1\u5e74\u4e00\u4ee3\uff0c\u800c\u7cfb\u7edf3\u523010\u5e74\u4e00\u4ee3\uff0c\u4e25\u91cd\u5bfc\u81f4\u6027\u80fd\u8fc7\u5269\u3002\u4e00\u53f0\u7535\u8111\u53ef\u4ee5\u752810\u5e74\u8fd8\u53ef\u4ee5\u7ee7\u7eed\u7528\u3002\u5e02\u573a\u9971\u548c\u5fc5\u7136\uff0c\u800c\u6dd8\u6c70\u4e0a\u4e00\u4ee3\u7684\u7535\u8111\u7684\u65f6\u95f4\u592a\u4e45\u4e86",
+        "score": 2,
+        "reason": "1",
+        "userid": "0",
+        "icon": ""
+      },
+      "11224871": {
+        "tid": "11224871",
+        "pid": "0",
+        "sid": "398235",
+        "date": "2015-05-29 23:19:36",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u4e91\u5357\u7701\u6606\u660e\u5e02",
+        "comment": "win10\u51fa\u6765\u4e86\u4e4b\u540e\uff0c\u81f3\u5c11\u6211\u4f1a\u4e70\u65b0\u7535\u8111",
+        "score": 2,
+        "reason": 5,
+        "userid": "0",
+        "icon": ""
+      },
+      "11224853": {
+        "tid": "11224853",
+        "pid": "0",
+        "sid": "398235",
+        "date": "2015-05-29 23:15:33",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u4e2d\u56fd",
+        "comment": "\u6211\u4e5f\u89c9\u5f97\u662f\u8fd9\u6837\u7684\uff0c\u53ea\u80fd\u7b49 Linux \u62ef\u6551\u4e86\u3002",
+        "score": 2,
+        "reason": 2,
+        "userid": "0",
+        "icon": ""
+      },
+      "11224785": {
+        "tid": "11224785",
+        "pid": "0",
+        "sid": "398235",
+        "date": "2015-05-29 22:52:51",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u6c5f\u82cf\u7701\u5357\u4eac\u5e02",
+        "comment": "\u7136\u800c\u5e73\u677f\u8fd9\u4e2a\u4e1c\u897f\u5df2\u7ecf\u9971\u548c\u4e0b\u6ed1\u4e86\uff0c\u8fd9tm\u8d77\u6765\u7684\u665a\uff0c\u5374\u8eba\u4e0b\u7684\u65e9",
+        "score": 15,
+        "reason": "0",
+        "userid": "0",
+        "icon": ""
+      },
+      "11224779": {
+        "tid": "11224779",
+        "pid": "0",
+        "sid": "398235",
+        "date": "2015-05-29 22:50:12",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u5e7f\u4e1c\u7701\u6df1\u5733\u5e02",
+        "comment": "PC\u5df2\u7ecf\u6210\u4e3a\u5bb6\u5ead\u3001\u516c\u53f8\u7684\u4e00\u90e8\u5206\uff0c\u5e02\u573a\u4e0d\u4f1a\u6709\u5927\u7684\u6ce2\u52a8\uff0c\u4f46\u5374\u975e\u5e38\u7a33\u56fa\u3002",
+        "score": 16,
+        "reason": "0",
+        "userid": "0",
+        "icon": ""
+      },
+      "11224771": {
+        "tid": "11224771",
+        "pid": "0",
+        "sid": "398235",
+        "date": "2015-05-29 22:46:54",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u798f\u5efa\u7701\u53a6\u95e8\u5e02",
+        "comment": "\u4ece\u79fb\u52a8\u8bbe\u5907\u548c\u6e38\u620f\u4e3b\u673a\u51fa\u73b0\u540e\uff0cPC\u6bcf\u9694\u51e0\u4e2a\u6708\u90fd\u8981\u88ab\u5404\u5f0f\u5404\u6837\u7684\u5a92\u4f53\u62c9\u51fa\u6765\u8bf4\u9a6c\u4e0a\u5c31\u8981\u6d88\u5931\u4e86\uff0c\u7136\u800c\u8fd9\u4e48\u591a\u5e74\u8fc7\u53bb\u4e86PC\u4f9d\u65e7\u6ca1\u6709\u6d88\u5931\u3002",
+        "score": 28,
+        "reason": 1,
+        "userid": "0",
+        "icon": ""
+      },
+      "11224697": {
+        "tid": "11224697",
+        "pid": "11224583",
+        "sid": "398235",
+        "date": "2015-05-29 22:24:00",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u6e56\u5317\u7701\u6b66\u6c49\u5e02",
+        "comment": "\u7535\u8111\uff1a\u4e0a\u7f51\u3001\u542c\u6b4c\u3001\u6e38\u620f\u3001\u89c6\u9891--\uff0c\u968f\u4fbf\u5f00\uff0c\u5e73\u677f\uff0c\u54ea\u513f\u51c9\u5feb\u5f80\u54ea\u513f\u53bb",
+        "score": 17,
+        "reason": 4,
+        "userid": "0",
+        "icon": ""
+      },
+      "11224665": {
+        "tid": "11224665",
+        "pid": "11224549",
+        "sid": "398235",
+        "date": "2015-05-29 22:15:15",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u5317\u4eac\u5e02",
+        "comment": "\u800c\u5728\u5e74\u5e95\u5047\u671f\u8d2d\u7269\u65fa\u5b63\uff0c\u6d88\u8d39\u8005\u901a\u5e38\u4f1a\u8d2d\u4e70\u5e73\u677f\u7535\u8111\uff0c\u667a\u80fd\u624b\u673a\u4ee5\u53caApple Watch\u7b49\u53ef\u7a7f\u6234\u8bbe\u5907\u3002",
+        "score": "1",
+        "reason": 10,
+        "userid": "0",
+        "icon": ""
+      },
+      "11224583": {
+        "tid": "11224583",
+        "pid": "0",
+        "sid": "398235",
+        "date": "2015-05-29 21:51:18",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u5317\u4eac\u5e02",
+        "comment": "\u8bdd\u8bf4,\u4f60\u4eec\u4e00\u76f4\u4f4e\u7740\u5934\u770b\u5e73\u677f\u548c\u624b\u673a\u8116\u5b50\u4e0d\u75db\u5417?\u96be\u9053\u7535\u8111\u53ef\u4ee5\u5e73\u89c6\u8fd8\u662f\u5927\u5c4f\u5e55\u7684\u663e\u793a\u5668\u6ca1\u4eba\u559c\u6b22.",
+        "score": 11,
+        "reason": 3,
+        "userid": "0",
+        "icon": ""
+      },
+      "11224549": {
+        "tid": "11224549",
+        "pid": "11224497",
+        "sid": "398235",
+        "date": "2015-05-29 21:39:31",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u4e0a\u6d77\u5e02",
+        "comment": "\u6d88\u8d39\u8005\u5374\u4e0d\u4f1a\u8d2d\u4e70\u65b0PC\uff0c\u56e0\u4e3a\u5fae\u8f6f\u5df2\u7ecf\u627f\u8bfa\u8ba9\u8ba9Windows 7\u62168\u6b63\u7248\u7528\u6237\u514d\u8d39\u5347\u7ea7\u5230\u65b0\u7684\u6587\u660e\u7528\u8bed\u4f5c\u7cfb\u7edf\u3002\n\u53e6\u5916\uff0cwin10\u5df2\u7ecf\u4e0d\u662f\u6587\u660e\u7528\u8bed\u4f5c\u7cfb\u7edf\u4e86\uff0c\u5c06\u4f1a\u6210\u4e3a\u65e0\u6240\u4e0d\u5728\u7684\u670d\u52a1",
+        "score": 16,
+        "reason": 8,
+        "userid": "0",
+        "icon": ""
+      },
+      "11224543": {
+        "tid": "11224543",
+        "pid": "11224497",
+        "sid": "398235",
+        "date": "2015-05-29 21:38:02",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u5e7f\u4e1c\u7701\u5e7f\u5dde\u5e02",
+        "comment": "\u5bf9\uff0c\u5e73\u677f\u53bb\u5e74\u4e0b\u6ed1\u624d\u662fPC\u51e0\u500d",
+        "score": 36,
+        "reason": 5,
+        "userid": "0",
+        "icon": ""
+      },
+      "11224505": {
+        "tid": "11224505",
+        "pid": "11224497",
+        "sid": "398235",
+        "date": "2015-05-29 21:24:52",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u4e0a\u6d77\u5e02",
+        "comment": "\u55ef\uff01\u4f60\u56de\u5bb6\u5c31\u628a\u4f60\u5bb6\u7535\u8111\u7838\u4e86\u5427\uff01\u7528\u624b\u673a\u3001\u5e73\u677f\u5c31\u884c\u4e86\u3002",
+        "score": 14,
+        "reason": 11,
+        "userid": "0",
+        "icon": ""
+      },
+      "11224497": {
+        "tid": "11224497",
+        "pid": "0",
+        "sid": "398235",
+        "date": "2015-05-29 21:22:50",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u6cb3\u5317\u7701\u5eca\u574a\u5e02",
+        "comment": "IDC\u4e5f\u770b\u51fa\u6765\u4e86\uff0cINTEL\u4e5f\u770b\u51fa\u6765\u3002\u552f\u6709\u4e2d\u56fd\u7684\u4e00\u7fa4\u8f6f\u7c89\u4e0d\u670d\u3002\u3002\u3002\u6211\u4e0a\u6b21\u8bf4\u201c\u5927\u52bf\u5df2\u53bb\u201d\u8fd8\u88ab\u4eba\u9a82\uff01~~~PC\u6162\u6162\u8f6c\u6210\u4f01\u4e1a\u529e\u516c\u73af\u5883\uff0c\u4e2a\u4eba\u6d88\u8d39\u8005\u8d8a\u6765\u8d8a\u5c11\u4e86\u3002",
+        "score": 15,
+        "reason": 44,
+        "userid": "0",
+        "icon": ""
+      },
+      "11224495": {
+        "tid": "11224495",
+        "pid": "0",
+        "sid": "398235",
+        "date": "2015-05-29 21:21:07",
+        "name": "\u533f\u540d\u4eba\u58eb",
+        "host_name": "\u5e7f\u4e1c\u7701\u5e7f\u5dde\u5e02",
+        "comment": "\u7136\u800cpc\u5e76\u4e0d\u9700\u8981\u62ef\u6551",
+        "score": 80,
+        "reason": 3,
+        "userid": "0",
+        "icon": ""
+      }
+    },
+    "comment_num": "21",
+    "join_num": "20",
+    "open": 1,
+    "token": "40593e7d8d26344f907f6efcdb5e3ce97034d00e",
+    "view_num": 2731,
+    "page": "1",
+    "sid": "398235",
+    "u": [],
+    "dig_num": "1",
+    "fav_num": "0"
+  }
+}
