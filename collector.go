@@ -1,11 +1,12 @@
 package cbhistory
+
 import (
-	"time"
-	"reflect"
-	"sync"
-	"net/http"
 	"io/ioutil"
+	"net/http"
+	"reflect"
 	"sort"
+	"sync"
+	"time"
 )
 
 // 收集器的存储接口
@@ -19,16 +20,17 @@ type CollectorStore interface {
 
 type collector struct {
 	// 发现的文章
-	discovered     chan int
+	discovered chan int
 	// 待存储文章
-	storeArticle   chan Article
+	storeArticle chan Article
 	// 待存储评论
-	storeComment   chan Comment
+	storeComment chan Comment
 	// 等待收集的文章
 	pendingArticle chan Article
 	r              bool
 	s              CollectorStore
 }
+
 func NewCollector(s CollectorStore) *collector {
 	return &collector{
 		make(chan int, 200),
@@ -37,10 +39,10 @@ func NewCollector(s CollectorStore) *collector {
 		make(chan Article, 100),
 		false,
 		s,
-	};
+	}
 }
 
-func (c *collector)Start() error {
+func (c *collector) Start() error {
 	// 扫描指定页面
 	// 打开定时发现任务
 	// 打开处理线程
@@ -57,17 +59,23 @@ func clear(v interface{}) {
 	p.Set(reflect.Zero(p.Type()))
 }
 
-func (c *collector)Update(ids... int) {
+func (c *collector) Update(ids ...int) {
 	for _, v := range ids {
 		c.discovered <- v
 	}
 }
-func (c *collector)DiscoverUrl(url string) {
+func (c *collector) DiscoverUrl(url string) {
 	go func() {
-		r, err := http.Get(url);
-		if err != nil {log.Warning("Discover url %v faield:%v", url, err); return}
+		r, err := http.Get(url)
+		if err != nil {
+			log.Warning("Discover url %v faield:%v", url, err)
+			return
+		}
 		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {log.Warning("Read all %v faield:%v", url, err); return}
+		if err != nil {
+			log.Warning("Read all %v faield:%v", url, err)
+			return
+		}
 		ids := Discover(string(b))
 		log.Info("In %s discoved  (%v)%v", url, len(ids), ids)
 		for _, i := range ids {
@@ -75,7 +83,7 @@ func (c *collector)DiscoverUrl(url string) {
 		}
 	}()
 }
-func (c *collector)schedule() {
+func (c *collector) schedule() {
 	// 定时扫描指定页面
 	// 定时查询快指定间隔时间中的文章
 
@@ -91,17 +99,17 @@ func (c *collector)schedule() {
 
 	jobs := make([]Job, 0)
 	jobs = append(jobs, []Job{
-		NewJob("HomePage", 30 * time.Minute, 20 * time.Second, discoverUrl("http://www.cnbeta.com/")),
-		NewJob("RankPage", 2 * time.Hour, 10 * time.Second, discoverUrl("http://www.cnbeta.com/rank/show.htm")),
-		NewJob("TopPage", 2 * time.Hour, 30 * time.Second, discoverUrl("http://www.cnbeta.com/top10.htm")),
-		NewJob("UpdateExpired", 30 * time.Minute, 40 * time.Second, func() {
+		NewJob("HomePage", 30*time.Minute, 20*time.Second, discoverUrl("http://www.cnbeta.com/")),
+		NewJob("RankPage", 2*time.Hour, 10*time.Second, discoverUrl("http://www.cnbeta.com/rank/show.htm")),
+		NewJob("TopPage", 2*time.Hour, 30*time.Second, discoverUrl("http://www.cnbeta.com/top10.htm")),
+		NewJob("UpdateExpired", 30*time.Minute, 40*time.Second, func() {
 			log.Info("Update article between time")
 		}),
 	}...)
 	sort.Sort(byTimeAsc(jobs))
 	log.Info("Jobs %+v", jobs)
 	for c.r {
-		time.Sleep(2*time.Second)
+		time.Sleep(2 * time.Second)
 		log.Debug("Job tick")
 		now := time.Now()
 		for now.After(jobs[0].At) {
@@ -115,7 +123,7 @@ func (c *collector)schedule() {
 		}
 	}
 }
-func (c *collector)collect() {
+func (c *collector) collect() {
 	// 收集发现的文章
 	collecting := make(map[int]interface{})
 	rw := sync.RWMutex{}
@@ -125,16 +133,19 @@ func (c *collector)collect() {
 			a := Article{}
 			a.Sid = id
 			found, err := c.s.FindById(id, &a)
-			if err != nil {log.Warning("Get article faield %v:%v", a, err); continue}
+			if err != nil {
+				log.Warning("Get article faield %v:%v", a, err)
+				continue
+			}
 			if found {
 				if a.Outdated {
-					log.Info("Article outdated, will not update %v", a)
+					log.Debug("Article outdated, will not update %v", a)
 					continue
 				}
 				var minimalUpdateInterval time.Duration = 30 * time.Minute
 				if a.Update != nil && a.Update.Add(minimalUpdateInterval).After(time.Now()) {
 					// 判断是否需要更新
-					log.Info("Article last update is less than %s, will not update %v", minimalUpdateInterval.String(), a)
+					log.Debug("Article last update is less than %s, will not update %v", minimalUpdateInterval.String(), a)
 					continue
 				}
 			}
@@ -146,20 +157,31 @@ func (c *collector)collect() {
 		case a := <-c.pendingArticle:
 			comments := make(map[int]Comment)
 			err := Collect(&a, comments)
-			if err != nil {log.Warning("Collec article faield %v:%v", a, err); continue}
+			if err != nil {
+				log.Warning("Collec article faield %v:%v", a, err)
+				continue
+			}
 			if a.Comments > 0 && len(comments) == 0 {
 				a.Outdated = true
-				log.Info("Article oudated %v", a)
+				log.Info("Oudated Article get no comments %v", a)
+			} else if a.Date != nil && a.Date.Before(time.Now().Add(-10*24*time.Hour)) {
+				// 使十天前的文章过期
+				a.Outdated = true
+				log.Info("Oudated Article too old %v", a)
+			}
+			if a.Date == nil || a.Intro == "" || a.Title == "" {
+				log.Warning("Article missing field %+v", a)
 			}
 			c.storeArticle <- a
 			for _, v := range comments {
 				c.storeComment <- v
 			}
+			log.Info("Article updated %+v", a)
 		case <-time.After(time.Second):
 		}
 	}
 }
-func (c *collector)store() {
+func (c *collector) store() {
 	for c.r {
 		select {
 		case a := <-c.storeArticle:
@@ -167,15 +189,15 @@ func (c *collector)store() {
 			a.Update = &t
 			err := c.s.Store(&a)
 			if err != nil {
-				log.Warning("Store article faield %v:%v", a, err);
-			}else {
+				log.Warning("Store article faield %v:%v", a, err)
+			} else {
 				log.Debug("Store article %+v", a)
 			}
 		case cmt := <-c.storeComment:
 			err := c.s.Store(&cmt)
 			if err != nil {
-				log.Warning("Store comment faield %v:%v", cmt, err);
-			}else {
+				log.Warning("Store comment faield %v:%v", cmt, err)
+			} else {
 				log.Debug("Store comment %+v", cmt)
 			}
 		case <-time.After(time.Second):
@@ -189,18 +211,21 @@ type Job struct {
 	Interval time.Duration
 	Do       func()
 }
+
 // 如果 interval <= 0, 则该 Job 不会重复执行
 func NewJob(n string, i time.Duration, d time.Duration, v func()) Job {
-	return Job{n, time.Now().Add(d), i, v }
+	return Job{n, time.Now().Add(d), i, v}
 }
+
 //func (j *job)NextTime() {
 //	j.At = time.Now().Add(j.Interval)
 //}
 type Scheduler struct {
 	jobs []Job
 }
+
 // 返回是否还有 Job 等待处理
-func (s *Scheduler) Schedule() (bool) {
+func (s *Scheduler) Schedule() bool {
 	jobs := s.jobs
 	now := time.Now()
 	for now.After(jobs[0].At) {
@@ -215,7 +240,9 @@ func (s *Scheduler) Schedule() (bool) {
 	s.jobs = jobs
 	return len(jobs) > 0
 }
+
 type byTimeAsc []Job
-func (a byTimeAsc) Len() int { return len(a) }
-func (a byTimeAsc) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+
+func (a byTimeAsc) Len() int           { return len(a) }
+func (a byTimeAsc) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a byTimeAsc) Less(i, j int) bool { return a[i].At.Before(a[j].At) }
