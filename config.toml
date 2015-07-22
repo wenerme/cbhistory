@@ -1,0 +1,34 @@
+[database]
+type="sqlite3"
+file="cbh.db"
+
+[collector]
+enable=true
+
+[[collector.jobs]]
+description="Update valid article"
+type="sql"
+expression="SELECT sid FROM article WHERE outdated=0"
+interval=4h
+
+[[collector.jobs]]
+description="Discovery in homepage"
+type="url"
+expression="http://www.cnbeta.com/"
+interval="30m"
+
+[[collector.jobs]]
+description="Discovery in rank page"
+type="url"
+expression="http://www.cnbeta.com/rank/show.htm"
+interval="2h"
+
+[[collector.jobs]]
+description="Discovery in top page"
+type="url"
+expression="http://www.cnbeta.com/top10.htm"
+interval="2h"
+
+[server]
+port=8087
+enable=true
