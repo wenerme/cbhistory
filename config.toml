@@ -8,8 +8,8 @@ enable=true
 [[collector.jobs]]
 description="Update valid article"
 type="sql"
-expression="SELECT sid FROM article WHERE outdated=0"
-interval=4h
+expression="SELECT sid as id FROM article WHERE outdated=0"
+interval="4h"
 
 [[collector.jobs]]
 description="Discovery in homepage"
@@ -29,6 +29,6 @@ type="url"
 expression="http://www.cnbeta.com/top10.htm"
 interval="2h"
 
-[server]
+[http]
 port=8087
 enable=true

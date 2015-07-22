@@ -3,20 +3,10 @@ package cbhistory
 import (
 	"io/ioutil"
 	"net/http"
-	"reflect"
 	"sort"
 	"sync"
 	"time"
 )
-
-// 收集器的存储接口
-type CollectorStore interface {
-	Store(interface{}) error
-	FindById(id interface{}, out interface{}) (bool, error)
-	FindAllArticleDateBetween(a time.Time, b time.Time) ([]Article, error)
-	FindAllArticleUpdateBetween(a time.Time, b time.Time) ([]Article, error)
-	Init()
-}
 
 type collector struct {
 	// 发现的文章
@@ -28,35 +18,41 @@ type collector struct {
 	// 等待收集的文章
 	pendingArticle chan Article
 	r              bool
-	s              CollectorStore
+	s              *repo
+	jobs           []Job
+	svr            Server
 }
 
-func NewCollector(s CollectorStore) *collector {
-	return &collector{
-		make(chan int, 200),
-		make(chan Article, 100),
-		make(chan Comment, 200),
-		make(chan Article, 100),
-		false,
-		s,
+func newCollector(s Server) *collector {
+	c := &collector{
+		discovered:     make(chan int, 200),
+		storeArticle:   make(chan Article, 100),
+		storeComment:   make(chan Comment, 200),
+		pendingArticle: make(chan Article, 100),
+		r:              false,
+		s:              &repo{s.Database()},
 	}
+
+	c.svr = s
+	return c
 }
 
 func (c *collector) Start() error {
-	// 扫描指定页面
-	// 打开定时发现任务
-	// 打开处理线程
 	c.r = true
+
+	// 添加配置中的任务
+	for _, j := range c.svr.Config().Collector.Jobs {
+		job := NewJob(j.Description, j.Interval.Duration, j.Delay.Duration, nil)
+		t, e := j.Type, j.Expression
+		job.Do = func() { c.do(&job, t, e) }
+		c.jobs = append(c.jobs, job)
+		log.Debug("Add job %v", j)
+	}
 	log.Info("Start collecting")
 	go c.store()
 	go c.schedule()
 	go c.collect()
 	return nil
-}
-
-func clear(v interface{}) {
-	p := reflect.ValueOf(v).Elem()
-	p.Set(reflect.Zero(p.Type()))
 }
 
 func (c *collector) Update(ids ...int) {
@@ -83,42 +79,35 @@ func (c *collector) DiscoverUrl(url string) {
 		}
 	}()
 }
-func (c *collector) schedule() {
-	// 定时扫描指定页面
-	// 定时查询快指定间隔时间中的文章
-
-	discoverUrl := func(url string) func() {
-		return func() {
-			c.DiscoverUrl(url)
+func (c *collector) do(j *Job, t string, exp string) {
+	log.Debug("Do %v with %v", t, exp)
+	switch t {
+	case "sql":
+		ids := make([]int, 0)
+		if err := c.svr.Database().Raw(exp).Pluck("id", &ids).Error; err != nil {
+			panic(err)
 		}
+		log.Info("For job %v will update %v", j.Desc, ids)
+	case "url":
+		c.DiscoverUrl(exp)
+
 	}
+}
 
-	//	discoverBetween := func()func(){
-	//
-	//	}
+func (c *collector) schedule() {
+	sort.Sort(byTimeAsc(c.jobs))
 
-	jobs := make([]Job, 0)
-	jobs = append(jobs, []Job{
-		NewJob("HomePage", 30*time.Minute, 20*time.Second, discoverUrl("http://www.cnbeta.com/")),
-		NewJob("RankPage", 2*time.Hour, 10*time.Second, discoverUrl("http://www.cnbeta.com/rank/show.htm")),
-		NewJob("TopPage", 2*time.Hour, 30*time.Second, discoverUrl("http://www.cnbeta.com/top10.htm")),
-		NewJob("UpdateExpired", 30*time.Minute, 40*time.Second, func() {
-			log.Info("Update article between time")
-		}),
-	}...)
-	sort.Sort(byTimeAsc(jobs))
-	log.Info("Jobs %+v", jobs)
 	for c.r {
 		time.Sleep(2 * time.Second)
-		log.Debug("Job tick")
+
 		now := time.Now()
-		for now.After(jobs[0].At) {
-			job := jobs[0]
+		for now.After(c.jobs[0].At) {
+			job := c.jobs[0]
 			log.Info("Do job %v", job)
 			job.At = job.At.Add(job.Interval)
-			jobs = append(jobs[1:], job)
-			sort.Sort(byTimeAsc(jobs))
-			log.Info("Next job %v", jobs[0])
+			c.jobs = append(c.jobs[1:], job)
+			sort.Sort(byTimeAsc(c.jobs))
+			log.Info("Next job %v", c.jobs[0])
 			job.Do()
 		}
 	}
@@ -142,10 +131,10 @@ func (c *collector) collect() {
 					log.Debug("Article outdated, will not update %v", a)
 					continue
 				}
-				var minimalUpdateInterval time.Duration = 30 * time.Minute
+				var minimalUpdateInterval time.Duration = 10 * time.Minute
 				if a.Update != nil && a.Update.Add(minimalUpdateInterval).After(time.Now()) {
 					// 判断是否需要更新
-					log.Debug("Article last update is less than %s, will not update %v", minimalUpdateInterval.String(), a)
+					log.Info("Article last update is less than %s, will not update %v", minimalUpdateInterval.String(), a)
 					continue
 				}
 			}
@@ -206,7 +195,7 @@ func (c *collector) store() {
 }
 
 type Job struct {
-	Name     string
+	Desc     string
 	At       time.Time
 	Interval time.Duration
 	Do       func()

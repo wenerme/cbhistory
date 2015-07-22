@@ -1,42 +1,43 @@
 package cbhistory
+
 import (
-	"time"
 	"fmt"
+	"time"
 )
 
 type Article struct {
 	// 文章ID
-	Sid      int `gorm:"primary_key"`
-	Sn       string
+	Sid int `gorm:"primary_key"`
+	Sn  string
 	// 顶的数量
-	Dig      int
+	Dig int
 	// 评论数量
 	Comments int
 	//
-	Fav      int
+	Fav int
 	// 简介
-	Intro    string
+	Intro string
 	// 参与人数
-	Join     int
+	Join int
 	// 该文章更新时间
-	Update   *time.Time
+	Update *time.Time
 	// 文章发布日期
-	Date     *time.Time
+	Date *time.Time
 	// 阅读人数
-	Read     int
+	Read int
 	// 文章来源
-	Source   string
+	Source string
 	// 文章标题
-	Title    string
-	Token    string
+	Title string
+	Token string
 	// 是否该文章已经过期
 	Outdated bool
 }
 
-func (a Article)TableName() string {
+func (a Article) TableName() string {
 	return "article"
 }
-func (a Article)String() string {
+func (a Article) String() string {
 	return fmt.Sprintf("Article{sid=%v, sn=%v, oudated=%v, update=%v, date=%v, title=%v}",
 		a.Sid, a.Sn, a.Outdated, a.Update, a.Date, a.Title)
 }
@@ -49,17 +50,17 @@ type Comment struct {
 	// 文章ID
 	Sid int
 	// 评论内容
-	Comment  string
+	Comment string
 	// 反对数
-	Cons     int
+	Cons int
 	// 支持数
-	Pros     int
+	Pros int
 	// 发言者所在地区
 	Hostname string
 	// 评论日期
-	Date     *time.Time
+	Date *time.Time
 }
 
-func (a Comment)TableName() string {
+func (a Comment) TableName() string {
 	return "comment"
 }
