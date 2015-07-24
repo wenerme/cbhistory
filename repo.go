@@ -11,12 +11,32 @@ type repo struct {
 	*gorm.DB
 }
 
+func (r *repo) getCmt(id int, cmt *CmtResponse) (find bool, err error) {
+	a := &Article{}
+	if find, err = r.FindById(id, a); !find {
+		c := cmtNotExists
+		cmt = &c
+		return
+	}
+	var cmts []Comment
+	err = r.Table("article").Where("sid = ?", id).Find(&cmts).Error
+	if err != nil {
+		return
+	}
+	response := makeCmtResponse(a, cmts)
+	cmt = &response
+	return true, nil
+}
+func (r *repo) getArticleCmts(id int, cmts *[]Comment) (err error) {
+	err = r.Table("article").Where("sid = ?", id).Find(cmts).Error
+	return
+}
 func (this *repo) Database() *gorm.DB {
 	return this.DB
 }
 
 func (this *repo) FindById(id interface{}, v interface{}) (bool, error) {
-	switch v.(type) {
+	switch v := v.(type) {
 	case *Article:
 		if r := this.Where("sid = ?", id).Find(v); r.Error != nil {
 			if r.Error == gorm.RecordNotFound {
@@ -33,6 +53,8 @@ func (this *repo) FindById(id interface{}, v interface{}) (bool, error) {
 				return false, r.Error
 			}
 		}
+	case *CmtResponse:
+		return this.getCmt(id.(int), v)
 	default:
 		panic(fmt.Sprintf("Can not find %T with %v", v, id))
 	}

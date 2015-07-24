@@ -1,6 +1,15 @@
+[log]
+level="INFO"
+# file=stdout
+
 [database]
 type="sqlite3"
 file="cbh.db"
+# host=
+# password=
+# user=
+# name=cbh
+debug=false
 
 [collector]
 enable=true
@@ -30,5 +39,5 @@ expression="http://www.cnbeta.com/top10.htm"
 interval="2h"
 
 [http]
-port=8087
+address=":8087"
 enable=true

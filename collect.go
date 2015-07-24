@@ -1,22 +1,25 @@
 package cbhistory
+
 import (
-	"strconv"
+	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 	"io/ioutil"
+	"net/http"
+	"strconv"
 	"time"
-	"encoding/json"
 )
+
 var hc = &http.Client{}
-func Discover(c string) []int {
+
+func FindArticleIds(c string) []int {
 	m := regArticle.FindAllStringSubmatch(c, -1)
 	ids := make(map[int]bool, len(m))
 
 	for _, v := range m {
 		id, err := strconv.Atoi(v[1])
-		if (err != nil) {
-			log.Warning("Discover id failed: %v", err)
+		if err != nil {
+			log.Warning("Discover id(%v) failed %v", id, err)
 		}
 		ids[id] = true
 	}
@@ -39,21 +42,29 @@ func Collect(a *Article, comments map[int]Comment) (err error) {
 		return errors.New("Aricle no Sid")
 	}
 	if a.Sn == "" {
-		url := fmt.Sprintf("http://www.cnbeta.com/articles/%d.htm", a.Sid);
+		url := fmt.Sprintf("http://www.cnbeta.com/articles/%d.htm", a.Sid)
 		log.Debug("Fetct article %v", url)
 		r, err := http.Get(url)
-		if err != nil {return err}
+		if err != nil {
+			return err
+		}
 		if r.StatusCode != 200 {
-			return errors.New("Status is not OK: "+r.Status)
+			return errors.New("Status is not OK: " + r.Status)
 		}
 		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {return err}
+		if err != nil {
+			return err
+		}
 		err = ParsePage(a, string(b))
-		if err != nil {return err}
+		if err != nil {
+			return err
+		}
 	}
 	{
 		cmt, err := FetchCmt(a)
-		if err != nil {return err}
+		if err != nil {
+			return err
+		}
 		if cmt.State != "success" {
 			return errors.New(fmt.Sprintf("Wrong cmt response %d:%s", cmt.ErrorCode, cmt.Error))
 		}
@@ -81,29 +92,32 @@ func Collect(a *Article, comments map[int]Comment) (err error) {
 	return
 }
 func FetchCmt(a *Article) (c *CmtResponse, err error) {
-	//	c = new(CmtResponse)
-	//	if cache.Get("cmt", a.Sid, c) {
-	//		return
-	//	}
-	//	c = nil
-	for p := 1;; p ++ {
-		url := fmt.Sprintf("http://www.cnbeta.com/cmt?op=%v,%v,%v", p, a.Sid, a.Sn);
+	for p := 1; ; p++ {
+		url := fmt.Sprintf("http://www.cnbeta.com/cmt?op=%v,%v,%v", p, a.Sid, a.Sn)
 		log.Debug("Fetch Cmt %s", url)
 		r, err := http.NewRequest("GET", url, nil)
-		if err !=nil {return c, err}
+		if err != nil {
+			return c, err
+		}
 		r.Header.Add("X-Requested-With", "XMLHttpRequest")
 		res, err := hc.Do(r)
-		if err != nil {return c, err}
+		if err != nil {
+			return c, err
+		}
 		b, err := ioutil.ReadAll(res.Body)
-		if err != nil {return c, err}
+		if err != nil {
+			return c, err
+		}
 		log.Debug("Got Cmt %s", string(b))
 		cmt := CmtResponse{}
 		err = json.Unmarshal(b, &cmt)
-		if err != nil {return c, err}
+		if err != nil {
+			return c, err
+		}
 		log.Debug("Parse Cmt %+v", cmt)
 		if c == nil {
 			c = &cmt
-		}else if cmt.Result.CommentNum > 0 {
+		} else if cmt.Result.CommentNum > 0 {
 			// Merge Cmt
 			log.Info("Merge Cmt %+v", cmt.Result)
 			c.Result.HotList = append(c.Result.HotList, cmt.Result.HotList...)
@@ -120,13 +134,10 @@ func FetchCmt(a *Article) (c *CmtResponse, err error) {
 		}
 
 		if cmt.State == "success" && len(cmt.Result.CmtStore) > 70 {
-			log.Debug("Comments > 70, will try next page")
+			log.Debug("Comments > 70, will try next page for sid %v", a.Sid)
 			continue
 		}
 		break
 	}
-	//	if c.State == "success" {
-	//		cache.Put("cmt", a.Sid, c)
-	//	}
 	return
 }

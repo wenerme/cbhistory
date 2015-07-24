@@ -29,16 +29,21 @@ type Config struct {
 		}
 	}
 	Http struct {
-		Enable bool
-		Port   int
+		Enable  bool
+		Address string
 	}
 	Database struct {
 		Type     string
 		File     string // Used for sqlite
 		Host     string
-		Schema   string
+		Name     string
 		User     string
 		Password string
+		Debug    bool
+	}
+	Log struct {
+		Level string
+		File  string // Understand stderr stdout
 	}
 }
 

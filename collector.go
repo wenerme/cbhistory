@@ -72,7 +72,7 @@ func (c *collector) DiscoverUrl(url string) {
 			log.Warning("Read all %v faield:%v", url, err)
 			return
 		}
-		ids := Discover(string(b))
+		ids := FindArticleIds(string(b))
 		log.Info("In %s discoved  (%v)%v", url, len(ids), ids)
 		for _, i := range ids {
 			c.discovered <- i
@@ -185,7 +185,7 @@ func (c *collector) store() {
 		case cmt := <-c.storeComment:
 			err := c.s.Store(&cmt)
 			if err != nil {
-				log.Warning("Store comment faield %v:%v", cmt, err)
+				log.Warning("Store comment faield %v:%v", err, cmt)
 			} else {
 				log.Debug("Store comment %+v", cmt)
 			}
