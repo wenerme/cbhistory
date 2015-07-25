@@ -6,6 +6,17 @@
 
 ---
 
+# Get & Run
+
+```bash
+go get -u github.com/wenerme/cbhistory/...
+go install github.com/wenerme/cbhistory/cmd/cbhistory
+# Use default config
+cp $GOPATH/github.com/wenerme/cbhistory/config.toml .
+# Read to run
+cbhistory
+```
+
 相关项目
 --------
 * [cbhistory 服务端][cbhistory-server]

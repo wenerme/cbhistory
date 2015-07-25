@@ -4,14 +4,16 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/op/go-logging"
 	"github.com/spacemonkeygo/errors"
 )
 
 type Server interface {
 	Config() *Config
 	Start() error
+	Init() error
 	Database() *gorm.DB
-	repo() *repo
+	Repo() *repo
 }
 type svr struct {
 	c          *Config
@@ -21,6 +23,9 @@ type svr struct {
 	r          *repo
 }
 
+func New() Server {
+	return NewServer(LoadConfig("config.toml"))
+}
 func NewServer(c *Config) Server {
 	return &svr{c: c}
 }
@@ -28,19 +33,27 @@ func NewServer(c *Config) Server {
 func (s *svr) Config() *Config {
 	return s.c
 }
-func (s *svr) repo() *repo {
+func (s *svr) Repo() *repo {
 	return s.r
 }
 func (s *svr) Database() *gorm.DB {
 	db := s.db
 	return &db
 }
-func (s *svr) init() (err error) {
+func (s *svr) Init() (err error) {
 	if s.httpServer != nil {
 		return
 	}
 
 	c := s.c
+
+	l, err := logging.LogLevel(c.Log.Level)
+	if err != nil {
+		return err
+	}
+	logging.SetLevel(l, "cbh")
+	log.Info("Set log level to %v", l)
+
 	t := c.Database.Type
 	switch t {
 	case "sqlite3":
@@ -58,6 +71,7 @@ func (s *svr) init() (err error) {
 		log.Debug(fmt.Sprint(v...))
 	}))
 	s.r = &repo{s.Database()}
+
 	s.collector = newCollector(s)
 	s.httpServer = newHttpServer(s)
 	return
@@ -70,7 +84,7 @@ func (l dbLogger) Print(v ...interface{}) {
 }
 
 func (s *svr) Start() (err error) {
-	err = s.init()
+	err = s.Init()
 	if err != nil {
 		return
 	}

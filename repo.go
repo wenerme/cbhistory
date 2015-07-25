@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/op/go-logging"
+	"github.com/spacemonkeygo/errors"
 	"time"
 )
 
@@ -12,19 +14,18 @@ type repo struct {
 }
 
 func (r *repo) getCmt(id int, cmt *CmtResponse) (find bool, err error) {
+	log.Debug("Get cmt respnse %v", id)
 	a := &Article{}
 	if find, err = r.FindById(id, a); !find {
-		c := cmtNotExists
-		cmt = &c
+		*cmt = cmtNotExists
 		return
 	}
 	var cmts []Comment
-	err = r.Table("article").Where("sid = ?", id).Find(&cmts).Error
+	_, err = r.FindById(id, &cmts)
 	if err != nil {
 		return
 	}
-	response := makeCmtResponse(a, cmts)
-	cmt = &response
+	*cmt = makeCmtResponse(a, cmts)
 	return true, nil
 }
 func (r *repo) getArticleCmts(id int, cmts *[]Comment) (err error) {
@@ -35,30 +36,30 @@ func (this *repo) Database() *gorm.DB {
 	return this.DB
 }
 
-func (this *repo) FindById(id interface{}, v interface{}) (bool, error) {
-	switch v := v.(type) {
-	case *Article:
-		if r := this.Where("sid = ?", id).Find(v); r.Error != nil {
-			if r.Error == gorm.RecordNotFound {
-				return false, nil
-			} else {
-				return false, r.Error
-			}
-		}
-	case *Comment:
-		if r := this.Where("tid = ?", id).Find(v); r.Error != nil {
-			if r.Error == gorm.RecordNotFound {
-				return false, nil
-			} else {
-				return false, r.Error
-			}
-		}
-	case *CmtResponse:
-		return this.getCmt(id.(int), v)
-	default:
-		panic(fmt.Sprintf("Can not find %T with %v", v, id))
+func (this *repo) FindById(id interface{}, v interface{}) (find bool, err error) {
+	if log.IsEnabledFor(logging.DEBUG) {
+		defer log.Debug("%v(%v %v) %#v ", id, find, err, v)
 	}
-	return true, nil
+	switch v.(type) {
+	case *Article:
+		err = this.Where("sid = ?", id).Find(v).Error
+	case *[]Comment:
+		err = this.Table("comment").Where("sid = ?", id).Find(v).Error
+	case *Comment:
+		err = this.Where("tid = ?", id).Find(v).Error
+	case *CmtResponse:
+		find, err = this.getCmt(id.(int), v.(*CmtResponse))
+
+	default:
+		return false, errors.New(fmt.Sprintf("Can not find %T with %v", v, id))
+	}
+	if err == nil {
+		find = true
+	}
+	if err == gorm.RecordNotFound {
+		err = nil
+	}
+	return
 }
 func (this *repo) Store(v interface{}) error {
 	switch v.(type) {

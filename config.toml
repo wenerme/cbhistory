@@ -1,5 +1,5 @@
 [log]
-level="INFO"
+level="DEBUG"
 # file=stdout
 
 [database]
@@ -9,7 +9,7 @@ file="cbh.db"
 # password=
 # user=
 # name=cbh
-debug=false
+debug=true
 
 [collector]
 enable=true
